@@ -119,7 +119,17 @@ class Vector implements \Vector {
     }
 
     public function offsetGet($key) {
-        return $this->get($key);
+        $value = &$this->items[$key];
+        
+        if (is_array($value)) {
+            $vector = new self();
+            
+            $vector->items = &$value;
+            
+            return $vector;
+        }
+        
+        return $value;
     }
 
     public function offsetSet($key, $value) {
