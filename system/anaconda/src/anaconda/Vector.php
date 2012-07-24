@@ -7,7 +7,12 @@
 namespace anaconda;
 
 /**
- * {@link \Vector}
+ * {@link \Vector} allows the developer to work with arrays with a little bit
+ * more ease.
+ * 
+ * Advantages of using Vector over a normal PHP array:
+ *  - Append, prepend, insert whole arrays and keep their keys.
+ *  - Easier to read when daisy chaining array commands.
  * 
  * @package     
  * @name        Vector
