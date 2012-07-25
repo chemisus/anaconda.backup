@@ -20,12 +20,32 @@ interface Tree {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function has($node);
+    
+    function getRoot($node);
+    
+    function getAncestors($node);
+    
+    function getParent($node);
+    
+    function hasParent($node);
+    
+    function getDescendants($node);
+    
+    function getChildren($node);
+
+    function getHeight($node);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function add($node);
+    
+    function move($node, $parent);
+    
+    function orphan($node);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
