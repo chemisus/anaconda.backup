@@ -31,6 +31,29 @@ class Vector implements \Vector {
     /*\**********************************************************************\*/
     /*\                             Static Fields                            \*/
     /*\**********************************************************************\*/
+    public static function ToArray($value) {
+        if ($value instanceof \Vector) {
+            return $value->items();
+        } else if (is_object($value)) {
+            return array($value);
+        } else if (is_null($value)) {
+            return array();
+        }
+        
+        return (array)$value;
+    }
+
+    public static function ToVector($value) {
+        if ($value instanceof \Vector) {
+            return $value;
+        } else if (is_object($value)) {
+            return new self(array($value));
+        } else if (is_null($value)) {
+            return new self();
+        }
+        
+        return new self((array)$value);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Static Methods">
@@ -45,6 +68,8 @@ class Vector implements \Vector {
     /*\**********************************************************************\*/
     private $max = 0;
     
+    private $deep = true;
+    
     private $items = array();
     /**///</editor-fold>
 
@@ -54,6 +79,10 @@ class Vector implements \Vector {
     /*\**********************************************************************\*/
     public function items() {
         return $this->items;
+    }
+    
+    public function setItems($value) {
+        $this->items = $value;
     }
     
     public function keys() {
@@ -75,15 +104,15 @@ class Vector implements \Vector {
     }
     
     public function getOffsetOfKey($key) {
-        return array_search($key, $this->keys());
+        return array_search($key, $this->keys(), true);
     }
     
     public function getKey($value) {
-        return array_search($value, $this->items);
+        return array_search($value, $this->items, true);
     }
     
     public function getOffsetOf($value) {
-        return array_search($value, $this->values());
+        return array_search($value, $this->values(), true);
     }
     
     public function getKeyAtOffset($offset) {
@@ -120,6 +149,10 @@ class Vector implements \Vector {
 
     public function offsetGet($key) {
         $value = &$this->items[$key];
+        
+        if ($value === null && $this->deep) {
+            $value = array();
+        }
         
         if (is_array($value)) {
             $vector = new self();
@@ -190,7 +223,9 @@ class Vector implements \Vector {
     }
     
     public function splice($offset, $length=null, $replace=array()) {
-        $vector = array_slice($this->items, $offset, $length);
+        $replace = self::ToArray($replace);
+        
+        $vector = new self(array_slice($this->items, $offset, $length));
 
         $first = array_slice($this->items, 0, $offset, true);
         
@@ -259,10 +294,14 @@ class Vector implements \Vector {
     }
     
     public function insertInto(&$array, $offset=0) {
-        $vector = new self();
-        
-        $vector->items = &$array;
-        
+        $vector = $array;
+
+        if (is_array($array)) {
+            $vector = new self();
+
+            $vector->items = &$array;
+        }
+
         $vector->splice($offset, 0, $this->items);
         
         return $this;
@@ -290,6 +329,34 @@ class Vector implements \Vector {
     
     public function pop() {
         return array_pop($this->items);
+    }
+    
+    public function intersect($array) {
+        $array = self::ToArray($array);
+        
+        $vector = new self();
+        
+        foreach ($this->items as $key=>$value) {
+            if (array_search($value, $array, true) !== false) {
+                $vector[$key] = $value;
+            }
+        }
+        
+        return $vector;
+    }
+    
+    public function intersectKey($array) {
+        $array = self::ToArray($array);
+        
+        return new self(array_intersect_key($this->items, $array));
+    }
+    
+    public function unique() {
+        return new self(array_unique($this->items));
+    }
+    
+    public function flip() {
+        return new self(array_flip($this->items));
     }
     /**///</editor-fold>
 
