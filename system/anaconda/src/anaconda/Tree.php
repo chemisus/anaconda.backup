@@ -39,35 +39,75 @@ class Tree implements \Tree {
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
     /** @var \Vector $nodes */
-    public $nodes;
+    private $nodes;
     
-    /** @var \Vector $roots */
-    public $roots;
+    /** @var \Vector $trees */
+    private $trees;
     
     /** @var \Vector $heights */
-    public $heights;
+    private $heights;
     
     /** @var \Vector $bounds */
-    public $bounds;
+    private $bounds;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getNodes() {
+        return $this->nodes;
+    }
+    
+    public function setNodes(\Vector $value) {
+        $this->nodes = $value;
+        
+        return $this;
+    }
+    
+    public function getTrees() {
+        return $this->trees;
+    }
+    
+    public function setTrees(\Vector $value) {
+        $this->trees = $value;
+        
+        return $this;
+    }
+    
+    public function getHeights() {
+        return $this->heights;
+    }
+    
+    public function setHeights(\Vector $value) {
+        $this->heights = $value;
+        
+        return $this;
+    }
+    
+    public function getBounds() {
+        return $this->bounds;
+    }
+    
+    public function setBounds(\Vector $value) {
+        $this->bounds = $value;
+        
+        return $this;
+    }
+    
     public function has($node) {
         return $this->nodes->hasValue($node);
     }
     
     public function getRoot($node) {
-        return $this->nodes->get($this->roots->get($this->key($node)));
+        return $this->nodes->get($this->trees->get($this->key($node)));
     }
     
     public function getAncestors($node) {
         $bounds = $this->bounds($node);
 
         return $this->nodes->select(
-                $this->bounds->slice($bounds[1] + 1)->appendAll(
+                $this->bounds->slice($bounds[1] + 1)->intersect(
                         $this->bounds->slice(0, $bounds[0])->unique()
                 )
         );
@@ -109,10 +149,11 @@ class Tree implements \Tree {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($nodes, $roots, $heights, $bounds) {
+    public function __construct($nodes=null, $roots=null, $heights=null,
+            $bounds=null) {
         $this->nodes = $nodes;
         
-        $this->roots = $roots;
+        $this->trees = $roots;
         
         $this->heights = $heights;
         
@@ -137,12 +178,12 @@ class Tree implements \Tree {
         
         $base = $this->heights->get($this->key($parent)) + 1;
         
-        $this->roots->set($this->key($node), $root);
+        $this->trees->set($this->key($node), $root);
         
         $this->heights->set($this->key($node), $base);
         
         foreach ($this->getDescendants($node) as $value) {
-            $this->roots->set($this->key($value), $root);
+            $this->trees->set($this->key($value), $root);
 
             $height = $this->getHeight($value);
             
@@ -155,12 +196,12 @@ class Tree implements \Tree {
         
         $base = $this->heights->get($this->key($node));
         
-        $this->roots->set($this->key($node), $root);
+        $this->trees->set($this->key($node), $root);
         
         $this->heights->set($this->key($node), 0);
         
         foreach ($this->getDescendants($node) as $value) {
-            $this->roots->set($this->key($value), $root);
+            $this->trees->set($this->key($value), $root);
 
             $height = $this->getHeight($value);
             
@@ -188,13 +229,15 @@ class Tree implements \Tree {
         
         $key = $this->nodes->getKey($node);
 
-        $this->roots[$key] = $key;
+        $this->trees[$key] = $key;
 
         $this->heights[$key] = 0;
 
         $this->bounds[] = $key;
 
         $this->bounds[] = $key;
+        
+        $this->bounds->setItems($this->bounds->values());
     }
     
     public function move($node, $parent) {
