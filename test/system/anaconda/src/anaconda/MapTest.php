@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/Map.php';
 require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/anaconda/Map.php';
 
 /**
@@ -18,7 +19,7 @@ class MapTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Map;
+        $this->object = new \anaconda\Map;
     }
 
     /**
@@ -29,6 +30,8 @@ class MapTest extends PHPUnit_Framework_TestCase {
         
     }
 
+    public function test() {
+    }
 }
 
 ?>

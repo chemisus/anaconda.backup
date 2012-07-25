@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/Node.php';
 require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/anaconda/Node.php';
 
 /**
@@ -18,7 +19,7 @@ class NodeTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Node;
+        $this->object = new \anaconda\Node;
     }
 
     /**
@@ -27,6 +28,9 @@ class NodeTest extends PHPUnit_Framework_TestCase {
      */
     protected function tearDown() {
         
+    }
+
+    public function test() {
     }
 
 }

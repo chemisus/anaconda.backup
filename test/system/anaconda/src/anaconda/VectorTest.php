@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/Vector.php';
 require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/anaconda/Vector.php';
 
 /**
@@ -18,7 +19,7 @@ class VectorTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Vector;
+        $this->object = new \anaconda\Vector;
     }
 
     /**
@@ -27,6 +28,9 @@ class VectorTest extends PHPUnit_Framework_TestCase {
      */
     protected function tearDown() {
         
+    }
+
+    public function test() {
     }
 
 }

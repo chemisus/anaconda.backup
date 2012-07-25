@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/Tree.php';
 require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/anaconda/Tree.php';
 
 /**
@@ -9,7 +10,7 @@ require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/sys
 class TreeTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * @var Tree
+     * @var Tree $object
      */
     protected $object;
 
@@ -18,7 +19,12 @@ class TreeTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Tree;
+        $this->object = new \anaconda\Tree(
+                new \anaconda\Vector(),
+                new \anaconda\Vector(),
+                new \anaconda\Vector(),
+                new \anaconda\Vector()
+        );
     }
 
     /**
@@ -28,7 +34,80 @@ class TreeTest extends PHPUnit_Framework_TestCase {
     protected function tearDown() {
         
     }
+    
+    public function testInitialize1() {
+        $node = new stdClass();
+        
+        self::assertFalse($this->object->has($node));
+    }
 
+    public function testAdd() {
+        $node = new stdClass();
+        
+        $this->object->add($node);
+        
+        self::assertTrue($this->object->has($node));
+    }
+    
+    public function testCount() {
+        $n = rand(5, 15);
+        
+        for ($i = 0; $i < $n; $i++) {
+            $this->object->add(new stdClass());
+        }
+
+        self::assertEquals($n, $this->object->count());
+    }
+    
+    public function testAncestors() {
+        $child = new stdClass();
+        
+        $parent = new stdClass();
+        
+        $this->object->add($parent);
+        
+        $this->object->move($child, $parent);
+
+        self::assertEquals($parent, $this->object->getAncestors($child)->shift());
+    }
+    
+    public function testDescendants() {
+        $child = new stdClass();
+        
+        $parent = new stdClass();
+        
+        $this->object->add($parent);
+        
+        $this->object->move($child, $parent);
+
+        self::assertEquals($child, $this->object->getDescendants($parent)->shift());
+    }
+    
+    public function testChildren() {
+        $child = new stdClass();
+        
+        $parent = new stdClass();
+        
+        $this->object->add($parent);
+        
+        $this->object->move($child, $parent);
+
+        self::assertEquals($child, $this->object->getChildren($parent)->shift());
+    }
+    
+    public function testParent() {
+        $child = new stdClass();
+        
+        $parent = new stdClass();
+        
+        $this->object->add($parent);
+        
+        $this->object->move($child, $parent);
+        
+        print_r($this->object);
+        
+        self::assertEquals($parent, $this->object->getParent($child));
+    }
 }
 
 ?>

@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/Subscriber.php';
 require_once dirname(__FILE__) . '/../../../../../../../../Projects/anaconda/system/anaconda/src/anaconda/Subscriber.php';
 
 /**
@@ -18,7 +19,7 @@ class SubscriberTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Subscriber;
+        $this->object = new \anaconda\Subscriber;
     }
 
     /**
@@ -27,6 +28,9 @@ class SubscriberTest extends PHPUnit_Framework_TestCase {
      */
     protected function tearDown() {
         
+    }
+
+    public function test() {
     }
 
 }
