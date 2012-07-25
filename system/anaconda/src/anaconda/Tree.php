@@ -65,11 +65,12 @@ class Tree implements \Tree {
     
     public function getAncestors($node) {
         $bounds = $this->bounds($node);
-        
-        return $this->nodes->intersectKey(
-                    $this->bounds->slice($bounds[0] + $bounds[1] - 2)->intersect(
-                            $this->bounds->range(0, $bounds[0])
-                ));
+
+        return $this->nodes->select(
+                $this->bounds->slice($bounds[1] + 1)->appendAll(
+                        $this->bounds->slice(0, $bounds[0])->unique()
+                )
+        );
     }
     
     public function getParent($node) {
@@ -82,10 +83,11 @@ class Tree implements \Tree {
     
     public function getDescendants($node) {
         $bounds = $this->bounds($node);
-
+        
         return $this->nodes->intersectKey(
-                    $this->bounds->range($bounds[0] + 1, $bounds[1])->unique()
-                );
+                $this->bounds->range($bounds[0] + 1, $bounds[1])
+                ->unique()->flip()
+        );
     }
     
     public function getChildren($node) {
@@ -96,6 +98,10 @@ class Tree implements \Tree {
     
     public function getHeight($node) {
         return $this->heights->get($this->key($node));
+    }
+    
+    public function count() {
+        return $this->nodes->count();
     }
     /**///</editor-fold>
 
@@ -118,12 +124,12 @@ class Tree implements \Tree {
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
-    private function key($node) {
+    public function key($node) {
         return $this->nodes->getKey($node);
     }
     
     private function bounds($node) {
-        return $this->bounds->intersect(array($this->key($node)))->keys();
+        return $this->bounds->intersect($this->key($node))->keys();
     }
     
     private function moved($node, $parent) {
@@ -156,7 +162,9 @@ class Tree implements \Tree {
         foreach ($this->getDescendants($node) as $value) {
             $this->roots->set($this->key($value), $root);
 
-            $this->heights->set($this->key($value), $this->getHeight($value) - $base);
+            $height = $this->getHeight($value);
+            
+            $this->heights->set($this->key($value), $height - $base);
         }
     }
     /**///</editor-fold>

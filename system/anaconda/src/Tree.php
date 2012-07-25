@@ -15,7 +15,7 @@
  * @version     0.1
  * @since       0.1
  */
-interface Tree {
+interface Tree extends Countable {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
