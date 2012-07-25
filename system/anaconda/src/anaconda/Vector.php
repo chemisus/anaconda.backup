@@ -351,6 +351,20 @@ class Vector implements \Vector {
         return new self(array_intersect_key($this->items, $array));
     }
     
+    public function select($keys) {
+        $keys = self::ToArray($keys);
+
+        $values = new self();
+        
+        foreach ($keys as $key) {
+            if ($this->has($key)) {
+                $values[$key] = $this->get($key);
+            }
+        }
+        
+        return $values;
+    }
+    
     public function unique() {
         return new self(array_unique($this->items));
     }

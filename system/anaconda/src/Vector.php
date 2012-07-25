@@ -87,6 +87,8 @@ interface Vector extends Countable, ArrayAccess, IteratorAggregate {
     
     function intersectKey($array);
     
+    function select($keys);
+    
     function unique();
     
     function flip();
