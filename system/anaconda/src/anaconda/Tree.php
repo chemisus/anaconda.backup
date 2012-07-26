@@ -95,6 +95,10 @@ class Tree implements \Tree {
         return $this;
     }
     
+    public function getRoots() {
+        return $this->nodes->select($this->heights->intersect(0)->keys());
+    }
+    
     public function has($node) {
         return $this->nodes->hasValue($node);
     }
