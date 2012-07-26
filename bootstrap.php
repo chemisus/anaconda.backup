@@ -68,7 +68,7 @@ call_user_func(function () {
         )
     );
     
-    foreach (\anaconda\Autoloader::Get('load')->find('load.php') as $bootstrap) {
+    foreach (\anaconda\Autoloader::Get('load')->find('load.php') as $load) {
         require_once($load);
     }
 });
