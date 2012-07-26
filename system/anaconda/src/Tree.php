@@ -43,7 +43,7 @@ interface Tree extends Countable {
     /*\**********************************************************************\*/
     function add($node);
     
-    function move($node, $parent);
+    function move($parent, $node);
     
     function orphan($node);
     /**///</editor-fold>

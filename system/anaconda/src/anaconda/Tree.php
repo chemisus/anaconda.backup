@@ -173,7 +173,7 @@ class Tree implements \Tree {
         return $this->bounds->intersect($this->key($node))->keys();
     }
     
-    private function moved($node, $parent) {
+    private function moved($parent, $node) {
         $root = $this->key($this->getRoot($parent));
         
         $base = $this->heights->get($this->key($parent)) + 1;
@@ -240,32 +240,38 @@ class Tree implements \Tree {
         $this->bounds->setItems($this->bounds->values());
     }
     
-    public function move($node, $parent) {
+    public function move($parent, $node) {
         if (!$this->has($parent)) {
             return;
         }
         
-        if (!$this->has($node)) {
-            $this->add($node);
-        }
+        $nodes = func_get_args();
         
-        if ($this->hasParent($node)) {
-            $this->orphan($node);
-        }
+        array_shift($nodes);
+        
+        foreach ($nodes as $node) {
+            if (!$this->has($node)) {
+                $this->add($node);
+            }
 
-        $bounds = $this->bounds($node);
-        
-        $nodes = $this->bounds->splice($bounds[0], $bounds[1] - $bounds[0] + 1);
-        
-        $this->bounds->setItems($this->bounds->values());
-        
-        $bounds = $this->bounds($parent);
-        
-        $nodes->insertInto($this->bounds, $bounds[1]);
-        
-        $this->bounds->setItems($this->bounds->values());
+            if ($this->hasParent($node)) {
+                $this->orphan($node);
+            }
 
-        $this->moved($node, $parent);
+            $bounds = $this->bounds($node);
+
+            $nodes = $this->bounds->splice($bounds[0], $bounds[1] - $bounds[0] + 1);
+
+            $this->bounds->setItems($this->bounds->values());
+
+            $bounds = $this->bounds($parent);
+
+            $nodes->insertInto($this->bounds, $bounds[1]);
+
+            $this->bounds->setItems($this->bounds->values());
+
+            $this->moved($parent, $node);
+        }
     }
     
     public function orphan($node) {
