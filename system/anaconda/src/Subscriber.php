@@ -26,6 +26,9 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function check(\Publisher $publisher);
+
+    function execute(\Publisher $publisher);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

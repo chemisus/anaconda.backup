@@ -72,3 +72,48 @@ call_user_func(function () {
         require_once($load);
     }
 });
+
+
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+
+
+$subscribers = new anaconda\Tree();
+$subscribers->setBounds(new anaconda\Vector());
+$subscribers->setHeights(new anaconda\Vector());
+$subscribers->setNodes(new anaconda\Vector());
+$subscribers->setTrees(new anaconda\Vector());
+
+$subscribers->add(new anaconda\Subscriber());
+
+function publish(\Tree $tree, $node, $publisher) {
+    if (!$node->check($publisher) === false) {
+        return;
+    }
+    
+    foreach ($tree->getChildren($node) as $child) {
+        publish($tree, $child, $publisher);
+    }
+}
+
+$publisher = new anaconda\Publisher();
+
+foreach ($subscribers->getRoots() as $subscriber) {
+    publish($subscribers, $subscriber, $publisher);
+}
+
+
+
+
+
+
+
+
+
+
+
+

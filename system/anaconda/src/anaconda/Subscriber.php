@@ -68,6 +68,13 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function check(\Publisher $publisher) {
+        
+    }
+    
+    public function execute(\Publisher $publisher) {
+        
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">
