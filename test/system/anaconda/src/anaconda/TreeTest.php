@@ -2,10 +2,10 @@
 
 namespace anaconda;
 
-require_once dirname(__FILE__) . '/../../../../../../../../projects/anaconda/system/anaconda/src/Tree.php';
-require_once dirname(__FILE__) . '/../../../../../../../../projects/anaconda/system/anaconda/src/anaconda/Tree.php';
-require_once dirname(__FILE__) . '/../../../../../../../../projects/anaconda/system/anaconda/src/Vector.php';
-require_once dirname(__FILE__) . '/../../../../../../../../projects/anaconda/system/anaconda/src/anaconda/Vector.php';
+require_once dirname(__FILE__) . '/../../../../../system/anaconda/src/Tree.php';
+require_once dirname(__FILE__) . '/../../../../../system/anaconda/src/anaconda/Tree.php';
+require_once dirname(__FILE__) . '/../../../../../system/anaconda/src/Vector.php';
+require_once dirname(__FILE__) . '/../../../../../system/anaconda/src/anaconda/Vector.php';
 
 /**
  * Test class for Tree.
