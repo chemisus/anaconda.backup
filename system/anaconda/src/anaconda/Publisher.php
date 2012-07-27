@@ -7,7 +7,7 @@
 namespace anaconda;
 
 /**
- * {@link \Publisher}
+ * {@link \anaconda\Publisher}
  * 
  * @package     
  * @name        Publisher
@@ -15,7 +15,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class Publisher implements \Publisher {
+class Publisher extends \anaconda\Vector implements \Publisher {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/

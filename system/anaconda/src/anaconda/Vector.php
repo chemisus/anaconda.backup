@@ -372,6 +372,39 @@ class Vector implements \Vector {
     public function flip() {
         return new self(array_flip($this->items));
     }
+    
+    public function equalTo($array) {
+        return $this->subsetOf($array) && self::ToVector($array)->subsetOf($this);
+    }
+    
+    public function subsetOf($array) {
+        $array = self::ToVector($array);
+        
+        if (count($this) > count($array)) {
+            return false;
+        }
+        
+        foreach ($this->items as $key=>$value) {
+            if (!$array->has($key)) {
+                return false;
+            }
+
+            if ($value instanceof \Vector || is_array($value)) {
+                $value = self::ToVector($value);
+                
+                if (!$value->subsetOf($array[$key])) {
+                    return false;
+                }
+            }
+            else {
+                if ($value !== $array[$key]) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

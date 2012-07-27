@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \Subscriber}
+ * {@link \anaconda\SubscriberDecoration}
  * 
- * @package     
- * @name        Subscriber
+ * @package     anaconda
+ * @name        SubscriberDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Subscriber implements \Subscriber {
+class SubscriberDecoration implements \Subscriber {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -38,6 +38,7 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $base;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -45,7 +46,7 @@ class Subscriber implements \Subscriber {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function getBase() {
-        return $this;
+        return $this->base;
     }
     /**///</editor-fold>
 
@@ -53,12 +54,22 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($subscriber) {
+        $this->base = $subscriber;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
+    private function doCheck(\Publisher $publisher) {
+        return $this->base->check($publisher);
+    }
+
+    private function doExecute(\Publisher $publisher) {
+        $this->base->execute($publisher);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Methods">
@@ -84,11 +95,14 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     public final function check(\Publisher $publisher) {
         return ($this->preCheck($publisher) !== false)
+            && ($this->doCheck($publisher) !== false)
             && ($this->postCheck($publisher) !== false);
     }
 
     public final function execute(\Publisher $publisher) {
         $this->preExecute($publisher);
+        
+        $this->doExecute($publisher);
         
         $this->postExecute($publisher);
         

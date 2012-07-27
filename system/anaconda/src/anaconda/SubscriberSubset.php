@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \Subscriber}
+ * {@link \anaconda\SubscriberSubset}
  * 
  * @package     
- * @name        Subscriber
+ * @name        SubscriberSubset
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Subscriber implements \Subscriber {
+class SubscriberSubset extends \anaconda\SubscriberDecoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -38,21 +38,24 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $values;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getBase() {
-        return $this;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($values, $subscriber) {
+        $this->values = \anaconda\Vector::ToVector($values);
+        
+        parent::__construct($subscriber);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -65,34 +68,14 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function preCheck(\Publisher $publisher) {
-    }
-
-    protected function postCheck(\Publisher $publisher) {
-    }
-
-    protected function preExecute(\Publisher $publisher) {
-    }
-
-    protected function postExecute(\Publisher $publisher) {
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function check(\Publisher $publisher) {
-        return ($this->preCheck($publisher) !== false)
-            && ($this->postCheck($publisher) !== false);
-    }
-
-    public final function execute(\Publisher $publisher) {
-        $this->preExecute($publisher);
-        
-        $this->postExecute($publisher);
-        
-        return $publisher;
+    protected function preCheck(\Publisher $publisher) {
+        return $this->values->subsetOf($publisher);
     }
     /**///</editor-fold>
 

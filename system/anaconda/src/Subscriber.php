@@ -15,7 +15,7 @@
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Subscriber extends Decorated {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -26,6 +26,9 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function check(\Publisher $publisher);
+
+    function execute(\Publisher $publisher);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

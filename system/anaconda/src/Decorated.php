@@ -7,21 +7,21 @@
 
 
 /**
- * {@link \Publisher}
+ * {@link \Decorated}
  * 
  * @package     
- * @name        Publisher
+ * @name        Decorated
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Publisher extends \Vector {
+interface Decorated {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     /**///</editor-fold>
-
+    function getBase();
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/

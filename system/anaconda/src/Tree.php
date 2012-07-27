@@ -20,6 +20,8 @@ interface Tree extends Countable {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function getRoots();
+    
     function has($node);
     
     function getRoot($node);
