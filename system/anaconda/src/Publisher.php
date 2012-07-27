@@ -15,7 +15,7 @@
  * @version     0.1
  * @since       0.1
  */
-interface Publisher {
+interface Publisher extends \Vector {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
