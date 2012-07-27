@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \Subscriber}
+ * {@link \anaconda\SubscriberCallback}
  * 
  * @package     
- * @name        Subscriber
+ * @name        SubscriberCallback
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Subscriber implements \Subscriber {
+class SubscriberCallback implements \Subscriber {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -38,6 +38,7 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $callback;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -53,12 +54,18 @@ class Subscriber implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($callback) {
+        $this->callback = $callback;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
+    private function doExecute($publisher) {
+        call_user_func($this->callback, $publisher);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Methods">
@@ -89,6 +96,8 @@ class Subscriber implements \Subscriber {
 
     public final function execute(\Publisher $publisher) {
         $this->preExecute($publisher);
+        
+        $this->doExecute($publisher);
         
         $this->postExecute($publisher);
         
