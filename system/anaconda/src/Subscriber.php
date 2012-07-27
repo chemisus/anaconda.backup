@@ -15,7 +15,7 @@
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Subscriber extends Decorated {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
