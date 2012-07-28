@@ -22,6 +22,8 @@ interface Tree extends Countable {
     /*\**********************************************************************\*/
     function getRoots();
     
+    function get($key);
+    
     function has($node);
     
     function getRoot($node);
@@ -43,7 +45,7 @@ interface Tree extends Countable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function add($node);
+    function add($key, $node);
     
     function move($parent, $node);
     

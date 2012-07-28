@@ -99,6 +99,10 @@ class Tree implements \Tree {
         return $this->nodes->select($this->heights->intersect(0)->keys());
     }
     
+    public function get($key) {
+        return $this->nodes->get($key);
+    }
+    
     public function has($node) {
         return $this->nodes->hasValue($node);
     }
@@ -224,7 +228,7 @@ class Tree implements \Tree {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function add($node) {
+    public function add($key=null, $node) {
         if ($this->has($node)) {
             return;
         }
