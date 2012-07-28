@@ -228,12 +228,12 @@ class Tree implements \Tree {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function add($key=null, $node) {
+    public function add($key, $node) {
         if ($this->has($node)) {
             return;
         }
 
-        $this->nodes[] = $node;
+        $this->nodes[$key] = $node;
         
         $key = $this->nodes->getKey($node);
 
@@ -248,6 +248,14 @@ class Tree implements \Tree {
         $this->bounds->setItems($this->bounds->values());
     }
     
+    public function addTo($key, $node, $parent) {
+        $this->add($key, $node);
+        
+        $this->move($parent, $node);
+        
+        return $node;
+    }
+    
     public function move($parent, $node) {
         if (!$this->has($parent)) {
             return;
@@ -259,7 +267,7 @@ class Tree implements \Tree {
         
         foreach ($nodes as $node) {
             if (!$this->has($node)) {
-                $this->add($node);
+                $this->add(null, $node);
             }
 
             if ($this->hasParent($node)) {
