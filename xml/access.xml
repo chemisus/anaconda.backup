@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<roles>
+    <role name="guest">
+        <permissions>
+            <permission name="create user">
+                <decorator type="AllowPermission">
+                    <param>user.create</param>
+                </decorator>
+                <decorator type="IsOwnerPermission" />
+                <decorator type="IsRolePermission" value="guest" />
+            </permission>
+        </permissions>
+    </role>
+    <role name="admin">
+        <permissions>
+            <permission name="create user">
+                <decorator type="AllowPermission">
+                    <param>user.create</param>
+                    <param>user.update</param>
+                </decorator>
+                <decorator type="IsOwnerPermission" />
+            </permission>
+        </permissions>
+    </role>
+</roles>
