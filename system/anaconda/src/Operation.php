@@ -26,6 +26,9 @@ interface Operation {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function execute(   \Session $session,
+                        \Subject $subject,
+                        \Role $role);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

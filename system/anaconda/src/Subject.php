@@ -20,12 +20,19 @@ interface Subject {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function key();
+    
+    function roles();
+    
+    function hasRole($key);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function execute(   \Operation $operation,
+                        \Session $session);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

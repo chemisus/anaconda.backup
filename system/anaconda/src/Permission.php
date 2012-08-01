@@ -20,12 +20,17 @@ interface Permission {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function key();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function execute(   \Operation $operation,
+                        \Session $session,
+                        \Subject $subject,
+                        \Role $role);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

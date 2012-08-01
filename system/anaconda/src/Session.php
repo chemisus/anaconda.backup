@@ -20,12 +20,32 @@ interface Session {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    /**
+     * @return \Subject 
+     */
+    function subject();
+    
+    /**
+     * @return \Subject 
+     */
+    function current();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    /**
+     * @param \Subject $subject
+     */
+    function assume(\Subject $subject);
+    
+    function unassume();
+    
+    /**
+     * @return boolean
+     */
+    function execute(\Operation $operation);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
