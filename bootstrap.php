@@ -193,6 +193,73 @@ foreach ($subscribers->getRoots() as $subscriber) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class IsOwnerPermission extends \anaconda\PermissionDecoration {
+    protected function doCheck(\Operation $operation, $target, \Subject $subject, \Role $role) {
+        return $target->owner === $subject;
+    }
+}
+
+
+
+
+$session = new anaconda\Session();
+
+$subject = new anaconda\Subject('chemisus');
+
+$role = new anaconda\Role('admin');
+
+$permission = new IsOwnerPermission(new \anaconda\Permission('user.create'));
+
+$role->addPermission($permission);
+
+$subject->addRole($role);
+
+$session->assume($subject);
+
+$object = new stdClass();
+
+$object->owner = $subject;
+
+$operation = new anaconda\Operation(array('user.create'=>$object));
+
+$operation->execute($session->current());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 class MessageModel {
     private $user;
@@ -366,7 +433,7 @@ var_dump($user);
 
 
 
-
+/*
 
 
 interface Session {
@@ -479,6 +546,12 @@ class SessionModel implements Session {
 class SubjectModel implements Subject {
     private $roles = array();
     
+    private $name = 'guest';
+    
+    public function name() {
+        return $this->name;
+    }
+    
     public function addRole(\Role $value) {
         $this->roles[$value->name()] = $value;
     }
@@ -580,6 +653,30 @@ class IsOwnerPermission extends PermissionDecorator {
     }
 }
 
+class IsSubjectPermission extends PermissionDecorator {
+    private $value;
+    
+    public function check(\Session $session, \Subject $subject, \Role $role, \Operation $operation) {
+        return $subject->name() === $this->value && parent::check($session, $subject, $role, $operation);
+    }
+
+    public function loadXML(DOMElement $element) {
+        $this->value = $element->getAttribute('value');
+    }
+}
+
+class IsRolePermission extends PermissionDecorator {
+    private $value;
+    
+    public function check(\Session $session, \Subject $subject, \Role $role, \Operation $operation) {
+        return $role->name() === $this->value && parent::check($session, $subject, $role, $operation);
+    }
+
+    public function loadXML(DOMElement $element) {
+        $this->value = $element->getAttribute('value');
+    }
+}
+
 class AllowPermission extends PermissionDecorator {
     private $allows = array();
     
@@ -614,7 +711,7 @@ class CreateUserOperation implements Operation {
     }
 
     public function execute(\Session $session) {
-        echo 'h';
+        echo 'CreateUserOperation';
     }
 }
 
@@ -632,24 +729,16 @@ class UpdateUserOperation implements Operation {
     }
 
     public function execute(\Session $session) {
-        echo 'h';
+        echo 'UpdateUserOperation';
     }
 }
 
-
-session_start();
-
-$session = SessionModel::Instance();
+*/
 
 
-echo '<pre>';
 
-$session->pop();
-
-$session->subject()->addRole($session->getRole('admin'));
-
-print_r($session->execute(new CreateUserOperation()));
-print_r($session->execute(new UpdateUserOperation()));
+//session_start();
 
 
-session_write_close();
+
+//session_write_close();
