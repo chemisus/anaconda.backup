@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\Permission}
+ * {@link \PermissionDecoration}
  * 
  * @package     
- * @name        Permission
+ * @name        PermissionDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Permission implements \Permission {
+class PermissionDecoration implements \Permission {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -38,7 +38,7 @@ class Permission implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $key;
+    private $permission;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -46,7 +46,7 @@ class Permission implements \Permission {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function key() {
-        return $this->key;
+        return $this->permission->key();
     }
     /**///</editor-fold>
 
@@ -54,8 +54,8 @@ class Permission implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($key) {
-        $this->key = $key;
+    public function __construct(\Permission $permission=null) {
+        $this->permission = $permission;
     }
     /**///</editor-fold>
 
@@ -69,14 +69,29 @@ class Permission implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doCheck(
+                    \Operation $operation,
+                    $target,
+                    \Subject $subject,
+                    \Role $role) {
+        return true;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check(\Operation $operation, $target, \Subject $subject, \Role $role) {
-        return true;
+    /**
+     * @return boolean
+     */
+    public final function check(
+                    \Operation $operation,
+                    $target,
+                    \Subject $subject,
+                    \Role $role) {
+        return $this->doCheck($operation, $target, $subject, $role)
+            && $this->permission->check($operation, $target, $subject, $role);
     }
     /**///</editor-fold>
 

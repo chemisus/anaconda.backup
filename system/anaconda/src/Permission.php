@@ -20,6 +20,9 @@ interface Permission {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    /**
+     * @return string
+     */
     function key();
     /**///</editor-fold>
 
@@ -27,10 +30,13 @@ interface Permission {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function execute(   \Operation $operation,
-                        \Session $session,
-                        \Subject $subject,
-                        \Role $role);
+    /**
+     * @return boolean
+     */
+    function check( \Operation $operation,
+                    $target,
+                    \Subject $subject,
+                    \Role $role);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

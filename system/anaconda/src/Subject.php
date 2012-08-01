@@ -21,18 +21,17 @@ interface Subject {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     function key();
-    
-    function roles();
-    
-    function hasRole($key);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function execute(   \Operation $operation,
-                        \Session $session);
+    /**
+     * @return array 
+     */
+    function check( array $permissions,
+                    \Operation $operation);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

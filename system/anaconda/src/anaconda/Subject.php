@@ -50,20 +50,15 @@ class Subject implements \Subject {
     public function key() {
         return $this->key;
     }
-    
-    public function roles() {
-        return $this->roles;
-    }
-    
-    public function hasRole($key) {
-        return isset($this->roles[$key]);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($key) {
+        $this->key = $key;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -82,14 +77,24 @@ class Subject implements \Subject {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function execute(\Operation $operation, \Session $session) {
-        foreach ($this->roles() as $role) {
-            if ($role->execute($operation, $session, $this)) {
-                return true;
+    public function addRole(\Role $role) {
+        $this->roles[$role->key()] = $role;
+    }
+    
+    public function removeRole($key) {
+        unset($this->roles[$key]);
+    }
+    
+    public function check(array $permissions, \Operation $operation) {
+        foreach ($this->roles as $role) {
+            if (!count($permissions)) {
+                break;
             }
+            
+            $permissions = $role->check($permissions, $operation, $this);
         }
         
-        return false;
+        return $permissions;
     }
     /**///</editor-fold>
 

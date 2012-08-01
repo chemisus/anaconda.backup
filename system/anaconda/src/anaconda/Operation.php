@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\Permission}
+ * {@link \anaconda\Operation}
  * 
  * @package     
- * @name        Permission
+ * @name        Operation
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Permission implements \Permission {
+class Operation implements \Operation {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -38,15 +38,15 @@ class Permission implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $key;
+    private $permissions = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function key() {
-        return $this->key;
+    public function permissions() {
+        return $this->permissions;
     }
     /**///</editor-fold>
 
@@ -54,8 +54,18 @@ class Permission implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($key) {
-        $this->key = $key;
+    public function __construct($permissions=array()) {
+        foreach ((array)$permissions as $key=>$value) {
+            if (is_numeric($key)) {
+                $this->permissions[$value] = $this;
+            }
+            else if (is_object($value)) {
+                $this->permissions[$key] = array($value);
+            }
+            else {
+                $this->permissions[$key] = (array)$value;
+            }
+        }
     }
     /**///</editor-fold>
 
@@ -69,14 +79,27 @@ class Permission implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function perform(\Subject $subject) {
+        echo 'hi';
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check(\Operation $operation, $target, \Subject $subject, \Role $role) {
-        return true;
+    public final function check(\Subject $subject) {
+        
+    }
+    
+    public final function execute(\Subject $subject) {
+        if (count($subject->check($this->permissions, $this)) === 0) {
+            $this->perform($subject);
+            
+            return true;
+        }
+        
+        return false;
     }
     /**///</editor-fold>
 

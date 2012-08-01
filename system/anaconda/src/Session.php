@@ -41,11 +41,6 @@ interface Session {
     function assume(\Subject $subject);
     
     function unassume();
-    
-    /**
-     * @return boolean
-     */
-    function execute(\Operation $operation);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

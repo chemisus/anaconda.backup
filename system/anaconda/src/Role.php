@@ -20,20 +20,22 @@ interface Role {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    /**
+     * @return string
+     */
     function key();
-    
-    function permissions();
-
-    function hasPermission($key);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function execute(   \Operation $operation,
-                        \Session $session,
-                        \Subject $subject);
+    /**
+     * @return array 
+     */
+    function check( array $permissions,
+                    \Operation $operation,
+                    \Subject $subject);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

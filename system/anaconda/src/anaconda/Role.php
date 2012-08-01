@@ -50,20 +50,15 @@ class Role implements \Role {
     public function key() {
         return $this->key;
     }
-    
-    public function permissions() {
-        return $this->permissions;
-    }
-    
-    public function hasPermission($key) {
-        return isset($this->permissions[$key]);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($key) {
+        $this->key = $key;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -82,16 +77,28 @@ class Role implements \Role {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function execute(\Operation $operation, \Session $session, \Subject $subject) {
-        foreach ($this->permissions() as $permission) {
-            if ($permission->check($operation, $session, $subject, $this)) {
-                $permission->execute($operation, $session, $subject, $this);
+    public function addPermission(\Permission $permission) {
+        $this->permissions[$permission->key()] = $permission;
+    }
+    
+    public function check(  array $permissions,
+                            \Operation $operation,
+                            \Subject $subject) {
+        foreach ($permissions as $key=>$values) {
+            if (isset($this->permissions[$key])) {
+                foreach ($values as $index=>$value) {
+                    if ($this->permissions[$key]->check($operation, $value, $subject, $this)) {
+                        unset($permissions[$key][$index]);
+                    }
+                }
                 
-                return true;
+                if (!count($permissions[$key])) {
+                    unset($permissions[$key]);
+                }
             }
         }
         
-        return false;
+        return $permissions;
     }
     /**///</editor-fold>
 
