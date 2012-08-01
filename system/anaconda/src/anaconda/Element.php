@@ -22,36 +22,79 @@
  *              GNU General Public License
  */
 
-
+namespace anaconda;
 
 /**
- * {@link \Autoloader}
+ * {@link \anaconda\Element}
  * 
+ * @package     
+ * @name        Element
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Autoloader {
+class Element implements \Element {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
-    /**///<editor-fold desc="Static Fields and Methods">
+    /**///<editor-fold desc="Static Fields">
     /*\**********************************************************************\*/
     /*\                             Static Fields                            \*/
     /*\**********************************************************************\*/
+    /**///</editor-fold>
 
-
+    /**///<editor-fold desc="Static Methods">
     /*\**********************************************************************\*/
     /*\                             Static Methods                           \*/
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
+    /**///<editor-fold desc="Fields">
+    /*\**********************************************************************\*/
+    /*\                             Fields                                   \*/
+    /*\**********************************************************************\*/
+    private $name;
+    
+    private $value;
+    
+    private $attributes;
+    /**///</editor-fold>
+
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
+    /*\**********************************************************************\*/
+    public function getElementName() {
+        return $this->name;
+    }
+    
+    public function getElementAttributes() {
+        return $this->attributes;
+    }
+    
+    public function getElementValue() {
+        return $this->value;
+    }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Constructors">
+    /*\**********************************************************************\*/
+    /*\                             Constructors                             \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Methods">
+    /*\**********************************************************************\*/
+    /*\                             Private Methods                          \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Methods">
+    /*\**********************************************************************\*/
+    /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
@@ -59,65 +102,15 @@ interface Autoloader {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    /**
-     *
-     */
-    public function register();
+    public function toDom(\Tree $tree, \DOMDocument $document) {
+        
+    }
+    /**///</editor-fold>
 
-    /**
-     *
-     * @param string $file
-     * @param array $extract
-     */
-    public function req($file, array $extract=array());
-    
-    /**
-     *
-     * @param string $file
-     * @param array $extract
-     */
-    public function req_once($file, array $extract=array());
-    
-    /**
-     *
-     * @param string $file
-     * @param array $extract
-     */
-    public function inc($file, array $extract=array());
-    
-    /**
-     *
-     * @param string $file
-     * @param array $extract
-     */
-    public function inc_once($file, array $extract=array());
-
-    /**
-     *
-     * @param string $file
-     * @param integer $count
-     * @param boolean $throw
-     * @return Arr
-     */
-    public function find($file, $count=0, $throw=false);
-    
-    /**
-     *
-     * @param string $file
-     * @param boolean $throw
-     * @return string
-     */
-    public function findOne($file, $throw=false);
-    
-    public function add($a, $b=null, $c=null);
-    
-    public function addTranslate($from, $to);
-    
-    public function removeTranslate($from);
-    
-    public function addExtension($extension);
-    
-    public function extensions();
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
