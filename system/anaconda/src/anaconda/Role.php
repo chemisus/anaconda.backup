@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\RoleModel}
+ * {@link \anaconda\Role}
  * 
  * @package     
- * @name        RoleModel
+ * @name        Role
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class RoleModel implements \Role {
+class Role implements \Role {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/

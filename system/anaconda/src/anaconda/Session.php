@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\SessionModel}
+ * {@link \anaconda\Session}
  * 
  * @package     
- * @name        SessionModel
+ * @name        Session
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SessionModel implements \Session {
+class Session implements \Session {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/

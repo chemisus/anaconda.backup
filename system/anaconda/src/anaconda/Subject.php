@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\SubjectModel}
+ * {@link \anaconda\Subject}
  * 
  * @package     
- * @name        SubjectModel
+ * @name        Subject
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubjectModel implements \Subject {
+class Subject implements \Subject {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/

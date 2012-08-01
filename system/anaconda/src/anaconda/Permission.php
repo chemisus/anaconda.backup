@@ -7,15 +7,15 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\PermissionModel}
+ * {@link \anaconda\Permission}
  * 
  * @package     
- * @name        PermissionModel
+ * @name        Permission
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionModel implements \Permission {
+class Permission implements \Permission {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
