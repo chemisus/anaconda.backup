@@ -22,83 +22,331 @@
  *              GNU General Public License
  */
 
-class SubscriberFilterCallback extends \SubscriberDecorator {
-    private $callback;
-    
-    public function __construct($callback, \Subscriber $subscriber) {
-        parent::__construct($subscriber);
+class Anaconda extends ApplicationTemplate {
+    public function run() {
+        $this->subscribe(new RouterTemplate('^home$', new \page\Home()));
         
-        $this->callback = $callback;
-    }
-    
-    protected function check(\Publisher $publisher) {
-        return call_user_func($this->callback, $publisher);
-    }
-}
+        $this->subscribe(new RouterTemplate('^$', new \page\Home()));
 
-class SubscriberPublishCallback extends \SubscriberTemplate {
-    private $callback;
-    
-    public function __construct($callback) {
-        $this->callback = $callback;
-    }
-    
-    public function publish(\Publisher $publisher) {
-        return call_user_func($this->callback, $publisher);
-    }
-}
+        $this->subscribe(new RouterTemplate('^cds(/<action>(/<name>))', new \page\Cds()));
+        
+        $this->subscribe(new RouterTemplate('^cms(/<module>(/<action>(/<id>)))', new \page\Cms()));
 
-class Main {
-    public static function Run() {
-        $subject = new \RoleTemplate(new \SubjectTemplate());
+        $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
+            'name' => 'system.ready',
+            'publisher' => $this,
+        ))));
 
-        $subject->addPermission(
-                new \PermissionDecorator(
-                        new \PermissionTemplate('blah')));
-
-        $application = new \ApplicationTemplate($subject);
-
-        $application->subscribe(
-                new SubscriberFilterCallback(
-                        function (\Publisher $publisher) {
-            return $publisher['name'] === 'system.ready';
-        }, new SubscriberPublishCallback(function () {
-            echo 'hi';
-        })));
-
-        $application->subscribe(
-                new SubscriberFilterCallback(
-                        function (\Publisher $publisher) {
-                            return $publisher['name'] === 'system.route'
-                                && $publisher['path'] === '';
-                        }, new SubscriberPublishCallback(
-                                function () {
-                                    echo 'root page';
-                                })));
-
-        $application->subscribe(
-                new SubscriberFilterCallback(
-                        function (\Publisher $publisher) {
-                            return $publisher['name'] === 'system.route'
-                                && $publisher['path'] === 'home';
-                        }, new SubscriberPublishCallback(
-                                function () {
-                                    echo 'home page';
-                                })));
-
-        $operation = new \OperationTemplate();
-
-        $operation->execute($application->subject());
-
-        $application->publish(new \PublisherTemplate(array(
-            'name' => 'system.ready'
-        )));
-
-        $application->publish(new \PublisherTemplate(array(
+        $page = $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
             'name' => 'system.route',
-            'path' => empty($_SERVER['PATH_INFO']) ? '' : trim($_SERVER['PATH_INFO'], '/')
-        )));
+            'publisher' => $this,
+            'path' => empty($_SERVER['PATH_INFO']) ? '' : trim($_SERVER['PATH_INFO'], '/'),
+        ))));
+
+        if (!$page->handled()) {
+            $page = $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
+                'name' => 'system.error',
+                'publisher' => $this,
+                'code' => 404
+            ))));
+        }
+        
+        if ($page->handled()) {
+            $xsl = $page['page']->naked()->views();
+            
+            $xslt = new XSLTProcessor();
+            
+            $xslt->importStylesheet($xsl);
+            
+            echo $xslt->transformToXml($page['page']->naked()->elements());
+        }
     }
 }
 
-Main::Run();
+/**
+ * {@link anaconda\XmlDocument}
+ * 
+ * @package     anaconda
+ * @name        XmlDocument
+ * @author      Terrence Howard <chemisus@gmail.com>
+ * @version     0.1
+ * @since       0.1
+ */
+class XmlDocument {
+    /**///<editor-fold desc="Constants">
+    /*\**********************************************************************\*/
+    /*\                             Constants                                \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Static Fields">
+    /*\**********************************************************************\*/
+    /*\                             Static Fields                            \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Static Methods">
+    /*\**********************************************************************\*/
+    /*\                             Static Methods                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Fields">
+    /*\**********************************************************************\*/
+    /*\                             Fields                                   \*/
+    /*\**********************************************************************\*/
+    private $nodes = array();
+    
+    private $levels = array();
+    
+    private $roots = array();
+    
+    private $bounds = array();
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Properties">
+    /*\**********************************************************************\*/
+    /*\                             Properties                               \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Constructors">
+    /*\**********************************************************************\*/
+    /*\                             Constructors                             \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Methods">
+    /*\**********************************************************************\*/
+    /*\                             Private Methods                          \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Methods">
+    /*\**********************************************************************\*/
+    /*\                             Protected Methods                        \*/
+    /*\**********************************************************************\*/
+    protected function key($node) {
+        return array_search($node, $this->nodes, true);
+    }
+    
+    protected function bounds($key) {
+        return array_keys(array_intersect($this->bounds, array($key)));
+    }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Methods">
+    /*\**********************************************************************\*/
+    /*\                             Public Methods                           \*/
+    /*\**********************************************************************\*/
+    public function nodes() {
+        return new ArrayIterator($this->nodes);
+    }
+    
+    public function roots() {
+    }
+    
+    public function root($node) {
+    }
+    
+    public function level($node) {
+    }
+    
+    public function ancestors($node) {
+    }
+    
+    public function parent($node) {
+    }
+    
+    public function descendants($node) {
+    }
+    
+    public function children($node) {
+    }
+    
+    public function loadXmlFile($filename) {
+        $matches = array();
+        
+        preg_match_all('/(?:\<|\>|([^\<\>]*))/', file_get_contents($filename), $matches);
+
+        $nodes = array();
+        
+        $stack = array();
+        
+        $current = new XmlNode('');
+
+        while (count($matches[0])) {
+            $value = array_shift($matches[0]);
+            
+            switch ($value) {
+                case '<':
+                    $value = array_shift($matches[0]);
+                    
+                    $value = trim($value);
+                    
+                    if ($value[0] === '?') {
+                        if (substr($value, -1) !== '?') {
+                            throw new Exception;
+                        }
+
+                        $nodes[] = new XmlNode(trim($value, '?'));
+                    }
+                    else if ($value[0] === '/') {
+                        $current = array_pop($stack);
+                    } else if (substr($value, -1) === '/') {
+                        $nodes[] = new XmlNode(trim($value, '/'));
+                    } else {
+                        $stack[] = $current;
+                        
+                        $current = new XmlNode(trim($value, '/'));
+
+                        $nodes[] = $current;
+                    }
+                    
+                    $value = array_shift($matches[0]);
+                    
+                    if ($value !== '>') {
+                        throw new Exception;
+                    }
+                break;
+
+                default:
+                    $current->addValue($value);
+            }
+        }
+        
+        echo '<xmp>';
+        print_r($nodes);
+        echo '</xmp>';
+    }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Event Handlers">
+    /*\**********************************************************************\*/
+    /*\                             Event Handlers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Classes">
+    /*\**********************************************************************\*/
+    /*\                             Classes                                  \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+}
+
+/**
+ * {@link anaconda\XmlNode}
+ * 
+ * @package     anaconda
+ * @name        XmlNode
+ * @author      Terrence Howard <chemisus@gmail.com>
+ * @version     0.1
+ * @since       0.1
+ */
+class XmlNode {
+    /**///<editor-fold desc="Constants">
+    /*\**********************************************************************\*/
+    /*\                             Constants                                \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Static Fields">
+    /*\**********************************************************************\*/
+    /*\                             Static Fields                            \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Static Methods">
+    /*\**********************************************************************\*/
+    /*\                             Static Methods                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Fields">
+    /*\**********************************************************************\*/
+    /*\                             Fields                                   \*/
+    /*\**********************************************************************\*/
+    private $tag;
+    
+    private $attributes = array();
+    
+    private $values = array();
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Properties">
+    /*\**********************************************************************\*/
+    /*\                             Properties                               \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Constructors">
+    /*\**********************************************************************\*/
+    /*\                             Constructors                             \*/
+    /*\**********************************************************************\*/
+    public function __construct($line) {
+        $matches = array();
+        
+        preg_match('/(\S+)\s*(?:([^\s\=]+)(?:=\s*\"([^\"]*)\"))*/', $line, $matches);
+
+        array_shift($matches);
+
+        $this->tag = array_shift($matches);
+
+        while (count($matches)) {
+            $this->attributes[array_shift($matches)] = array_shift($matches);
+        }
+    }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Methods">
+    /*\**********************************************************************\*/
+    /*\                             Private Methods                          \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Methods">
+    /*\**********************************************************************\*/
+    /*\                             Protected Methods                        \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Methods">
+    /*\**********************************************************************\*/
+    /*\                             Public Methods                           \*/
+    /*\**********************************************************************\*/
+    public function addValue($value) {
+        $this->values[] = $value;
+    }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Event Handlers">
+    /*\**********************************************************************\*/
+    /*\                             Event Handlers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Classes">
+    /*\**********************************************************************\*/
+    /*\                             Classes                                  \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+}
+
+
+
+
+$document = new XmlDocument();
+
+$document->loadXmlFile(ROOT."/application/anaconda/view/layout.xsl");
