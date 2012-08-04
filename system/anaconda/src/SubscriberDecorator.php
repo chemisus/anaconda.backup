@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\ApplicationTemplate}
+ * {@link \SubscriberDecorator}
  * 
- * @package     anaconda
- * @name        ApplicationTemplate
+ * @package     
+ * @name        SubscriberDecorator
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ApplicationTemplate implements \Application {
+class SubscriberDecorator extends \anaconda\SubscriberDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,33 +56,18 @@ class ApplicationTemplate implements \Application {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $version = '0.1';
-    
-    private $subject;
-    
-    private $subscribers = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function subject() {
-        return $this->subject;
-    }
-    
-    public function version() {
-        return $this->version;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\Subject $subject) {
-        $this->subject = $subject;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -101,15 +86,6 @@ class ApplicationTemplate implements \Application {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function publish(\Publisher $publisher) {
-        foreach ($this->subscribers as $subscriber) {
-            $subscriber->publish($publisher);
-        }
-    }
-    
-    public function subscribe(\Subscriber $subscriber) {
-        $this->subscribers[] = $subscriber;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

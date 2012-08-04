@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class OperationTemplate implements \anaconda\Operation {
+class OperationTemplate implements \Operation {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -95,7 +95,7 @@ class OperationTemplate implements \anaconda\Operation {
         $this->permissions[$name][] = $value;
     }
     
-    public function execute(\anaconda\Subject $subject) {
+    public function execute(\Subject $subject) {
         foreach ($this->permissions as $permission=>$values) {
             foreach ($values as $value) {
                 if (!$subject->check($permission, $value)) {

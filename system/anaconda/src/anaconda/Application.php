@@ -47,9 +47,9 @@ interface Application {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function publish(\anaconda\Publisher $publisher);
+    function publish(\Publisher $publisher);
     
-    function subscribe(\anaconda\Subscriber $subscriber);
+    function subscribe(\Subscriber $subscriber);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

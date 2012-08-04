@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class PermissionDecorator implements \anaconda\Permission {
+class PermissionDecorator implements \Permission {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -72,7 +72,7 @@ class PermissionDecorator implements \anaconda\Permission {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\anaconda\Permission $permission) {
+    public function __construct(\Permission $permission) {
         $this->permission = $permission;
     }
     /**///</editor-fold>

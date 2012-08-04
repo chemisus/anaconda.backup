@@ -44,7 +44,7 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function publish(\anaconda\Publisher $publisher);
+    function publish(\Publisher $publisher);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

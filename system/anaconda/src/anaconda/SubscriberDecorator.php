@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class SubscriberDecorator implements \anaconda\Subscriber {
+class SubscriberDecorator implements \Subscriber {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -84,7 +84,7 @@ class SubscriberDecorator implements \anaconda\Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function check(\anaconda\Publisher $publisher) {
+    protected function check(\Publisher $publisher) {
         return false;
     }
     /**///</editor-fold>
@@ -93,7 +93,7 @@ class SubscriberDecorator implements \anaconda\Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function publish(\anaconda\Publisher $publisher) {
+    public final function publish(\Publisher $publisher) {
         if (!$this->check($publisher)) {
             return false;
         }

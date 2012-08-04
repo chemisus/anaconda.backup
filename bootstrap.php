@@ -22,4 +22,25 @@
  *              GNU General Public License
  */
 
-define('ROOT', __DIR__.'/');
+
+
+
+class Bootstrap {
+    public static function Run() {
+        define('ROOT', dirname(__FILE__).'/');
+        
+        spl_autoload_register(function ($class) {
+            $class = strtr($class, array('\\'=>'/'));
+            
+            require_once(array_shift(glob(ROOT."*/*/src/{$class}.php")));
+        });
+        
+        require_once(ROOT."application/anaconda/Main.php");
+    }
+}
+
+Bootstrap::Run();
+
+
+
+

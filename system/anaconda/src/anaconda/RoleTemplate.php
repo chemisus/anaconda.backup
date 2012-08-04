@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class RoleTemplate implements \anaconda\Subject, \anaconda\Role {
+class RoleTemplate implements \Subject, \Role {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -74,7 +74,7 @@ class RoleTemplate implements \anaconda\Subject, \anaconda\Role {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\anaconda\Subject $subject) {
+    public function __construct(\Subject $subject) {
         $this->subject = $subject;
     }
     /**///</editor-fold>
@@ -95,13 +95,13 @@ class RoleTemplate implements \anaconda\Subject, \anaconda\Role {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function addPermission(\anaconda\Permission $permission) {
+    public function addPermission(\Permission $permission) {
         $this->permissions[$permission->name()] = $permission;
 
         return $permission;
     }
     
-    public function removePermission(\anaconda\Permission $permission) {
+    public function removePermission(\Permission $permission) {
         if (isset($this->permissions[$permission->name()])) {
             unset($this->permissions[$permission->name()]);
         }

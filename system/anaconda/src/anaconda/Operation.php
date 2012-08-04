@@ -44,7 +44,7 @@ interface Operation {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function execute(\anaconda\Subject $subject);
+    function execute(\Subject $subject);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

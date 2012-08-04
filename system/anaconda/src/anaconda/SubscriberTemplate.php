@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate implements \anaconda\Subscriber {
+class SubscriberTemplate implements \Subscriber {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -86,7 +86,7 @@ class SubscriberTemplate implements \anaconda\Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function publish(\anaconda\Publisher $publisher) {
+    public function publish(\Publisher $publisher) {
     }
     /**///</editor-fold>
 

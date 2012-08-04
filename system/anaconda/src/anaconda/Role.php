@@ -25,7 +25,7 @@
 namespace anaconda;
 
 /**
- * {@link \anaconda\Role}
+ * {@link anaconda\Role}
  * 
  * @package     anaconda
  * @name        Role
@@ -45,9 +45,9 @@ interface Role {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function addPermission(\anaconda\Permission $permission);
+    function addPermission(\Permission $permission);
     
-    function removePermission(\anaconda\Permission $permission);
+    function removePermission(\Permission $permission);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

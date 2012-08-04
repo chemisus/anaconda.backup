@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\Subject}
+ * {@link \Subject}
  * 
- * @package     anaconda
+ * @package     
  * @name        Subject
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subject {
+interface Subject extends \anaconda\Subject {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -44,7 +44,6 @@ interface Subject {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function check($permission, $value=null);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
