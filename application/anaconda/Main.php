@@ -28,10 +28,10 @@ class Anaconda extends ApplicationTemplate {
         
         $this->subscribe(new RouterTemplate('^$', new \page\Home()));
 
-        $this->subscribe(new RouterTemplate('^cds(/<action>(/<name>))', new \page\Cds()));
-        
         $this->subscribe(new RouterTemplate('^cms(/<module>(/<action>(/<id>)))', new \page\Cms()));
 
+        $this->subscribe(new RouterTemplate('^cds(/<action>(/<name>))', new \page\Cds()));
+        
         $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
             'name' => 'system.ready',
             'publisher' => $this,

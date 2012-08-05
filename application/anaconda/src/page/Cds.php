@@ -124,21 +124,8 @@ class Cds extends \PageTemplate {
     public function browse() {
         $this->elements = $this->model->all();
     }
-    
-    public function create() {
-        $this->model->createModule(array());
-    }
-    
-    public function read($name) {
-        $this->elements = $this->model->readModule($name);
-    }
-    
-    public function update($name) {
-        $this->elements = $this->model->updateModule($name, array());
-    }
-    
-    public function delete($name) {
-        $this->model->deleteModule($name);
+
+    public function addField() {
     }
     /**///</editor-fold>
 

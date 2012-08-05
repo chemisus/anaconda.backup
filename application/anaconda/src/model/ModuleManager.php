@@ -105,20 +105,56 @@ class ModuleManager {
         return $this->document->documentElement;
     }
     
-    public function readModule($name) {
-        return $this->xpath->query("/modules/module[@name='{$name}']");
-    }
-    
-    public function createModule($module) {
-    }
-    
-    public function updateModule($name, $module) {
-        $this->deleteModule($name);
+    public function addModule($module) {
+        $modules = $this->xpath->query("/modules");
         
-        $this->createModule($module);
+        $node = $this->document->createElement('module');
+        
+        $node->setAttribute('name', $module);
+        
+        $modules->appendNode($node);
     }
     
-    public function deleteModule($name) {
+    public function removeModule($module) {
+        $modules = $this->xpath->query("/modules");
+        
+        $modules->removeChild($this->xpath->query("/modules/module[@name='{$module}']"));
+    }
+    
+    public function newField($module, $field) {
+        $module = $this->xpath->query("/modules/module[@name='{$module}']");
+
+        $node = $this->document->createElement('field');
+        
+        $node->setAttribute('name', $field);
+        
+        $module->appendNode($node);
+    }
+    
+    public function removeField($module, $field) {
+        $node = $this->xpath->query("/modules/module[@name='{$module}']");
+        
+        $node->removeChild($this->xpath->query("/modules/module[@name='{$module}']/field[[@name='{$field}']"));
+    }
+    
+    public function addDecorator($module, $decorator) {
+        $module = $this->xpath->query("/modules/module[@name='{$module}']");
+
+        $node = $this->document->createElement('decorator');
+        
+        $node->setAttribute('name', $decorator);
+        
+        $module->appendNode($node);
+    }
+    
+    public function addFieldDecorator($module, $field, $decorator) {
+        $field = $this->xpath->query("/modules/module[@name='{$module}']/field[[@name='{$field}']");
+
+        $node = $this->document->createElement('decorator');
+        
+        $node->setAttribute('name', $decorator);
+        
+        $field->appendNode($node);
     }
     /**///</editor-fold>
 

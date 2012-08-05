@@ -56,7 +56,7 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $pattern = array();
+    private $patterns = array();
     
     private $keys = array();
     /**///</editor-fold>
@@ -71,10 +71,12 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($route, \Page $page) {
+    public function __construct($routes, \Page $page) {
         parent::__construct($page);
-        
-        $this->route($route);
+
+        foreach ((array)$routes as $route) {
+            $this->route($route);
+        }
     }
     /**///</editor-fold>
 
@@ -95,12 +97,14 @@ class RouterTemplate extends \SubscriberDecorator {
         
         $matches = array();
         
-        if (preg_match($this->pattern, $publisher['path'], $matches)) {
-            $publisher['parameters'] = array_intersect_key($matches, $this->keys);
-            
-            $publisher['page'] = $this;
+        foreach ($this->patterns as $pattern) {
+            if (preg_match($pattern, $publisher['path'], $matches)) {
+                $publisher['parameters'] = array_intersect_key($matches, $this->keys);
 
-            return true;
+                $publisher['page'] = $this;
+
+                return true;
+            }
         }
         
         return false;
@@ -163,7 +167,7 @@ class RouterTemplate extends \SubscriberDecorator {
         
         $this->keys = array_flip($keys);
         
-        $this->pattern = "/{$current}/";
+        $this->patterns[] = "/{$current}/";
     }
     /**///</editor-fold>
 
