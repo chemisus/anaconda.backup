@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link \SubscriberPublishCallback}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     
+ * @name        SubscriberPublishCallback
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class SubscriberPublishCallback extends \SubscriberTemplate {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,28 +56,21 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $callback;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
+    public function __construct($callback) {
+        $this->callback = $callback;
     }
     /**///</editor-fold>
 
@@ -97,8 +90,8 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public function publish(\Publisher $publisher) {
+        return call_user_func($this->callback, $publisher);
     }
     /**///</editor-fold>
 

@@ -25,27 +25,25 @@
 namespace anaconda;
 
 /**
- * {@link anaconda\Publisher}
+ * {@link anaconda\Page}
  * 
  * @package     anaconda
- * @name        Publisher
+ * @name        Page
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Publisher extends \ArrayAccess {
+interface Page {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function handled();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function published(\Subscriber $subscriber);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

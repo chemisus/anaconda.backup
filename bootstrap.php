@@ -22,9 +22,6 @@
  *              GNU General Public License
  */
 
-
-
-
 class Bootstrap {
     public static function Run() {
         define('ROOT', dirname(__FILE__).'/');
@@ -36,11 +33,15 @@ class Bootstrap {
         });
         
         require_once(ROOT."application/anaconda/Main.php");
+        
+        $subject = new \RoleTemplate(new \SubjectTemplate());
+
+        $subject->addPermission(new \PermissionDecorator(new \PermissionTemplate('blah')));
+
+        $application = new \Anaconda($subject);
+        
+        $application->run();
     }
 }
 
 Bootstrap::Run();
-
-
-
-

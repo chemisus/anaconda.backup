@@ -22,30 +22,28 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\Publisher}
+ * {@link \Decoration}
  * 
- * @package     anaconda
- * @name        Publisher
+ * @package     
+ * @name        Decoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Publisher extends \ArrayAccess {
+interface Decoration extends anaconda\Decoration {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function handled();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function published(\Subscriber $subscriber);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

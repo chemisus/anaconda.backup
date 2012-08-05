@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link \PageTemplate}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     
+ * @name        PageTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class PageTemplate extends \SubscriberTemplate implements \Page {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,19 +56,27 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    protected $elements = array();
+    
+    protected $views;
+    
+    private $parameters = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
+    public function elements() {
+        return $this->elements;
     }
     
-    public function name() {
-        return $this->name;
+    public function views() {
+        return $this->views;
+    }
+    
+    public function parameters() {
+        return $this->parameters;
     }
     /**///</editor-fold>
 
@@ -76,29 +84,59 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
+    private function execute() {
+        $method = isset($this->parameters['action']) ? $this->parameters['action'] : 'index';
+        
+        if (!method_exists($this, $method)) {
+            return false;
+        }
+        
+        $callback = new ReflectionMethod($this, $method);
+        
+        $callback->invokeArgs($this, $this->parameters);
+        
+        return true;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Methods">
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function before() {
+    }
+    
+    protected function after() {
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public final function publish(\Publisher $publisher) {
+        $this->parameters = $publisher['parameters'];
+        
+        try {
+            $this->before();
+
+            if (!$this->execute()) {
+                return false;
+            }
+
+            $this->after();
+        }
+        catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+        
+        return true;
     }
     /**///</editor-fold>
 

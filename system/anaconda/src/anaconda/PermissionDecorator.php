@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class PermissionDecorator implements \Permission {
+class PermissionDecorator implements \Permission, \Decoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -63,6 +63,10 @@ class PermissionDecorator implements \Permission {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function naked() {
+        return $this->permission->naked();
+    }
+    
     public function name() {
         return $this->permission->name();
     }

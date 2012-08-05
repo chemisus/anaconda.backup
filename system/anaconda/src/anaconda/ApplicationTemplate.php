@@ -103,8 +103,16 @@ class ApplicationTemplate implements \Application {
     /*\**********************************************************************\*/
     public function publish(\Publisher $publisher) {
         foreach ($this->subscribers as $subscriber) {
-            $subscriber->publish($publisher);
+            if ($subscriber->publish($publisher)) {
+                $publisher->published($subscriber);
+            }
+            
+            if ($publisher->handled()) {
+                break;
+            }
         }
+        
+        return $publisher;
     }
     
     public function subscribe(\Subscriber $subscriber) {

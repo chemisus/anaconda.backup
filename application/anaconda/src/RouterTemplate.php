@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link \RouterTemplate}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     
+ * @name        RouterTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class RouterTemplate extends \SubscriberDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,28 +56,25 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $pattern = array();
+    
+    private $keys = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
+    public function __construct($route, \Page $page) {
+        parent::__construct($page);
+        
+        $this->route($route);
     }
     /**///</editor-fold>
 
@@ -91,14 +88,82 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function check(\Publisher $publisher) {
+        if ($publisher['name'] !== 'system.route') {
+            return false;
+        }
+        
+        $matches = array();
+        
+        if (preg_match($this->pattern, $publisher['path'], $matches)) {
+            $publisher['parameters'] = array_intersect_key($matches, $this->keys);
+            
+            $publisher['page'] = $this;
+
+            return true;
+        }
+        
+        return false;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public function route($route) {
+        $route = trim($route, "/");
+        
+        $route = strtr($route, array('/' => '\\/'));
+        
+        $matches = array();
+        
+        preg_match_all('/(\(|[^\(\)]+|\))/', $route, $matches, PREG_OFFSET_CAPTURE);
+        
+        $stack = array();
+        
+        $current = '';
+        
+        $keys = array();
+        
+        foreach ($matches[0] as $match) {
+            switch ($match[0]) {
+                case '(':
+                    $stack[] = $current;
+
+                    $current = '';
+                break;
+            
+                case ')':
+                    $current = array_pop($stack)."(?:".$current.")?";
+                break;
+            
+                default:
+                    $offset = 0;
+                    
+                    $value = $match[0];
+
+                    while (preg_match('/\<(\w+)\>/', $value, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+                        $old = $matches[0][0];
+
+                        $key = $matches[1][0];
+
+                        $keys[] = $key;
+
+                        $new = "(?P<{$key}>[a-zA-z0-9]+)";
+
+                        $value = str_replace($old, $new, $value);
+
+                        $offset = $matches[0][1] + strlen($new);
+                    }
+                    
+                    $current .= $value;
+            }
+        }
+        
+        $this->keys = array_flip($keys);
+        
+        $this->pattern = "/{$current}/";
     }
     /**///</editor-fold>
 

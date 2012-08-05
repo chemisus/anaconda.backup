@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate implements \Subscriber {
+class SubscriberTemplate implements \Subscriber, \Decoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -62,6 +62,9 @@ class SubscriberTemplate implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function naked() {
+        return $this;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -87,6 +90,7 @@ class SubscriberTemplate implements \Subscriber {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function publish(\Publisher $publisher) {
+        return true;
     }
     /**///</editor-fold>
 
