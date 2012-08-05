@@ -25,15 +25,15 @@
 namespace anaconda;
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link anaconda\PublisherDecorator}
  * 
  * @package     anaconda
- * @name        PermissionTemplate
+ * @name        PublisherDecorator
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class PublisherDecorator implements \Decoration, \Publisher {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,7 +56,7 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $publisher;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -64,11 +64,11 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function naked() {
-        return $this;
+        return $this->publisher->naked();
     }
     
-    public function name() {
-        return $this->name;
+    public function handled() {
+        return $this->publisher->handled();
     }
     /**///</editor-fold>
 
@@ -76,8 +76,8 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
+    public function __construct(\Publisher $publisher) {
+        $this->publisher = $publisher;
     }
     /**///</editor-fold>
 
@@ -97,8 +97,24 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public function published(\Subscriber $subscriber) {
+        return $this->publisher->published($subscriber);
+    }
+    
+    public function offsetExists($offset) {
+        return $this->publisher->offsetExists($offset);
+    }
+
+    public function offsetGet($offset) {
+        return $this->publisher->offsetGet($offset);
+    }
+
+    public function offsetSet($offset, $value) {
+        return $this->publisher->offsetSet($offset, $value);
+    }
+
+    public function offsetUnset($offset) {
+        return $this->publisher->offsetUnset($offset);
     }
     /**///</editor-fold>
 

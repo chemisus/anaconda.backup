@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<modules>
+    <module name="user">
+        <decorator name="id"/>
+        <field name="name" type="string" display="text">
+            <decorator name="unique"/>
+            <decorator name="minlength" value="8"/>
+        </field>
+        <field name="password" type="string" display="password">
+            <decorator name="minlength" value="8"/>
+        </field>
+    </module>
+    <module name="role">
+        
+    </module>
+</modules>

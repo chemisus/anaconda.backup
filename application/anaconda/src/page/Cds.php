@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace page;
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link page\Cds}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     page
+ * @name        Cds
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class Cds extends \PageTemplate {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,29 +56,19 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $model;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -91,14 +81,64 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function before() {
+        $this->model = new \model\ModuleManager();
+        
+        $this->model->loadXml(ROOT.'application/anaconda/config/modules.xml');
+        
+        $this->views = new \DOMDocument();
+        
+        $this->views->preserveWhiteSpace = false;
+        
+        $this->views->formatOutput = true;
+
+        $this->views->load(ROOT.'application/anaconda/view/layout.xsl');
+
+        $node = $this->views->createElement('xsl:include');
+        
+        $node->setAttribute('href', ROOT.'application/anaconda/view/view.xsl');
+        
+        $this->views->documentElement->appendChild($node);
+
+        $node = $this->views->createElement('xsl:include');
+        
+        $node->setAttribute('href', ROOT.'application/anaconda/view/cds.xsl');
+        
+        $this->views->documentElement->appendChild($node);
+        
+        $this->views->loadXML($this->views->saveXML());
+    }
+    
+    protected function after() {
+        $this->model->saveXml(ROOT.'application/anaconda/config/modules.xml');
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public function index() {
+    }
+    
+    public function browse() {
+        $this->elements = $this->model->all();
+    }
+    
+    public function create() {
+        $this->model->createModule(array());
+    }
+    
+    public function read($name) {
+        $this->elements = $this->model->readModule($name);
+    }
+    
+    public function update($name) {
+        $this->elements = $this->model->updateModule($name, array());
+    }
+    
+    public function delete($name) {
+        $this->model->deleteModule($name);
     }
     /**///</editor-fold>
 

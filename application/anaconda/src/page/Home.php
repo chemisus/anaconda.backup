@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace page;
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link page\Home}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     page
+ * @name        Home
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class Home extends \PageTemplate {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,29 +56,18 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -91,15 +80,15 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function execute() {
+        echo 'home page';
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

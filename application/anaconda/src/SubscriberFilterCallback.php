@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link \SubscriberFilterCallback}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     
+ * @name        SubscriberFilterCallback
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class SubscriberFilterCallback extends \SubscriberDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,28 +56,23 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $callback;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
+    public function __construct($callback, \Subscriber $subscriber) {
+        parent::__construct($subscriber);
+        
+        $this->callback = $callback;
     }
     /**///</editor-fold>
 
@@ -91,15 +86,15 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function check(\Publisher $publisher) {
+        return call_user_func($this->callback, $publisher);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

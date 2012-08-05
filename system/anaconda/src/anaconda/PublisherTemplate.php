@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class PublisherTemplate implements \Publisher {
+class PublisherTemplate implements \Publisher, \Decoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -63,6 +63,13 @@ class PublisherTemplate implements \Publisher {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function naked() {
+        return $this;
+    }
+    
+    public function handled() {
+        return false;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -90,6 +97,9 @@ class PublisherTemplate implements \Publisher {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function published(\Subscriber $subscriber) {
+    }
+    
     public function offsetExists($offset) {
         return isset($this->values[$offset]);
     }

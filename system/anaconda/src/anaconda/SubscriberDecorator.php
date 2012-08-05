@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class SubscriberDecorator implements \Subscriber {
+class SubscriberDecorator implements \Subscriber, \Decoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -63,6 +63,9 @@ class SubscriberDecorator implements \Subscriber {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function naked() {
+        return $this->subscriber->naked();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">

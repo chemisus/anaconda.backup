@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link \PublisherLimit}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     
+ * @name        PublisherLimit
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class PublisherLimit extends \PublisherDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,19 +56,15 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $limit;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
+    public function handled() {
+        return count($this['subscribers']) >= $this->limit || parent::handled();
     }
     /**///</editor-fold>
 
@@ -76,8 +72,12 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
+    public function __construct($limit, \Publisher $publisher) {
+        parent::__construct($publisher);
+        
+        $this['subscribers'] = array();
+        
+        $this->limit = $limit;
     }
     /**///</editor-fold>
 
@@ -97,8 +97,14 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public function published(\Subscriber $subscriber) {
+        $subscribers = $this['subscribers'];
+        
+        $subscribers[] = $subscriber;
+        
+        $this['subscribers'] = $subscribers;
+        
+        return parent::published($subscriber);
     }
     /**///</editor-fold>
 

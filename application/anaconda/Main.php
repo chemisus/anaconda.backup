@@ -22,83 +22,43 @@
  *              GNU General Public License
  */
 
-class SubscriberFilterCallback extends \SubscriberDecorator {
-    private $callback;
-    
-    public function __construct($callback, \Subscriber $subscriber) {
-        parent::__construct($subscriber);
+class Anaconda extends ApplicationTemplate {
+    public function run() {
+        $this->subscribe(new RouterTemplate('^home$', new \page\Home()));
         
-        $this->callback = $callback;
-    }
-    
-    protected function check(\Publisher $publisher) {
-        return call_user_func($this->callback, $publisher);
-    }
-}
+        $this->subscribe(new RouterTemplate('^$', new \page\Home()));
 
-class SubscriberPublishCallback extends \SubscriberTemplate {
-    private $callback;
-    
-    public function __construct($callback) {
-        $this->callback = $callback;
-    }
-    
-    public function publish(\Publisher $publisher) {
-        return call_user_func($this->callback, $publisher);
-    }
-}
+        $this->subscribe(new RouterTemplate('^cds(/<action>(/<name>))', new \page\Cds()));
+        
+        $this->subscribe(new RouterTemplate('^cms(/<module>(/<action>(/<id>)))', new \page\Cms()));
 
-class Main {
-    public static function Run() {
-        $subject = new \RoleTemplate(new \SubjectTemplate());
+        $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
+            'name' => 'system.ready',
+            'publisher' => $this,
+        ))));
 
-        $subject->addPermission(
-                new \PermissionDecorator(
-                        new \PermissionTemplate('blah')));
-
-        $application = new \ApplicationTemplate($subject);
-
-        $application->subscribe(
-                new SubscriberFilterCallback(
-                        function (\Publisher $publisher) {
-            return $publisher['name'] === 'system.ready';
-        }, new SubscriberPublishCallback(function () {
-            echo 'hi';
-        })));
-
-        $application->subscribe(
-                new SubscriberFilterCallback(
-                        function (\Publisher $publisher) {
-                            return $publisher['name'] === 'system.route'
-                                && $publisher['path'] === '';
-                        }, new SubscriberPublishCallback(
-                                function () {
-                                    echo 'root page';
-                                })));
-
-        $application->subscribe(
-                new SubscriberFilterCallback(
-                        function (\Publisher $publisher) {
-                            return $publisher['name'] === 'system.route'
-                                && $publisher['path'] === 'home';
-                        }, new SubscriberPublishCallback(
-                                function () {
-                                    echo 'home page';
-                                })));
-
-        $operation = new \OperationTemplate();
-
-        $operation->execute($application->subject());
-
-        $application->publish(new \PublisherTemplate(array(
-            'name' => 'system.ready'
-        )));
-
-        $application->publish(new \PublisherTemplate(array(
+        $page = $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
             'name' => 'system.route',
-            'path' => empty($_SERVER['PATH_INFO']) ? '' : trim($_SERVER['PATH_INFO'], '/')
-        )));
+            'publisher' => $this,
+            'path' => empty($_SERVER['PATH_INFO']) ? '' : trim($_SERVER['PATH_INFO'], '/'),
+        ))));
+
+        if (!$page->handled()) {
+            $page = $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
+                'name' => 'system.error',
+                'publisher' => $this,
+                'code' => 404
+            ))));
+        }
+        
+        if ($page->handled()) {
+            $xsl = $page['page']->naked()->views();
+            
+            $xslt = new XSLTProcessor();
+            
+            $xslt->importStylesheet($xsl);
+            
+            echo $xslt->transformToXml($page['page']->naked()->elements());
+        }
     }
 }
-
-Main::Run();

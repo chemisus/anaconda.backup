@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace model;
 
 /**
- * {@link anaconda\PermissionTemplate}
+ * {@link model\ModuleManager}
  * 
- * @package     anaconda
- * @name        PermissionTemplate
+ * @package     model
+ * @name        ModuleManager
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class PermissionTemplate implements \Permission, \Decoration {
+class ModuleManager {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,29 +56,21 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $name;
+    private $document;
+    
+    private $xpath;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this;
-    }
-    
-    public function name() {
-        return $this->name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($name) {
-        $this->name = $name;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -97,8 +89,36 @@ class PermissionTemplate implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function check($value=null) {
-        return false;
+    public function loadXml($file) {
+        $this->document = new \DOMDocument();
+        
+        $this->document->load($file);
+
+        $this->xpath = new \DOMXPath($this->document);
+    }
+
+    public function saveXml($file) {
+        $this->document->save($file);
+    }
+    
+    public function all() {
+        return $this->document->documentElement;
+    }
+    
+    public function readModule($name) {
+        return $this->xpath->query("/modules/module[@name='{$name}']");
+    }
+    
+    public function createModule($module) {
+    }
+    
+    public function updateModule($name, $module) {
+        $this->deleteModule($name);
+        
+        $this->createModule($module);
+    }
+    
+    public function deleteModule($name) {
     }
     /**///</editor-fold>
 
