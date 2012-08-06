@@ -22,22 +22,15 @@
  *              GNU General Public License
  */
 
-require_once('functions.php');
-
-class Bootstrap {
-    public static function Run() {
-        define('ROOT', dirname(__FILE__).'/');
-        
-        spl_autoload_register(function ($class) {
-            $class = strtr($class, array('\\'=>'/'));
-            
-            require_once(array_shift(glob(ROOT."*/*/src/{$class}.php")));
-        });
+function xmp() {
+    echo '<xmp style="border: 1px black dotted;">';
+    foreach (func_get_args() as $value) {
+        print_r($value);
+        echo "\n";
     }
+    echo '</xmp>';
 }
 
-Bootstrap::Run();
-
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
@@ -45,37 +38,32 @@ Bootstrap::Run();
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 
-$controller = new ModuleController();
-
-$controller->before();
-
-$routes = array_flatten(isset($_REQUEST['route']) ? $_REQUEST['route'] : array(), '/', false);
-
-foreach ($routes as $route) {
-    xmp(trim($route, '/'));
-    
-    $matches = array();
-    
-    preg_match('/^(?P<controller>[^\/]*)(\/(?P<action>[^\/]*))?(\/(?P<module>[^\/]*))?(\/(?P<index>[^\/]*))?/', $route, $matches);
-    
-    if ($matches['controller'] === 'module' && $matches['action'] === 'create') {
-        $controller->create($_REQUEST['field'][$matches['module']]);
-    } else if ($matches['controller'] === 'module' && $matches['action'] === 'delete') {
-        $controller->delete($_REQUEST['field'][$matches['module']][$matches['index']]['name']);
+function array_flatten($values, $glue='', $last=true) {
+    if (!is_array($values)) {
+        return array($last ? $values : null);
     }
-    
-/*
-    if (preg_match('/^module\/create/', $route)) {
-        $controller->create($_REQUEST['field']['newmodule']);
+
+    $array = array();
+
+    foreach ($values as $key=>$value) {
+        $value = array_flatten($value, $glue, $last);
+
+        if (count($value)) {
+            foreach ($value as $route) {
+                $array[] = "{$key}{$glue}{$route}";
+            }
+        }
+        else {
+            $array[] = $key;
+        }
     }
- * 
- */
+
+    return $array;
 }
 
-$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
-
-xmp(trim($path, '/'));
-
-$controller->after();
-
-$controller->render();
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
