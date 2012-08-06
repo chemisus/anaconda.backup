@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \RouterTemplate}
+ * {@link \Config}
  * 
  * @package     
- * @name        RouterTemplate
+ * @name        Config
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class RouterTemplate extends \SubscriberDecorator {
+class Config {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,9 +56,9 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $pattern = array();
+    private $document;
     
-    private $keys = array();
+    private $xpath;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -71,10 +71,12 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($route, \Page $page) {
-        parent::__construct($page);
+    public function __construct($filename) {
+        $this->document = new DOMDocument();
         
-        $this->route($route);
+        $this->document->load($filename);
+        
+        $this->xpath = new DOMXPath($this->document);
     }
     /**///</editor-fold>
 
@@ -88,82 +90,14 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function check(\Publisher $publisher) {
-        if ($publisher['name'] !== 'system.route') {
-            return false;
-        }
-        
-        $matches = array();
-        
-        if (preg_match($this->pattern, $publisher['path'], $matches)) {
-            $publisher['parameters'] = array_intersect_key($matches, $this->keys);
-            
-            $publisher['page'] = $this;
-
-            return true;
-        }
-        
-        return false;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function route($route) {
-        $route = trim($route, "/");
-        
-        $route = strtr($route, array('/' => '\\/'));
-        
-        $matches = array();
-        
-        preg_match_all('/(\(|[^\(\)]+|\))/', $route, $matches, PREG_OFFSET_CAPTURE);
-        
-        $stack = array();
-        
-        $current = '';
-        
-        $keys = array();
-        
-        foreach ($matches[0] as $match) {
-            switch ($match[0]) {
-                case '(':
-                    $stack[] = $current;
-
-                    $current = '';
-                break;
-            
-                case ')':
-                    $current = array_pop($stack)."(?:".$current.")?";
-                break;
-            
-                default:
-                    $offset = 0;
-                    
-                    $value = $match[0];
-
-                    while (preg_match('/\[(\w+)\]/', $value, $matches, PREG_OFFSET_CAPTURE, $offset)) {
-                        $old = $matches[0][0];
-
-                        $key = $matches[1][0];
-
-                        $keys[] = $key;
-
-                        $new = "(?P<{$key}>[a-zA-z0-9]+)";
-
-                        $value = str_replace($old, $new, $value);
-
-                        $offset = $matches[0][1] + strlen($new);
-                    }
-                    
-                    $current .= $value;
-            }
-        }
-        
-        $this->keys = array_flip($keys);
-        
-        $this->pattern = "/{$current}/";
+    public function find($path, \DOMNode $node=null) {
+        return $this->xpath->query($path, $node);
     }
     /**///</editor-fold>
 
