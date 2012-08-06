@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<routes>
-    <route path="/" controller="" method=""></route>
-    <route path="/cds(/[module](/[action]))"></route>
-</routes>

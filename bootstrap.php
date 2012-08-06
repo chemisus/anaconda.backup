@@ -31,16 +31,6 @@ class Bootstrap {
             
             require_once(array_shift(glob(ROOT."*/*/src/{$class}.php")));
         });
-        
-        require_once(ROOT."application/anaconda/Main.php");
-        
-        $subject = new \RoleTemplate(new \SubjectTemplate());
-
-        $subject->addPermission(new \PermissionDecorator(new \PermissionTemplate('blah')));
-
-        $application = new \Anaconda($subject);
-        
-        $application->run();
     }
 }
 
