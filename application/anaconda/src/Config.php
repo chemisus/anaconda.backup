@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace model;
+
 
 /**
- * {@link model\ModuleManager}
+ * {@link \Config}
  * 
- * @package     model
- * @name        ModuleManager
+ * @package     
+ * @name        Config
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ModuleManager {
+class Config {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -71,6 +71,13 @@ class ModuleManager {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($filename) {
+        $this->document = new DOMDocument();
+        
+        $this->document->load($filename);
+        
+        $this->xpath = new DOMXPath($this->document);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -89,72 +96,8 @@ class ModuleManager {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function loadXml($file) {
-        $this->document = new \DOMDocument();
-        
-        $this->document->load($file);
-
-        $this->xpath = new \DOMXPath($this->document);
-    }
-
-    public function saveXml($file) {
-        $this->document->save($file);
-    }
-    
-    public function all() {
-        return $this->document->documentElement;
-    }
-    
-    public function addModule($module) {
-        $modules = $this->xpath->query("/modules");
-        
-        $node = $this->document->createElement('module');
-        
-        $node->setAttribute('name', $module);
-        
-        $modules->appendNode($node);
-    }
-    
-    public function removeModule($module) {
-        $modules = $this->xpath->query("/modules");
-        
-        $modules->removeChild($this->xpath->query("/modules/module[@name='{$module}']"));
-    }
-    
-    public function newField($module, $field) {
-        $module = $this->xpath->query("/modules/module[@name='{$module}']");
-
-        $node = $this->document->createElement('field');
-        
-        $node->setAttribute('name', $field);
-        
-        $module->appendNode($node);
-    }
-    
-    public function removeField($module, $field) {
-        $node = $this->xpath->query("/modules/module[@name='{$module}']");
-        
-        $node->removeChild($this->xpath->query("/modules/module[@name='{$module}']/field[[@name='{$field}']"));
-    }
-    
-    public function addDecorator($module, $decorator) {
-        $module = $this->xpath->query("/modules/module[@name='{$module}']");
-
-        $node = $this->document->createElement('decorator');
-        
-        $node->setAttribute('name', $decorator);
-        
-        $module->appendNode($node);
-    }
-    
-    public function addFieldDecorator($module, $field, $decorator) {
-        $field = $this->xpath->query("/modules/module[@name='{$module}']/field[[@name='{$field}']");
-
-        $node = $this->document->createElement('decorator');
-        
-        $node->setAttribute('name', $decorator);
-        
-        $field->appendNode($node);
+    public function find($path, \DOMNode $node=null) {
+        return $this->xpath->query($path, $node);
     }
     /**///</editor-fold>
 

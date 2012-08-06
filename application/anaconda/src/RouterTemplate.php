@@ -143,7 +143,7 @@ class RouterTemplate extends \SubscriberDecorator {
                     
                     $value = $match[0];
 
-                    while (preg_match('/\<(\w+)\>/', $value, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+                    while (preg_match('/\[(\w+)\]/', $value, $matches, PREG_OFFSET_CAPTURE, $offset)) {
                         $old = $matches[0][0];
 
                         $key = $matches[1][0];

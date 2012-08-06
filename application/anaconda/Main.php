@@ -24,41 +24,11 @@
 
 class Anaconda extends ApplicationTemplate {
     public function run() {
-        $this->subscribe(new RouterTemplate('^home$', new \page\Home()));
+        $routes = new Config(ROOT.'/application/anaconda/config/routes.xml');
+
+        $modules = new Config(ROOT.'/application/anaconda/config/modules.xml');
         
-        $this->subscribe(new RouterTemplate('^$', new \page\Home()));
-
-        $this->subscribe(new RouterTemplate('^cds(/<action>(/<name>))', new \page\Cds()));
-        
-        $this->subscribe(new RouterTemplate('^cms(/<module>(/<action>(/<id>)))', new \page\Cms()));
-
-        $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
-            'name' => 'system.ready',
-            'publisher' => $this,
-        ))));
-
-        $page = $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
-            'name' => 'system.route',
-            'publisher' => $this,
-            'path' => empty($_SERVER['PATH_INFO']) ? '' : trim($_SERVER['PATH_INFO'], '/'),
-        ))));
-
-        if (!$page->handled()) {
-            $page = $this->publish(new PublisherLimit(1, new \PublisherTemplate(array(
-                'name' => 'system.error',
-                'publisher' => $this,
-                'code' => 404
-            ))));
-        }
-        
-        if ($page->handled()) {
-            $xsl = $page['page']->naked()->views();
-            
-            $xslt = new XSLTProcessor();
-            
-            $xslt->importStylesheet($xsl);
-            
-            echo $xslt->transformToXml($page['page']->naked()->elements());
+        foreach ($routes->find('/routes/route') as $route) {
         }
     }
 }
