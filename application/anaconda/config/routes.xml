@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<routes>
+    <route
+        value="module/[method]"
+        controller="/page/ModuleController"
+        method="[method]">
+        <parameter name="method" value="index" />
+    </route>
+    <route
+        value="([controller](/[method]))"
+        controller="/page/[controller]"
+        method="[method]">
+        <parameter name="controller" value="home" />
+        <parameter name="method" value="index" />
+    </route>
+</routes>

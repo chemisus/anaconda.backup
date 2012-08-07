@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace page;
 
 /**
- * {@link \RouterTemplate}
+ * {@link anaconda\ModuleController}
  * 
- * @package     
- * @name        RouterTemplate
+ * @package     anaconda
+ * @name        ModuleController
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class RouterTemplate extends \SubscriberDecorator {
+class ModuleController implements \FormController {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,26 +56,19 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $pattern = array();
-    
-    private $keys = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    private $model;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($route, \Page $page) {
-        parent::__construct($page);
-        
-        $this->route($route);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -88,84 +81,78 @@ class RouterTemplate extends \SubscriberDecorator {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function check(\Publisher $publisher) {
-        if ($publisher['name'] !== 'system.route') {
-            return false;
-        }
-        
-        $matches = array();
-        
-        echo $this->pattern;
-        
-        if (preg_match($this->pattern, $publisher['path'], $matches)) {
-            $publisher['parameters'] = array_intersect_key($matches, $this->keys);
-            
-            $publisher['page'] = $this;
-
-            return true;
-        }
-        
-        return false;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function route($route) {
-        $route = trim($route, "/");
+    public function before() {
+        $this->model = new \ModuleModel();
         
-        $route = strtr($route, array('/' => '\\/'));
-        
-        $matches = array();
-        
-        preg_match_all('/(\(|[^\(\)]+|\))/', $route, $matches, PREG_OFFSET_CAPTURE);
-        
-        $stack = array();
-        
-        $current = '';
-        
-        $keys = array();
-        
-        foreach ($matches[0] as $match) {
-            switch ($match[0]) {
-                case '(':
-                    $stack[] = $current;
-
-                    $current = '';
-                break;
-            
-                case ')':
-                    $current = array_pop($stack)."(?:".$current.")?";
-                break;
-            
-                default:
-                    $offset = 0;
-                    
-                    $value = $match[0];
-
-                    while (preg_match('/\[(\w+)\]/', $value, $matches, PREG_OFFSET_CAPTURE, $offset)) {
-                        $old = $matches[0][0];
-
-                        $key = $matches[1][0];
-
-                        $keys[] = $key;
-
-                        $new = "(?P<{$key}>[a-zA-z0-9]+)";
-
-                        $value = str_replace($old, $new, $value);
-
-                        $offset = $matches[0][1] + strlen($new);
-                    }
-                    
-                    $current .= $value;
-            }
-        }
-        
-        $this->keys = array_flip($keys);
-        
-        $this->pattern = "/{$current}/";
+        $this->model->load(ROOT."application/anaconda/config/modules.xml");
+    }
+    
+    public function after() {
+        $this->model->save(ROOT."application/anaconda/config/modules.xml");
+    }
+    
+    public function index() {
+    }
+    
+    public function create($name) {
+        $this->model->create($name);
+    }
+    
+    public function update($module) {
+    }
+    
+    public function delete($module) {
+        $this->model->delete($module);
+    }
+    
+    public function render() {
+?>
+<hr />
+<form method="get">
+    <div>
+        <label></label>
+        <input
+            type="submit"
+            value="Add Module"
+            name="route[module][create][newmodule]" />
+    </div>
+    <div>
+        <input
+            type="text"
+            name="field[newmodule]" />
+    </div>
+    <hr />
+<?php foreach ($this->model->browse() as $index=>$module) : ?>
+    <div>
+        <div>
+            <input
+                type="text"
+                value="<?php echo $module; ?>"
+                name="field[module][<?php echo $index; ?>][name]" />
+        </div>
+        <div>
+            <input
+                type="submit"
+                value="Update Module"
+                name="route[module][update][module][<?php echo $index; ?>]" />
+        </div>
+        <div>
+            <input
+                type="submit"
+                value="Delete Module"
+                name="route[module][delete][module][<?php echo $index; ?>]" />
+        </div>
+    </div>
+    <hr />
+<?php endforeach; ?>
+</form>
+<?php
     }
     /**///</editor-fold>
 

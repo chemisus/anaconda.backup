@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace page;
 
 /**
- * {@link anaconda\ModuleController}
+ * {@link \Home}
  * 
- * @package     anaconda
- * @name        ModuleController
+ * @package     
+ * @name        Home
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ModuleController implements FormController {
+class home {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -62,7 +62,6 @@ class ModuleController implements FormController {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    private $model;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -88,68 +87,15 @@ class ModuleController implements FormController {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function before() {
-        $this->model = new ModuleModel();
-        
-        $this->model->load(ROOT."application/anaconda/config/modules.xml");
     }
     
     public function after() {
-        $this->model->save(ROOT."application/anaconda/config/modules.xml");
-    }
-    
-    public function create($name) {
-        $this->model->create($name);
-    }
-    
-    public function update($module) {
-    }
-    
-    public function delete($module) {
-        $this->model->delete($module);
     }
     
     public function render() {
-?>
-<hr />
-<form method="get">
-    <div>
-        <label></label>
-        <input
-            type="submit"
-            value="Add Module"
-            name="route[module][create][newmodule]" />
-    </div>
-    <div>
-        <input
-            type="text"
-            name="field[newmodule]" />
-    </div>
-    <hr />
-<?php foreach ($this->model->browse() as $index=>$module) : ?>
-    <div>
-        <div>
-            <input
-                type="text"
-                value="<?php echo $module; ?>"
-                name="field[module][<?php echo $index; ?>][name]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Update Module"
-                name="route[module][update][module][<?php echo $index; ?>]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Delete Module"
-                name="route[module][delete][module][<?php echo $index; ?>]" />
-        </div>
-    </div>
-    <hr />
-<?php endforeach; ?>
-</form>
-<?php
+    }
+    
+    public function index() {
     }
     /**///</editor-fold>
 
