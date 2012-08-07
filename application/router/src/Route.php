@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \ApplicationTemplate}
+ * {@link anaconda\Route}
  * 
- * @package     
- * @name        ApplicationTemplate
+ * @package     anaconda
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ApplicationTemplate extends \anaconda\ApplicationTemplate {
+class Route extends \SubscriberTemplate {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,6 +56,15 @@ class ApplicationTemplate extends \anaconda\ApplicationTemplate {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $pattern;
+    
+    private $controller;
+    
+    private $method;
+    
+    private $parameters = array();
+    
+    private $defaults = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -68,6 +77,17 @@ class ApplicationTemplate extends \anaconda\ApplicationTemplate {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($value, $controller, $method, $parameters, $defaults) {
+        $this->pattern = $this->pattern($value);
+        
+        $this->controller = $controller;
+        
+        $this->method = $method;
+        
+        $this->parameters = $parameters;
+        
+        $this->defaults = $defaults;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -80,12 +100,110 @@ class ApplicationTemplate extends \anaconda\ApplicationTemplate {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function pattern($route) {
+        $matches = array();
+        
+        $route = strtr(trim($route, '/'), array('/'=>'\/'));
+        
+        preg_match_all('/\(|\)|\[|\]|[^\(\)\[\]]*/', trim($route, '/'), $matches);
+            
+        $stack = array();
+
+        $current = '';
+        
+        while (count($matches[0])) {
+            $match = array_shift($matches[0]);
+
+            switch ($match) {
+                case '(':
+                    $stack[] = $current;
+                    
+                    $current = '';
+                break;
+
+                case ')':
+                    $current = array_pop($stack)."(?:".$current.")?";
+                break;
+
+                case '[':
+                    $match = array_shift($matches[0]);
+
+                    if (!isset($this->defaults[$match])) {
+                        $this->defaults[$match] = null;
+                    }
+                    
+                    $current .= "(?P<{$match}>[A-Za-z0-9]*)";
+                    
+                    $match = array_shift($matches[0]);
+                    
+                    if ($match !== ']') {
+                        throw new Exception;
+                    }
+                break;
+
+                default:
+                    $current .= $match;
+            }
+        }
+        
+        return "/{$current}/";
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function route($path) {
+        $matches = array();
+
+        if (!preg_match($this->pattern, $path, $matches)) {
+            return false;
+        }
+        
+        $parameters = $matches;
+        
+        foreach ($this->parameters as $key=>$value) {
+            $continue = false;
+            
+            $current = $_REQUEST;
+
+            foreach ($value as $next) {
+                if (isset($current[$next])) {
+                    $current = $current[$next];
+                } else {
+                    $continue = true;
+                    
+                    break;
+                }
+            }
+            
+            if ($continue) {
+                continue;
+            }
+            
+            $parameters[$key] = $current;
+        }
+        
+        $controller = $this->controller;
+        
+        $method = $this->method;
+        
+        foreach ($parameters as $key=>$value) {
+            $controller = str_replace("[{$key}]", $value, $controller);
+
+            $method = str_replace("[{$key}]", $value, $method);
+        }
+        
+        $values = array(
+            'controller' => strtr($controller, array('/'=>'\\')),
+            'method' => $method,
+            'parameters' => $parameters,
+        );
+xmp($values);
+
+        return $values;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

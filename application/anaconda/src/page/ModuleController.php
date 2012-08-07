@@ -120,33 +120,33 @@ class ModuleController implements \FormController {
         <input
             type="submit"
             value="Add Module"
-            name="route[module][create][newmodule]" />
+            name="route[module][create]" />
     </div>
     <div>
         <input
             type="text"
-            name="field[newmodule]" />
+            name="field[module][create][name]" />
     </div>
     <hr />
-<?php foreach ($this->model->browse() as $index=>$module) : ?>
+<?php foreach ($this->model->browse() as $module) : ?>
     <div>
         <div>
             <input
                 type="text"
                 value="<?php echo $module; ?>"
-                name="field[module][<?php echo $index; ?>][name]" />
+                name="field[module][<?php echo $module; ?>][name]" />
         </div>
         <div>
             <input
                 type="submit"
                 value="Update Module"
-                name="route[module][update][module][<?php echo $index; ?>]" />
+                name="route[module][update][module][<?php echo $module; ?>]" />
         </div>
         <div>
             <input
                 type="submit"
                 value="Delete Module"
-                name="route[module][delete][module][<?php echo $index; ?>]" />
+                name="route[module][delete][module][<?php echo $module; ?>]" />
         </div>
     </div>
     <hr />

@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\ApplicationTemplate}
+ * {@link \RouteManager}
  * 
- * @package     anaconda
- * @name        ApplicationTemplate
+ * @package     
+ * @name        RouteManager
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ApplicationTemplate implements \Application {
+class RouteManager {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,33 +56,19 @@ class ApplicationTemplate implements \Application {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $version = '0.1';
-    
-    private $subject;
-    
-    private $subscribers = array();
+    private $routes = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function subject() {
-        return $this->subject;
-    }
-    
-    public function version() {
-        return $this->version;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\Subject $subject) {
-        $this->subject = $subject;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -101,22 +87,99 @@ class ApplicationTemplate implements \Application {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function publish(\Publisher $publisher) {
-        foreach ($this->subscribers as $subscriber) {
-            if ($subscriber->publish($publisher)) {
-                $publisher->published($subscriber);
+    public function setup() {
+        $config = new DOMDocument();
+
+        $config->load(ROOT.'application/anaconda/config/routes.xml');
+
+        $xpath = new DOMXPath($config);
+
+        foreach ($xpath->query('/routes/route') as $node) {
+            $defaults = array();
+
+            foreach ($xpath->query('default', $node) as $default) {
+                $defaults[$default->getAttribute('name')] = $default->getAttribute('value');
             }
-            
-            if ($publisher->handled()) {
+
+            $parameters = array();
+
+            foreach ($xpath->query('parameter', $node) as $parameter) {
+                $parameters[$parameter->getAttribute('name')] = explode(':', $parameter->getAttribute('value'));
+            }
+
+            $this->routes[] = new Route(
+                    $node->getAttribute('value'),
+                    $node->getAttribute('controller'),
+                    $node->getAttribute('method'),
+                    $parameters,
+                    $defaults);
+        }
+        
+        xmp($this->routes);
+    }
+    
+    public function route() {
+        $paths = array_flatten(isset($_REQUEST['route']) ? $_REQUEST['route'] : array(), '/', false);
+
+        foreach ($paths as $path) {
+            foreach ($this->routes as $route) {
+                if (($values = $route->route(trim($path, '/'))) === false) {
+                    continue;
+                }
+
+                $controller = new $values['controller']();
+
+                $method = new \ReflectionMethod($controller, $values['method']);
+
+                $parameters = array();
+
+                foreach ($method->getParameters() as $parameter) {
+                    $parameters[$parameter->getName()] = isset($values['parameters'][$parameter->getName()]) ? $values['parameters'][$parameter->getName()] : null;
+                }
+
+                $controller->before();
+                
+                $method->invokeArgs($controller, $parameters);
+
+                $controller->after();
+
                 break;
             }
         }
-        
-        return $publisher;
-    }
-    
-    public function subscribe(\Subscriber $subscriber) {
-        $this->subscribers[] = $subscriber;
+
+        $paths = array();
+
+        $paths[] = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+
+        foreach ($paths as $path) {
+            foreach ($this->routes as $route) {
+                if (($values = $route->route(trim($path, '/'))) === false) {
+                    continue;
+                }
+
+                $controller = new $values['controller']();
+
+                $method = new \ReflectionMethod($controller, $values['method']);
+
+                $parameters = array();
+
+                foreach ($method->getParameters() as $parameter) {
+                    $parameters[$parameter->getName()] = null;
+                }
+
+                $parameters = array_merge($parameters, $values['parameters']);
+
+                $controller->before();
+
+                $method->invokeArgs($controller, $parameters);
+
+                $controller->after();
+
+                $controller->render();
+
+                break;
+            }
+        }
     }
     /**///</editor-fold>
 
