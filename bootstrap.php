@@ -76,19 +76,13 @@ $routeManager->route();
 /*\**************************************************************************\*/
 
 
-$document = new node\XmlDocument();
+$document2 = new node\XmlDocument(new node\XmlFactory());
 
-$document->appendNode(
-        new \node\XmlElementDecorator(
-        new \node\XmlElement()
-        ));
+$document2->fromXml(file_get_contents(ROOT.'application/anaconda/config/routes.xml'));
 
-xmp($document);
+xmp($document2);
 
-
-
-
-
+xmp($document2->toXml());
 
 
 
