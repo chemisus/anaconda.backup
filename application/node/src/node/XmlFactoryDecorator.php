@@ -25,15 +25,15 @@
 namespace node;
 
 /**
- * {@link \XmlFactory}
+ * {@link node\XmlFactoryDecorator}
  * 
- * @package     
- * @name        XmlFactory
+ * @package     node
+ * @name        XmlFactoryDecorator
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlFactory implements Factory, \Decorated {
+class XmlFactoryDecorator implements Factory {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,7 +56,7 @@ class XmlFactory implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
+    private $factory;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -64,21 +64,15 @@ class XmlFactory implements Factory, \Decorated {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function inside() {
-        return $this;
+        return $this->factory->inside();
     }
 
     public function outside() {
-        return $this->outside;
-    }
-
-    public function setOutside(\Decoration $value) {
-        $this->outside = $value;
-        
-        return $this;
+        return $this->inside()->outside();
     }
 
     public function under() {
-        return $this;
+        return $this->factory;
     }
     /**///</editor-fold>
 
@@ -86,6 +80,11 @@ class XmlFactory implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct(Factory $factory) {
+        $this->factory = $factory;
+        
+        $this->factory->setOutside($this);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -98,14 +97,25 @@ class XmlFactory implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function check($tag, $attributes) {
+        return false;
+    }
+    
+    protected function create($tag, $attributes) {
+        return null;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function newNode($tag, $attributes=array()) {
-        return new XmlElement($tag, $attributes);
+    public function newNode($tag, $attributes = array()) {
+        if ($this->check($tag, $attributes)) {
+            return $this->create($tag, $attributes);
+        }
+        
+        return $this->factory->newNode($tag, $attributes);
     }
     /**///</editor-fold>
 

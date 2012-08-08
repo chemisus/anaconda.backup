@@ -33,7 +33,7 @@ namespace node;
  * @version     0.1
  * @since       0.1
  */
-interface Factory extends \Decorated {
+interface Factory extends \Decoration {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -44,6 +44,7 @@ interface Factory extends \Decorated {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function newNode($tag, $attributes=array());
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
