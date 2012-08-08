@@ -25,15 +25,15 @@
 namespace node;
 
 /**
- * {@link node\XmlElement}
+ * {@link node\XmlDeclaration}
  * 
  * @package     node
- * @name        XmlElement
+ * @name        XmlDeclaration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlElement extends XmlNode implements Element {
+class XmlDeclaration extends XmlElement {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,39 +56,18 @@ class XmlElement extends XmlNode implements Element {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $tag;
-    
-    private $attributes;
-
-    private $children = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function children() {
-        return $this->children;
-    }
-    
-    public function tag() {
-        return $this->tag;
-    }
-    
-    public function attributes() {
-        return $this->attributes;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($tag=null, $attributes=array()) {
-        $this->tag = $tag;
-        
-        $this->attributes = $attributes;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -107,38 +86,8 @@ class XmlElement extends XmlNode implements Element {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function appendNode(Node $node) {
-        $this->children[] = $node;
-    }
-    
-    public function value() {
-        $value = '';
-        
-        foreach ($this->children as $child) {
-            $value .= $child->value();
-        }
-        
-        return $value;
-    }
-    
     public function toXml($level=0) {
-        $pad = '';//str_pad('', $level * 4, ' ');
-
-        $tag = $this->tag();
-
-        $attributes = '';
-
-        foreach ($this->attributes() as $key=>$value) {
-            $attributes .= ' '.$key.'="'.$value.'"';
-        }
-
-        $values = '';
-
-        foreach ($this->children() as $child) {
-            $values .= $child->toXml($level + 1);
-        }
-
-        return "{$pad}<{$tag}{$attributes}>{$values}{$pad}</{$tag}>";
+        return "<{$this->tag()}>";
     }
     /**///</editor-fold>
 

@@ -25,19 +25,20 @@
 namespace node;
 
 /**
- * {@link node\Document}
+ * {@link node\Container}
  * 
  * @package     node
- * @name        Document
+ * @name        Container
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Document extends Container {
+interface Container {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function children();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

@@ -98,12 +98,22 @@ class XmlElementDecorator extends XmlNodeDecorator implements Element {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doToXml($xml) {
+        return $xml;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public final function toXml($level=0) {
+        $xml = $this->inside()->toXml($level);
+
+        $xml = $this->doToXml($xml);
+        
+        return $xml;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

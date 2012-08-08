@@ -25,15 +25,15 @@
 namespace node;
 
 /**
- * {@link node\Document}
+ * {@link node\Attribute}
  * 
  * @package     node
- * @name        Document
+ * @name        Attribute
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Document extends Container {
+interface Attribute {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/

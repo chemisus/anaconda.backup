@@ -56,15 +56,17 @@ class XmlDocument implements Document {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $roots = array();
+    private $children = array();
+    
+    private $factory;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function roots() {
-        return new \ArrayIterator($this->roots);
+    public function children() {
+        return $this->children;
     }
     /**///</editor-fold>
 
@@ -72,6 +74,9 @@ class XmlDocument implements Document {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct(Factory $factory=null) {
+        $this->factory = $factory;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -91,11 +96,105 @@ class XmlDocument implements Document {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function appendNode(Node $node) {
-        $this->roots[] = $node;
+        $this->children[] = $node;
     }
 
     public function prependNode(Node $node) {
         throw new Exception;
+    }
+    
+    public function toXml() {
+        $xml = '';
+        
+        foreach ($this->children() as $child) {
+            $xml .= $child->toXml();
+        }
+
+        return $xml;
+    }
+    
+    public function fromXml($xml) {
+        $matches = array();
+
+        preg_match_all('/\<|\>|[^\<\>]*/', $xml, $matches);
+        
+        $stack = array();
+        
+        $current = $this;
+        
+        while (count($matches[0])) {
+            $line = array_shift($matches[0]);
+            
+            if ($line === '<') {
+                $line = array_shift($matches[0]);
+
+                if (left($line, '?') || right($line, '?')) {
+                    $current->appendNode(new XmlDeclaration($line));
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else if (left($line, '--')) {
+                    while (!right($line, '-->')) {
+                        $line .= array_shift($matches[0]);
+                    }
+                    
+                    $current->appendNode(new XmlText('<'.$line));
+                }
+                else if (right($line, '/')) {
+                    list($tag, $attributes) = $this->parseLine($line);
+                    
+                    $current->appendNode($this->factory->newNode($tag, $attributes));
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else if (left($line, '/')) {
+                    $current = array_pop($stack);
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else {
+                    $stack[] = $current;
+
+                    list($tag, $attributes) = $this->parseLine($line);
+                    
+                    $node = $this->factory->newNode($tag, $attributes);
+                    
+                    $current->appendNode($node);
+                    
+                    $current = $node;
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                
+            }
+            else {
+                $current->appendNode(new XmlText($line));
+            }
+        }
+    }
+    
+    public function parseLine($line) {
+        list($tag, $attributes) = explode(' ', $line.' ', 2);
+        
+        $matches = array();
+
+        preg_match_all('/(?:\"[^\"]*\")|\w+/', $attributes, $matches);
+        
+        $attributes = array();
+        
+        while (count($matches[0])) {
+            $attributes[array_shift($matches[0])] = trim(array_shift($matches[0]), '"');
+        }
+        
+        return array($tag, $attributes);
     }
     /**///</editor-fold>
 

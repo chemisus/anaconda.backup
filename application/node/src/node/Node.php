@@ -47,6 +47,7 @@ interface Node extends \Decoration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function toXml($level=0);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

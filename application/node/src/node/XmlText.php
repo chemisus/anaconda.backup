@@ -72,6 +72,9 @@ class XmlText extends XmlNode implements Text {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($value) {
+        $this->value = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -90,6 +93,9 @@ class XmlText extends XmlNode implements Text {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function toXml($level=0) {
+        return $this->value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

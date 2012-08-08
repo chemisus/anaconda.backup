@@ -33,7 +33,7 @@ namespace node;
  * @version     0.1
  * @since       0.1
  */
-interface Element extends Node {
+interface Element extends Node, Container {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -41,8 +41,6 @@ interface Element extends Node {
     function tag();
     
     function attributes();
-    
-    function children();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
