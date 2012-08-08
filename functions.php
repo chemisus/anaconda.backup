@@ -79,6 +79,14 @@ function array_flatten(array $array, $glue='') {
     return $values;
 }
 
+function left($string, $pattern) {
+    return substr($string, 0, strlen($pattern)) === $pattern;
+}
+
+function right($string, $pattern) {
+    return substr($string, strlen($string) - strlen($pattern)) === $pattern;
+}
+
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
