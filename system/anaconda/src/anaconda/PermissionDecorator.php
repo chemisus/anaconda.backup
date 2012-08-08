@@ -63,7 +63,7 @@ class PermissionDecorator implements \Permission, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
+    public function inside() {
         return $this->permission->naked();
     }
     

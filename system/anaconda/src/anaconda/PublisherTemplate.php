@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class PublisherTemplate implements \Publisher, \Decoration {
+class PublisherTemplate implements \Publisher, \Decorated {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -57,13 +57,29 @@ class PublisherTemplate implements \Publisher, \Decoration {
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
     private $values;
+
+    private $outside;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
+    public function outside() {
+        return $this->outside;
+    }
+    
+    public function under() {
+        return $this;
+    }
+    
+    public function inside() {
+        return $this;
+    }
+    
+    public function setOutside(\Decoration $value) {
+        $this->outside = $value;
+        
         return $this;
     }
     

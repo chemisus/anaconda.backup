@@ -22,27 +22,22 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\Decoration}
+ * {@link \Decorated}
  * 
- * @package     anaconda
- * @name        Decoration
+ * @package     
+ * @name        Decorated
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decoration {
+interface Decorated extends anaconda\Decorated {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function inside();
-    
-    function under();
-    
-    function outside();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

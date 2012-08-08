@@ -63,7 +63,7 @@ class PublisherDecorator implements \Decoration, \Publisher {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
+    public function inside() {
         return $this->publisher->naked();
     }
     

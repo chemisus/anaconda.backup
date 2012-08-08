@@ -63,15 +63,15 @@ class RouteDecorator extends SubscriberDecorator implements Route {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function controller() {
-        return $this->subscriber()->controller();
+        return $this->under()->controller();
     }
     
     public function method() {
-        return $this->subscriber()->method();
+        return $this->under()->method();
     }
     
     public function parameters() {
-        return $this->subscriber()->parameters();
+        return $this->under()->parameters();
     }
     /**///</editor-fold>
 
@@ -104,19 +104,19 @@ class RouteDecorator extends SubscriberDecorator implements Route {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function offsetExists($offset) {
-        return $this->subscriber()->offsetExists($offset);
+        return $this->under()->offsetExists($offset);
     }
 
     public function offsetGet($offset) {
-        return $this->subscriber()->offsetGet($offset);
+        return $this->under()->offsetGet($offset);
     }
 
     public function offsetSet($offset, $value) {
-        return $this->subscriber()->offsetSet($offset, $value);
+        return $this->under()->offsetSet($offset, $value);
     }
 
     public function offsetUnset($offset) {
-        return $this->subscriber()->offsetUnset($offset);
+        return $this->under()->offsetUnset($offset);
     }
     /**///</editor-fold>
 

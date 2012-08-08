@@ -56,19 +56,23 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $subscriber;
+    private $under;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function naked() {
-        return $this->subscriber->naked();
+    public function inside() {
+        return $this->under->inside();
     }
     
-    public function subscriber() {
-        return $this->subscriber;
+    public function under() {
+        return $this->under;
+    }
+    
+    public function outside() {
+        return $this->inside()->getOutside();
     }
     /**///</editor-fold>
 
@@ -77,7 +81,9 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
     public function __construct($subscriber) {
-        $this->subscriber = $subscriber;
+        $this->under = $subscriber;
+        
+        $this->inside()->setOutside($this);
     }
     /**///</editor-fold>
 
@@ -112,24 +118,24 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     public final function reset() {
         $this->doReset();
         
-        $this->subscriber()->reset();
+        $this->under()->reset();
     }
     
     public final function prepare(\Publisher $publisher) {
         $this->doPrepare($publisher);
         
-        $this->subscriber()->prepare($publisher);
+        $this->under()->prepare($publisher);
     }
     
     public final function check(\Publisher $publisher) {
         return $this->doCheck($publisher)
-            && $this->subscriber()->check($publisher);
+            && $this->under()->check($publisher);
     }
     
     public final function publish(\Publisher $publisher) {
         $this->doPublish($publisher);
         
-        $this->subscriber()->publish($publisher);
+        $this->under()->publish($publisher);
         
         return $publisher;
     }
