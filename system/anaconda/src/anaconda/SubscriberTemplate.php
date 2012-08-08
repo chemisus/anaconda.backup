@@ -83,14 +83,40 @@ class SubscriberTemplate implements \Subscriber, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doReset() {
+    }
+    
+    protected function doPrepare(\Publisher $publisher) {
+    }
+    
+    protected function doCheck(\Publisher $publisher) {
+        return false;
+    }
+
+    protected function doPublish(\Publisher $publisher) {
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function publish(\Publisher $publisher) {
-        return true;
+    public final function reset() {
+        $this->doReset();
+    }
+    
+    public final function prepare(\Publisher $publisher) {
+        $this->doPrepare($publisher);
+    }
+    
+    public final function check(\Publisher $publisher) {
+        return $this->doCheck($publisher);
+    }
+    
+    public final function publish(\Publisher $publisher) {
+        $this->doPublish($publisher);
+        
+        return $publisher;
     }
     /**///</editor-fold>
 

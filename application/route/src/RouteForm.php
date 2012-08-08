@@ -25,15 +25,15 @@
 
 
 /**
- * {@link anaconda\Route}
+ * {@link \RouteForm}
  * 
- * @package     anaconda
- * @name        Route
+ * @package     
+ * @name        RouteForm
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Route extends \SubscriberTemplate {
+class RouteForm extends RouteDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,15 +56,9 @@ class Route extends \SubscriberTemplate {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $pattern;
+    private $key;
     
-    private $controller;
-    
-    private $method;
-    
-    private $parameters = array();
-    
-    private $defaults = array();
+    private $value;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -77,16 +71,12 @@ class Route extends \SubscriberTemplate {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($value, $controller, $method, $parameters, $defaults) {
-        $this->pattern = $this->pattern($value);
+    public function __construct($key, $value, \Route $route) {
+        parent::__construct($route);
         
-        $this->controller = $controller;
+        $this->key = $key;
         
-        $this->method = $method;
-        
-        $this->parameters = $parameters;
-        
-        $this->defaults = $defaults;
+        $this->value = $value;
     }
     /**///</editor-fold>
 
@@ -100,53 +90,28 @@ class Route extends \SubscriberTemplate {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function pattern($route) {
-        $matches = array();
+    protected function doPrepare(\Publisher $publisher) {
+        $keys = $this->value;
         
-        $route = strtr(trim($route, '/'), array('/'=>'\/'));
-        
-        preg_match_all('/\(|\)|\[|\]|[^\(\)\[\]]*/', trim($route, '/'), $matches);
-            
-        $stack = array();
-
-        $current = '';
-        
-        while (count($matches[0])) {
-            $match = array_shift($matches[0]);
-
-            switch ($match) {
-                case '(':
-                    $stack[] = $current;
-                    
-                    $current = '';
-                break;
-
-                case ')':
-                    $current = array_pop($stack)."(?:".$current.")?";
-                break;
-
-                case '[':
-                    $match = array_shift($matches[0]);
-
-                    if (!isset($this->defaults[$match])) {
-                        $this->defaults[$match] = null;
-                    }
-                    
-                    $current .= "(?P<{$match}>[A-Za-z0-9]*)";
-                    
-                    $match = array_shift($matches[0]);
-                    
-                    if ($match !== ']') {
-                        throw new Exception;
-                    }
-                break;
-
-                default:
-                    $current .= $match;
-            }
+        foreach ($this->parameters() as $key=>$value) {
+            $keys = str_replace("[{$key}]", $value, $keys);
         }
         
-        return "/{$current}/";
+        $keys = explode(':', $keys);
+        
+        $current = $publisher['form'];
+        
+        while (count($keys)) {
+            $key = array_shift($keys);
+            
+            if (!isset($current[$key])) {
+                return;
+            }
+            
+            $current = $current[$key];
+        }
+        
+        $this[$this->key] = $current;
     }
     /**///</editor-fold>
 
@@ -154,56 +119,6 @@ class Route extends \SubscriberTemplate {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function route($path) {
-        $matches = array();
-
-        if (!preg_match($this->pattern, $path, $matches)) {
-            return false;
-        }
-        
-        $parameters = $matches;
-        
-        foreach ($this->parameters as $key=>$value) {
-            $continue = false;
-            
-            $current = $_REQUEST;
-
-            foreach ($value as $next) {
-                if (isset($current[$next])) {
-                    $current = $current[$next];
-                } else {
-                    $continue = true;
-                    
-                    break;
-                }
-            }
-            
-            if ($continue) {
-                continue;
-            }
-            
-            $parameters[$key] = $current;
-        }
-        
-        $controller = $this->controller;
-        
-        $method = $this->method;
-        
-        foreach ($parameters as $key=>$value) {
-            $controller = str_replace("[{$key}]", $value, $controller);
-
-            $method = str_replace("[{$key}]", $value, $method);
-        }
-        
-        $values = array(
-            'controller' => strtr($controller, array('/'=>'\\')),
-            'method' => $method,
-            'parameters' => $parameters,
-        );
-xmp($values);
-
-        return $values;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

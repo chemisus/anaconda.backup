@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace page;
+
 
 /**
- * {@link anaconda\ModuleController}
+ * {@link anaconda\Route}
  * 
  * @package     anaconda
- * @name        ModuleController
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ModuleController implements \FormController {
+class RouteTemplate extends \SubscriberTemplate implements Route {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,19 +56,39 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $defaults;
+    
+    private $values;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    private $model;
+    public function controller() {
+        return $this->values['controller'];
+    }
+    
+    public function method() {
+        return $this->values['methods'];
+    }
+    
+    public function parameters() {
+        return $this->values['parameters'];
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($controller, $method) {
+        $this->defaults = array(
+            'controller' => $controller,
+            'method' => $method,
+            'parameters' => array(),
+        );
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -81,79 +101,69 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doReset() {
+        $this->values = $this->defaults;
+    }
+    
+    protected function doPrepare(\Publisher $publisher) {
+        foreach ($this->values['parameters'] as $key=>$value) {
+            if (is_string($value)) {
+                $this->values['controller'] = str_replace("[{$key}]", $value, $this->values['controller']);
+
+                $this->values['method'] = str_replace("[{$key}]", $value, $this->values['method']);
+            }
+        }
+
+        $this->values['controller'] = '\\'.strtr(trim($this->values['controller'], '/'), array('/'=>'\\'));
+    }
+    
+    protected function doCheck(\Publisher $publisher) {
+        return true;
+    }
+    
+    protected function doPublish(\Publisher $publisher) {
+        $reflection = new ReflectionClass($this->values['controller']);
+        
+        $instance = $reflection->newInstance();
+        
+        $method = $reflection->getMethod($this->values['method']);
+        
+        $parameters = array();
+        
+        foreach ($method->getParameters() as $parameter) {
+            $key = $parameter->getName();
+            
+            $value = isset($this->values['parameters'][$key]) ? $this->values['parameters'][$key] : null;
+            
+            $parameters[$key] = $value;
+        }
+        
+        $instance->before();
+
+        $method->invokeArgs($instance, $parameters);
+        
+        $instance->after();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function before() {
-        $this->model = new \ModuleModel();
-        
-        $this->model->load(ROOT."application/anaconda/config/modules.xml");
+    public function offsetExists($offset) {
+        return isset($this->values['parameters'][$offset]);
     }
-    
-    public function after() {
-        $this->model->save(ROOT."application/anaconda/config/modules.xml");
+
+    public function offsetGet($offset) {
+        return $this->values['parameters'][$offset];
     }
-    
-    public function index() {
-        $this->render();
+
+    public function offsetSet($offset, $value) {
+        $this->values['parameters'][$offset] = $value;
     }
-    
-    public function create($module) {
-        $this->model->create($module);
-    }
-    
-    public function update($module) {
-    }
-    
-    public function delete($module) {
-        $this->model->delete($module);
-    }
-    
-    public function render() {
-?>
-<hr />
-<form method="get">
-    <div>
-        <label></label>
-        <input
-            type="submit"
-            value="Add Module"
-            name="route[module][create]" />
-    </div>
-    <div>
-        <input
-            type="text"
-            name="field[module][create][name]" placeholder="name" />
-    </div>
-    <hr />
-<?php foreach ($this->model->browse() as $module) : ?>
-    <div>
-        <div>
-            <input
-                type="text"
-                value="<?php echo $module; ?>"
-                name="field[module][<?php echo $module; ?>][name]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Update Module"
-                name="route[module][update][<?php echo $module; ?>]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Delete Module"
-                name="route[module][delete][<?php echo $module; ?>]" />
-        </div>
-    </div>
-    <hr />
-<?php endforeach; ?>
-</form>
-<?php
+
+    public function offsetUnset($offset) {
+        unset($this->values['parameters'][$offset]);
     }
     /**///</editor-fold>
 

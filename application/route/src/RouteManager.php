@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace page;
+
 
 /**
- * {@link anaconda\ModuleController}
+ * {@link \RouteManager}
  * 
- * @package     anaconda
- * @name        ModuleController
+ * @package     
+ * @name        RouteManager
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ModuleController implements \FormController {
+class RouteManager {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,13 +56,13 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $routes = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    private $model;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -87,73 +87,86 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function before() {
-        $this->model = new \ModuleModel();
+    public function setup() {
+        $config = new DOMDocument();
+
+        $config->load(ROOT.'application/anaconda/config/routes.xml');
+
+        $xpath = new DOMXPath($config);
         
-        $this->model->load(ROOT."application/anaconda/config/modules.xml");
+        foreach ($xpath->query('/routes/route') as $node) {
+            $route = new RouteTemplate(
+                    $node->getAttribute('controller'),
+                    $node->getAttribute('method'));
+            
+            foreach ($xpath->query('./*', $node) as $value) {
+                switch ($value->tagName) {
+                    case 'form':
+                        $route = new RouteForm($value->getAttribute('name'), $value->getAttribute('value'), $route);
+                    break;
+
+                    case 'filter':
+                        $route = new RouteFilter($value->getAttribute('name'), $value->getAttribute('value'), $route);
+                    break;
+                    
+                    case 'default':
+                        $route = new RouteDefault($value->getAttribute('name'), $value->getAttribute('value'), $route);
+                    break;
+                }
+            }
+            
+            $route = new RoutePath($node->getAttribute('path'), $route);
+
+            $route = new RouteName($route);
+            
+            $this->routes[] = $route;
+        }
     }
     
-    public function after() {
-        $this->model->save(ROOT."application/anaconda/config/modules.xml");
-    }
-    
-    public function index() {
-        $this->render();
-    }
-    
-    public function create($module) {
-        $this->model->create($module);
-    }
-    
-    public function update($module) {
-    }
-    
-    public function delete($module) {
-        $this->model->delete($module);
-    }
-    
-    public function render() {
-?>
-<hr />
-<form method="get">
-    <div>
-        <label></label>
-        <input
-            type="submit"
-            value="Add Module"
-            name="route[module][create]" />
-    </div>
-    <div>
-        <input
-            type="text"
-            name="field[module][create][name]" placeholder="name" />
-    </div>
-    <hr />
-<?php foreach ($this->model->browse() as $module) : ?>
-    <div>
-        <div>
-            <input
-                type="text"
-                value="<?php echo $module; ?>"
-                name="field[module][<?php echo $module; ?>][name]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Update Module"
-                name="route[module][update][<?php echo $module; ?>]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Delete Module"
-                name="route[module][delete][<?php echo $module; ?>]" />
-        </div>
-    </div>
-    <hr />
-<?php endforeach; ?>
-</form>
-<?php
+    public function route() {
+        $paths = isset($_REQUEST['route']) ? array_flatten($_REQUEST['route'], '/') : array();
+        
+        foreach ($paths as $path=>$value) {
+            foreach ($this->routes as $route) {
+                $publisher = new PublisherTemplate(array(
+                    'name' => 'system.route',
+                    'form' => $_REQUEST,
+                    'path' => $path));
+                
+                $route->reset();
+                
+                $route->prepare($publisher);
+                
+                if ($route->check($publisher)) {
+                    $route->publish($publisher);
+                    
+                    break;
+                }
+            }
+        }
+        
+        $paths = array(
+            trim(isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '', '/') => null
+        );
+
+        foreach ($paths as $path=>$value) {
+            foreach ($this->routes as $route) {
+                $publisher = new PublisherTemplate(array(
+                    'name' => 'system.route',
+                    'form' => $_REQUEST,
+                    'path' => $path));
+                
+                $route->reset();
+                
+                $route->prepare($publisher);
+                
+                if ($route->check($publisher)) {
+                    $route->publish($publisher);
+                    
+                    break;
+                }
+            }
+        }
     }
     /**///</editor-fold>
 

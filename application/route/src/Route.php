@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+
 
 /**
- * {@link anaconda\Subscriber}
+ * {@link \Route}
  * 
- * @package     anaconda
- * @name        Subscriber
+ * @package     
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Route extends ArrayAccess {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -44,13 +44,11 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function reset();
+    function controller();
     
-    function prepare(\Publisher $publsher);
+    function method();
     
-    function check(\Publisher $publisher);
-    
-    function publish(\Publisher $publisher);
+    function parameters();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

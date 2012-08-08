@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \RouteManager}
+ * {@link \RoutePath}
  * 
  * @package     
- * @name        RouteManager
+ * @name        RoutePath
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class RouteManager {
+class RoutePath extends RouteDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,7 +56,11 @@ class RouteManager {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $routes = array();
+    private $pattern;
+    
+    private $parameters = array();
+    
+    private $check;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -69,118 +73,96 @@ class RouteManager {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($path, \Route $route) {
+        parent::__construct($route);
+        
+        $this->pattern = $this->pattern($path);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
+    protected function pattern($route) {
+        $matches = array();
+        
+        $route = strtr(trim($route, '/'), array('/'=>'\/'));
+        
+        preg_match_all('/\(|\)|\[|\]|[^\(\)\[\]]*/', trim($route, '/'), $matches);
+            
+        $stack = array();
+
+        $current = '';
+        
+        while (count($matches[0])) {
+            $match = array_shift($matches[0]);
+
+            switch ($match) {
+                case '(':
+                    $stack[] = $current;
+                    
+                    $current = '';
+                break;
+
+                case ')':
+                    $current = array_pop($stack)."(?:".$current.")?";
+                break;
+
+                case '[':
+                    $match = array_shift($matches[0]);
+
+                    $current .= "(?P<{$match}>[A-Za-z0-9]*)";
+                    
+                    $this->parameters[] = $match;
+                    
+                    $match = array_shift($matches[0]);
+                    
+                    if ($match !== ']') {
+                        throw new Exception;
+                    }
+                break;
+
+                default:
+                    $current .= $match;
+            }
+        }
+        
+        return "/{$current}/";
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Methods">
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doPrepare(\Publisher $publisher) {
+        $matches = array();
+
+        if (!preg_match($this->pattern, $publisher['path'], $matches)) {
+            $this->check = false;
+            
+            return;
+        }
+        
+        $this->check = true;
+        
+        foreach ($this->parameters as $key) {
+            if (isset($matches[$key])) {
+                $this[$key] = $matches[$key];
+            }
+        }
+    }
+    
+    protected function doCheck(\Publisher $publisher) {
+        return $this->check;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function setup() {
-        $config = new DOMDocument();
-
-        $config->load(ROOT.'application/anaconda/config/routes.xml');
-
-        $xpath = new DOMXPath($config);
-
-        foreach ($xpath->query('/routes/route') as $node) {
-            $defaults = array();
-
-            foreach ($xpath->query('default', $node) as $default) {
-                $defaults[$default->getAttribute('name')] = $default->getAttribute('value');
-            }
-
-            $parameters = array();
-
-            foreach ($xpath->query('parameter', $node) as $parameter) {
-                $parameters[$parameter->getAttribute('name')] = explode(':', $parameter->getAttribute('value'));
-            }
-
-            $this->routes[] = new Route(
-                    $node->getAttribute('value'),
-                    $node->getAttribute('controller'),
-                    $node->getAttribute('method'),
-                    $parameters,
-                    $defaults);
-        }
-        
-        xmp($this->routes);
-    }
-    
-    public function route() {
-        $paths = array_flatten(isset($_REQUEST['route']) ? $_REQUEST['route'] : array(), '/', false);
-
-        foreach ($paths as $path) {
-            foreach ($this->routes as $route) {
-                if (($values = $route->route(trim($path, '/'))) === false) {
-                    continue;
-                }
-
-                $controller = new $values['controller']();
-
-                $method = new \ReflectionMethod($controller, $values['method']);
-
-                $parameters = array();
-
-                foreach ($method->getParameters() as $parameter) {
-                    $parameters[$parameter->getName()] = isset($values['parameters'][$parameter->getName()]) ? $values['parameters'][$parameter->getName()] : null;
-                }
-
-                $controller->before();
-                
-                $method->invokeArgs($controller, $parameters);
-
-                $controller->after();
-
-                break;
-            }
-        }
-
-        $paths = array();
-
-        $paths[] = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
-
-        foreach ($paths as $path) {
-            foreach ($this->routes as $route) {
-                if (($values = $route->route(trim($path, '/'))) === false) {
-                    continue;
-                }
-
-                $controller = new $values['controller']();
-
-                $method = new \ReflectionMethod($controller, $values['method']);
-
-                $parameters = array();
-
-                foreach ($method->getParameters() as $parameter) {
-                    $parameters[$parameter->getName()] = null;
-                }
-
-                $parameters = array_merge($parameters, $values['parameters']);
-
-                $controller->before();
-
-                $method->invokeArgs($controller, $parameters);
-
-                $controller->after();
-
-                $controller->render();
-
-                break;
-            }
-        }
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

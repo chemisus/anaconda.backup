@@ -10,13 +10,30 @@
 
 ## Goals
 
- * Events
+### Events
 
- * Routes
+### Routes
+    <?xml version="1.0"?>
+    <routes>
+        <route path="module/create" controller="page/ModuleController" method="create">
+            <form name="module" value="module:create" />
+        </route>
+        <route path="module/[method](/[index])" controller="page/ModuleController" method="[method]">
+            <form name="module" value="module:[index]" />
+            <filter name="method" value="update|delete|index" />
+        </route>
+        <route path="[controller](/[method])" controller="page/[controller]" method="[method]">
+            <default name="controller" value="home" />
+            <default name="method" value="index" />
+            <filter name="controller" value="" />
+        </route>
+    </routes>
 
- * Authorization
+### Authorization
 
 ## Anaconda Roadmap:
+
+ * Configuration
 
  * Publisher
  * Subscriber

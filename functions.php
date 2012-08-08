@@ -25,9 +25,11 @@
 function xmp() {
     echo '<xmp style="border: 1px black dotted;">';
     foreach (func_get_args() as $value) {
+        echo "\n";
         print_r($value);
         echo "\n";
     }
+    echo "\n";
     echo '</xmp>';
 }
 
@@ -38,7 +40,7 @@ function xmp() {
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 
-function array_flatten($values, $glue='', $last=true) {
+function array_flatten2($values, $glue='', $last=true) {
     if (!is_array($values)) {
         return array($last ? $values : null);
     }
@@ -59,6 +61,22 @@ function array_flatten($values, $glue='', $last=true) {
     }
 
     return $array;
+}
+
+function array_flatten(array $array, $glue='') {
+    $values = array();
+    
+    foreach ($array as $key=>$value) {
+        if (is_array($value)) {
+            foreach (array_flatten($value, $glue) as $k=>$v) {
+                $values[$key.$glue.$k] = $v;
+            }
+        } else {
+            $values[$key] = $value;
+        }
+    }
+    
+    return $values;
 }
 
 /*\**************************************************************************\*/

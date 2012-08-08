@@ -1,27 +1,20 @@
 <?xml version="1.0"?>
 <routes>
-    <route
-            value="module/create/[module]"
-            controller="/page/ModuleController"
-            method="create">
-        <parameter name="name" value="field:module:create:name" />
+
+    <route path="module/[method]" controller="page/ModuleController" method="[method]">
+        <form name="module" value="field:module:[method]" />
+        <filter name="method" value="create" />
     </route>
-    <route
-            value="module/delete/[module]"
-            controller="/page/ModuleController"
-            method="delete">
-        <parameter name="name" value="field:module:delete:name" />
+    
+    <route path="module(/[method](/[index]))" controller="page/ModuleController" method="[method]">
+        <default name="method" value="index" />
+        <form name="module" value="field:module:[index]" />
+        <filter name="method" value="field:update|delete|index" />
     </route>
-    <route
-            value="module"
-            controller="/page/ModuleController"
-            method="index">
-    </route>
-    <route
-            value="([controller](/[method]))"
-            controller="/page/[controller]"
-            method="[method]">
+    
+    <route path="[controller](/[method])" controller="page/[controller]" method="[method]">
         <default name="controller" value="home" />
         <default name="method" value="index" />
+        <filter name="controller" value="" />
     </route>
 </routes>

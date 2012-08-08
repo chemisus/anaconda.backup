@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace page;
+
 
 /**
- * {@link anaconda\ModuleController}
+ * {@link \RouteName}
  * 
- * @package     anaconda
- * @name        ModuleController
+ * @package     
+ * @name        RouteName
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ModuleController implements \FormController {
+class RouteName extends RouteDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -62,13 +62,15 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    private $model;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct(\Route $route) {
+        parent::__construct($route);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -81,80 +83,15 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doCheck(\Publisher $publisher) {
+        return $publisher['name'] === 'system.route';
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function before() {
-        $this->model = new \ModuleModel();
-        
-        $this->model->load(ROOT."application/anaconda/config/modules.xml");
-    }
-    
-    public function after() {
-        $this->model->save(ROOT."application/anaconda/config/modules.xml");
-    }
-    
-    public function index() {
-        $this->render();
-    }
-    
-    public function create($module) {
-        $this->model->create($module);
-    }
-    
-    public function update($module) {
-    }
-    
-    public function delete($module) {
-        $this->model->delete($module);
-    }
-    
-    public function render() {
-?>
-<hr />
-<form method="get">
-    <div>
-        <label></label>
-        <input
-            type="submit"
-            value="Add Module"
-            name="route[module][create]" />
-    </div>
-    <div>
-        <input
-            type="text"
-            name="field[module][create][name]" placeholder="name" />
-    </div>
-    <hr />
-<?php foreach ($this->model->browse() as $module) : ?>
-    <div>
-        <div>
-            <input
-                type="text"
-                value="<?php echo $module; ?>"
-                name="field[module][<?php echo $module; ?>][name]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Update Module"
-                name="route[module][update][<?php echo $module; ?>]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Delete Module"
-                name="route[module][delete][<?php echo $module; ?>]" />
-        </div>
-    </div>
-    <hr />
-<?php endforeach; ?>
-</form>
-<?php
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

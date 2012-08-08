@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace page;
+
 
 /**
- * {@link anaconda\ModuleController}
+ * {@link \RouteFilter}
  * 
- * @package     anaconda
- * @name        ModuleController
+ * @package     
+ * @name        RouteFilter
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ModuleController implements \FormController {
+class RouteFilter extends RouteDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,25 +56,43 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $key;
+    
+    private $value;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    private $model;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($key, $value, \Route $route) {
+        parent::__construct($route);
+        
+        $this->key = $key;
+        
+        $this->value = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
+    protected function doCheck(\Publisher $publisher) {
+        $values = explode('|', $this->value);
+        
+        if (!isset($this[$this->key])) {
+            return false;
+        }
+        
+        return array_search($this[$this->key], $values) !== false;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Methods">
@@ -87,74 +105,6 @@ class ModuleController implements \FormController {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function before() {
-        $this->model = new \ModuleModel();
-        
-        $this->model->load(ROOT."application/anaconda/config/modules.xml");
-    }
-    
-    public function after() {
-        $this->model->save(ROOT."application/anaconda/config/modules.xml");
-    }
-    
-    public function index() {
-        $this->render();
-    }
-    
-    public function create($module) {
-        $this->model->create($module);
-    }
-    
-    public function update($module) {
-    }
-    
-    public function delete($module) {
-        $this->model->delete($module);
-    }
-    
-    public function render() {
-?>
-<hr />
-<form method="get">
-    <div>
-        <label></label>
-        <input
-            type="submit"
-            value="Add Module"
-            name="route[module][create]" />
-    </div>
-    <div>
-        <input
-            type="text"
-            name="field[module][create][name]" placeholder="name" />
-    </div>
-    <hr />
-<?php foreach ($this->model->browse() as $module) : ?>
-    <div>
-        <div>
-            <input
-                type="text"
-                value="<?php echo $module; ?>"
-                name="field[module][<?php echo $module; ?>][name]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Update Module"
-                name="route[module][update][<?php echo $module; ?>]" />
-        </div>
-        <div>
-            <input
-                type="submit"
-                value="Delete Module"
-                name="route[module][delete][<?php echo $module; ?>]" />
-        </div>
-    </div>
-    <hr />
-<?php endforeach; ?>
-</form>
-<?php
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

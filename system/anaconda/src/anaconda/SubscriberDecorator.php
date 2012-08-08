@@ -66,6 +66,10 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     public function naked() {
         return $this->subscriber->naked();
     }
+    
+    public function subscriber() {
+        return $this->subscriber;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -87,8 +91,17 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function check(\Publisher $publisher) {
+    protected function doReset() {
+    }
+    
+    protected function doPrepare(\Publisher $publisher) {
+    }
+    
+    protected function doCheck(\Publisher $publisher) {
         return false;
+    }
+
+    protected function doPublish(\Publisher $publisher) {
     }
     /**///</editor-fold>
 
@@ -96,12 +109,29 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function publish(\Publisher $publisher) {
-        if (!$this->check($publisher)) {
-            return false;
-        }
+    public final function reset() {
+        $this->doReset();
         
-        return $this->subscriber->publish($publisher);
+        $this->subscriber()->reset();
+    }
+    
+    public final function prepare(\Publisher $publisher) {
+        $this->doPrepare($publisher);
+        
+        $this->subscriber()->prepare($publisher);
+    }
+    
+    public final function check(\Publisher $publisher) {
+        return $this->doCheck($publisher)
+            && $this->subscriber()->check($publisher);
+    }
+    
+    public final function publish(\Publisher $publisher) {
+        $this->doPublish($publisher);
+        
+        $this->subscriber()->publish($publisher);
+        
+        return $publisher;
     }
     /**///</editor-fold>
 

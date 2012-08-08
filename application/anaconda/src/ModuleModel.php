@@ -119,18 +119,18 @@ class ModuleModel {
         return $modules;
     }
     
-    public function create($name) {
-        $module = $this->document->createElement('module');
+    public function create($module) {
+        $node = $this->document->createElement('module');
         
-        $module->setAttribute('name', $name);
+        $node->setAttribute('name', $module['name']);
         
         $modules = $this->xpath->query("/modules");
-        
-        $modules->item(0)->appendChild($module);
+
+        $modules->item(0)->appendChild($node);
     }
     
-    public function delete($name) {
-        $module = $this->xpath->query("/modules/module[@name='{$name}']");
+    public function delete($module) {
+        $module = $this->xpath->query("/modules/module[@name='{$module['name']}']");
         
         $modules = $this->xpath->query("/modules");
         
