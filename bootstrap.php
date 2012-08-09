@@ -62,10 +62,9 @@ Bootstrap::Run();
 /*\**************************************************************************\*/
 
 
-$dec = new DecoratorTemplate(new DecoratorTemplate(new DecoratedTemplate()));
+$dec = new SubscriberDecorator(new SubscriberDecorator(new SubscriberDecorated()));
 
-
-
+xmp($dec);
 
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/

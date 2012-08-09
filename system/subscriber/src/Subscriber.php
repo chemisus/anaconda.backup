@@ -25,28 +25,32 @@
 
 
 /**
- * {@link \Decorator}
+ * {@link \Subscriber}
  * 
  * @package     
- * @name        Decorator
+ * @name        Subscriber
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decorator {
+interface Subscriber {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function getInside();
-    
-    function getDecorated();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function reset();
+    
+    function prepare(\Publisher $publisher);
+    
+    function check(\Publisher $publisher);
+    
+    function publish(\Publisher $publisher);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
