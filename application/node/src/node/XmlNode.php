@@ -77,7 +77,7 @@ abstract class XmlNode implements Node, \Decorated {
         return $this->outside;
     }
 
-    public function setOutside(\Decoration $value) {
+    public function setOutside(\Decorator $value) {
         $this->outside = $value;
         
         return $this;

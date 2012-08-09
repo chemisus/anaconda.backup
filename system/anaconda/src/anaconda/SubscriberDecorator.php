@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class SubscriberDecorator implements \Subscriber, \Decoration {
+class SubscriberDecorator extends \DecoratorTemplate implements \Subscriber, \Decorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,34 +56,20 @@ class SubscriberDecorator implements \Subscriber, \Decoration {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $under;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function inside() {
-        return $this->under->inside();
-    }
-    
-    public function under() {
-        return $this->under;
-    }
-    
-    public function outside() {
-        return $this->inside()->getOutside();
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($subscriber) {
-        $this->under = $subscriber;
-        
-        $this->inside()->setOutside($this);
+    public function __construct(\Subscriber $subscriber) {
+        parent::__construct($subscriber);
     }
     /**///</editor-fold>
 

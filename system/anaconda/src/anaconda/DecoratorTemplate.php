@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace node;
+namespace anaconda;
 
 /**
- * {@link \XmlFactory}
+ * {@link anaconda\DecoratorTemplate}
  * 
- * @package     
- * @name        XmlFactory
+ * @package     anaconda
+ * @name        DecoratorTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
+class DecoratorTemplate implements Decorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,7 +56,7 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
+    private $decorator;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -64,21 +64,29 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function inside() {
-        return $this;
+        return $this->under()->inside();
     }
 
     public function outside() {
-        return $this->outside;
+        return $this->inside()->outside();
     }
 
-    public function setOutside(\Decorator $value) {
-        $this->outside = $value;
+    public function over() {
+        $over = null;
         
-        return $this;
+        $current = $this->outside();
+        
+        while ($current !== $this) {
+            $over = $current;
+            
+            $current = $current->under();
+        }
+        
+        return $over;
     }
 
     public function under() {
-        return $this;
+        return $this->decorator;
     }
     /**///</editor-fold>
 
@@ -86,6 +94,9 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct(\Decorator $decorator) {
+        $this->decorator = $decorator;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -104,9 +115,6 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function newNode($tag, $attributes=array()) {
-        return new XmlElement($tag, $attributes);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

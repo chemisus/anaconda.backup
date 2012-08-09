@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace node;
+namespace anaconda;
 
 /**
- * {@link \XmlFactory}
+ * {@link anaconda\DecoratedTemplate}
  * 
- * @package     
- * @name        XmlFactory
+ * @package     anaconda
+ * @name        DecoratedTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
+class DecoratedTemplate extends DecoratorTemplate implements Decorated {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -71,6 +71,20 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
         return $this->outside;
     }
 
+    public function over() {
+        $over = null;
+        
+        $current = $this->outside();
+        
+        while ($current !== $this) {
+            $over = $current;
+            
+            $current = $current->under();
+        }
+        
+        return $over;
+    }
+
     public function setOutside(\Decorator $value) {
         $this->outside = $value;
         
@@ -104,9 +118,6 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function newNode($tag, $attributes=array()) {
-        return new XmlElement($tag, $attributes);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

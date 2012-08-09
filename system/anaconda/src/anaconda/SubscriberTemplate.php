@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate implements \Subscriber, \Decorated {
+class SubscriberTemplate extends \DecoratedTemplate implements \Subscriber, \Decorated {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -75,7 +75,7 @@ class SubscriberTemplate implements \Subscriber, \Decorated {
         return $this;
     }
     
-    public function setOutside(\Decoration $value) {
+    public function setOutside(\Decorator $value) {
         $this->outside = $value;
         
         return $this;

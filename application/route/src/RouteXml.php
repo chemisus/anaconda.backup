@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace node;
+
 
 /**
- * {@link \XmlFactory}
+ * {@link \RouteXml}
  * 
  * @package     
- * @name        XmlFactory
+ * @name        RouteXml
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
+class RouteXml implements Subscriber, Route, \node\Element {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,29 +56,22 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function inside() {
-        return $this;
-    }
-
-    public function outside() {
-        return $this->outside;
-    }
-
-    public function setOutside(\Decorator $value) {
-        $this->outside = $value;
+    public function controller() {
         
-        return $this;
     }
 
-    public function under() {
-        return $this;
+    public function method() {
+        
+    }
+
+    public function parameters() {
+        
     }
     /**///</editor-fold>
 
@@ -104,8 +97,76 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function newNode($tag, $attributes=array()) {
-        return new XmlElement($tag, $attributes);
+    public function offsetExists($offset) {
+        
+    }
+
+    public function offsetGet($offset) {
+        
+    }
+
+    public function offsetSet($offset, $value) {
+        
+    }
+
+    public function offsetUnset($offset) {
+        
+    }
+
+    public function check(\Publisher $publisher) {
+        
+    }
+
+    public function prepare(\Publisher $publsher) {
+        
+    }
+
+    public function publish(\Publisher $publisher) {
+        
+    }
+
+    public function reset() {
+        
+    }
+
+    public function attributes() {
+        
+    }
+
+    public function children() {
+        
+    }
+
+    public function document() {
+        
+    }
+
+    public function inside() {
+        
+    }
+
+    public function outside() {
+        
+    }
+
+    public function tag() {
+        
+    }
+
+    public function toXml($level = 0) {
+        
+    }
+
+    public function under() {
+        
+    }
+
+    public function value() {
+        
+    }
+    
+    public function appendNode($node) {
+        
     }
     /**///</editor-fold>
 

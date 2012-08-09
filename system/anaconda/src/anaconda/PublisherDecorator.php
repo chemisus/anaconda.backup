@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class PublisherDecorator implements \Decoration, \Publisher {
+class PublisherDecorator implements \Decorator, \Publisher {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
