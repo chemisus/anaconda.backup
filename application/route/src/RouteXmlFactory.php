@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace node;
+
 
 /**
- * {@link \XmlFactory}
+ * {@link \RouteXmlFactory}
  * 
  * @package     
- * @name        XmlFactory
+ * @name        RouteXmlFactory
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
+class RouteXmlFactory extends \node\XmlFactoryDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,30 +56,12 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function inside() {
-        return $this;
-    }
-
-    public function outside() {
-        return $this->outside;
-    }
-
-    public function setOutside(\Decorator $value) {
-        $this->outside = $value;
-        
-        return $this;
-    }
-
-    public function under() {
-        return $this;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -98,15 +80,19 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function check($tag, $attributes) {
+        return $tag === 'route';
+    }    
+    
+    protected function create($tag, $attributes) {
+        return new RouteXml();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function newNode($tag, $attributes=array()) {
-        return new XmlElement($tag, $attributes);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

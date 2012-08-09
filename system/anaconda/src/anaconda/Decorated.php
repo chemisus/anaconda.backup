@@ -33,12 +33,12 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-interface Decorated extends \Decoration {
+interface Decorated extends \Decorator {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function setOutside(\Decoration $value);
+    function setOutside(\Decorator $value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

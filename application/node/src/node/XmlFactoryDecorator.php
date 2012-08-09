@@ -33,7 +33,7 @@ namespace node;
  * @version     0.1
  * @since       0.1
  */
-class XmlFactoryDecorator implements Factory {
+class XmlFactoryDecorator extends \DecoratorTemplate implements Factory {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/

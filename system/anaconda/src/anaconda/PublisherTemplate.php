@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class PublisherTemplate implements \Publisher, \Decorated {
+class PublisherTemplate extends \DecoratedTemplate implements \Publisher, \Decorated {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -77,7 +77,7 @@ class PublisherTemplate implements \Publisher, \Decorated {
         return $this;
     }
     
-    public function setOutside(\Decoration $value) {
+    public function setOutside(\Decorator $value) {
         $this->outside = $value;
         
         return $this;

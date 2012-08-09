@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace node;
+
 
 /**
- * {@link \XmlFactory}
+ * {@link \DecoratorTemplate}
  * 
  * @package     
- * @name        XmlFactory
+ * @name        DecoratorTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
+class DecoratorTemplate extends \anaconda\DecoratorTemplate {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,30 +56,12 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function inside() {
-        return $this;
-    }
-
-    public function outside() {
-        return $this->outside;
-    }
-
-    public function setOutside(\Decorator $value) {
-        $this->outside = $value;
-        
-        return $this;
-    }
-
-    public function under() {
-        return $this;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -104,9 +86,6 @@ class XmlFactory extends \DecoratorTemplate implements Factory, \Decorated {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function newNode($tag, $attributes=array()) {
-        return new XmlElement($tag, $attributes);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

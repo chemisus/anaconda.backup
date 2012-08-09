@@ -25,15 +25,15 @@
 namespace anaconda;
 
 /**
- * {@link anaconda\Decoration}
+ * {@link anaconda\Decorator}
  * 
  * @package     anaconda
- * @name        Decoration
+ * @name        Decorator
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decoration {
+interface Decorator {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -41,6 +41,8 @@ interface Decoration {
     function inside();
     
     function under();
+    
+    function over();
     
     function outside();
     /**///</editor-fold>

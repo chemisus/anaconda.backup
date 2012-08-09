@@ -33,7 +33,7 @@ namespace node;
  * @version     0.1
  * @since       0.1
  */
-interface Factory extends \Decoration {
+interface Factory extends \Decorator {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/

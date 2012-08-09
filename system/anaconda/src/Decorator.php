@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \Decoration}
+ * {@link \Decorator}
  * 
  * @package     
- * @name        Decoration
+ * @name        Decorator
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decoration extends anaconda\Decoration {
+interface Decorator extends anaconda\Decorator {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
