@@ -62,8 +62,7 @@ Bootstrap::Run();
 /*\**************************************************************************\*/
 
 
-
-
+$dec = new DecoratorTemplate(new DecoratorTemplate(new DecoratedTemplate()));
 
 
 
