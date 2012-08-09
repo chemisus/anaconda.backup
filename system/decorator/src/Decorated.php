@@ -25,24 +25,22 @@
 
 
 /**
- * {@link \Decorator}
+ * {@link \Decorated}
  * 
  * @package     
- * @name        Decorator
+ * @name        Decorated
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decorator {
+interface Decorated {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function getInside();
+    function getOutside();
     
-    function getDecorated();
-    
-    function setDecorated(\Decorated $value);
+    function setOutside(\Decorator $value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

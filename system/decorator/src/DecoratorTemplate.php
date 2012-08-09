@@ -33,7 +33,7 @@
  * @version     0.1
  * @since       0.1
  */
-class DecoratorTemplate implements Decorator {
+class DecoratorTemplate implements DecoratedDecorator {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -63,28 +63,6 @@ class DecoratorTemplate implements Decorator {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getDecorated() {
-        return $this->decorated;
-    }
-    
-    public function getDecorator() {
-        $decorator = null;
-        
-        $current = $this->getOutside();
-        
-        while ($current !== $this) {
-            $decorator = $current;
-            
-            $current = $current->getDecorated();
-        }
-        
-        return $decorator;
-    }
-    
-    public function getInside() {
-        return $this->getDecorated()->getInside();
-    }
-    
     public function getOutside() {
         return $this->getInside()->getOutside();
     }
@@ -92,14 +70,28 @@ class DecoratorTemplate implements Decorator {
     public function setOutside(\Decorator $value) {
         return $this->getInside()->setOutside($value);
     }
+    
+    public function getDecorated() {
+        return $this->decorated;
+    }
+    
+    public function setDecorated(\Decorated $value) {
+        $this->decorated = $value;
+        
+        return $this;
+    }
+    
+    public function getInside() {
+        return $this->getDecorated()->getInside();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\Decorator $decorated) {
-        $this->decorated = $decorated;
+    public function __construct(\Decorated $decorated) {
+        $this->setDecorated($decorated);
         
         $this->setOutside($this);
     }

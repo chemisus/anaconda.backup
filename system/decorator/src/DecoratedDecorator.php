@@ -25,30 +25,26 @@
 
 
 /**
- * {@link \Decorator}
+ * {@link \DecoratedDecorator}
  * 
  * @package     
- * @name        Decorator
+ * @name        DecoratedDecorator
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decorator {
+interface DecoratedDecorator extends Decorated, Decorator {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function getInside();
-    
-    function getDecorated();
-    
-    function setDecorated(\Decorated $value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function setDecorated(\Decorated $value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

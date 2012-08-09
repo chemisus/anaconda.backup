@@ -33,7 +33,7 @@
  * @version     0.1
  * @since       0.1
  */
-class DecoratedTemplate implements Decorator {
+class DecoratedTemplate implements Decorated {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -63,28 +63,6 @@ class DecoratedTemplate implements Decorator {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getDecorated() {
-        return $this;
-    }
-    
-    public function getDecorator() {
-        $decorator = null;
-        
-        $current = $this->getOutside();
-        
-        while ($current !== $this) {
-            $decorator = $current;
-            
-            $current = $current->getDecorated();
-        }
-        
-        return $decorator;
-    }
-    
-    public function getInside() {
-        return $this;
-    }
-    
     public function getOutside() {
         return $this->outside;
     }
@@ -92,6 +70,18 @@ class DecoratedTemplate implements Decorator {
     public function setOutside(\Decorator $value) {
         $this->outside = $value;
         
+        return $this;
+    }
+
+    public function getDecorated() {
+        return $this;
+    }
+
+    public function getInside() {
+        return $this;
+    }
+
+    public function setDecorated(\Decorated $value) {
         return $this;
     }
     /**///</editor-fold>
