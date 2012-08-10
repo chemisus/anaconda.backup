@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<routes>
+
+    <route path="module/[method]" controller="page/ModuleController" method="[method]">
+        <form name="module" value="field:module:[method]" />
+        <filter name="method" value="create" />
+    </route>
+
+    <route path="module(/[method](/[index]))" controller="page/ModuleController" method="[method]">
+        <default name="method" value="index" />
+        <form name="module" value="field:module:[index]" />
+        <filter name="method" value="field:update|delete|index" />
+    </route>
+
+    <route path="[controller](/[method])" controller="page/[controller]" method="[method]">
+        <default name="controller" value="home" />
+        <default name="method" value="index" />
+        <filter name="controller" value="" />
+    </route>
+</routes>

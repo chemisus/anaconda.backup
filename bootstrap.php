@@ -65,9 +65,9 @@ $application = new ApplicationTemplate(new FactoryTemplate());
 
 $document = new DocumentTemplate($application);
 
-$document->createNode('blah');
+$document->fromXml(file_get_contents(ROOT.'application/anaconda/config/routes.xml'));
 
-xmp($document);
+xmp($document->toXml());
 
 
 /*\**************************************************************************\*/

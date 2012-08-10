@@ -117,7 +117,7 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
     }
     
     public function toXml($level=0) {
-        $xml = '<?xml version="1.0"?>';
+        $xml = '';
         
         foreach ($this->getChildren() as $child) {
             $xml .= $child->toXml($level);
@@ -125,6 +125,91 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
         
         return $xml;
     }
+    
+    public function fromXml($xml) {
+        $matches = array();
+
+        preg_match_all('/\<|\>|[^\<\>]*/', $xml, $matches);
+        
+        $stack = array();
+        
+        $current = $this;
+        
+        while (count($matches[0])) {
+            $line = array_shift($matches[0]);
+            
+            if ($line === '<') {
+                $line = array_shift($matches[0]);
+
+                if (left($line, '?') || right($line, '?')) {
+                    $current->addChild(new TextTemplate('<'.$line.'>'));
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else if (left($line, '--')) {
+                    while (!right($line, '-->')) {
+                        $line .= array_shift($matches[0]);
+                    }
+                    
+                    $current->addChild(new XmlText('<'.$line));
+                }
+                else if (right($line, '/')) {
+                    list($tag, $attributes) = $this->parseLine($line);
+                    
+                    $current->addChild($this->getApplication()->resolve($tag, $attributes));
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else if (left($line, '/')) {
+                    $current = array_pop($stack);
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else {
+                    $stack[] = $current;
+
+                    list($tag, $attributes) = $this->parseLine($line);
+                    
+                    $node = $this->getApplication()->resolve($tag, $attributes);
+                    
+                    $current->addChild($node);
+                    
+                    $current = $node;
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                
+            }
+            else {
+                $current->addChild(new TextTemplate($line));
+            }
+        }
+    }
+    
+    public function parseLine($line) {
+        list($tag, $attributes) = explode(' ', $line.' ', 2);
+        
+        $matches = array();
++
+        preg_match_all('/(?:\"[^\"]*\")|\w+/', $attributes, $matches);
+        
+        $attributes = array();
+        
+        while (count($matches[0])) {
+            $attributes[array_shift($matches[0])] = trim(array_shift($matches[0]), '"');
+        }
+        
+        return array($tag, $attributes);
+    }    
+    
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">
