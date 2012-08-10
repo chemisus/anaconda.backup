@@ -76,8 +76,10 @@ class InjectableTemplate implements Injectable {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        
+    public function __construct(\Application $application=null) {
+        if ($application !== null) {
+            $this->setApplication($application);
+        }
     }
     /**///</editor-fold>
 

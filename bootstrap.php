@@ -90,6 +90,13 @@ $document->getOutside()->reset();
 
 xmp($document->toXml());
 
+
+$application = new ApplicationTemplate(new FactoryTemplate());
+
+$application->addFactory(new FactoryDecoration());
+
+xmp($application);
+
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/

@@ -68,6 +68,11 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct() {
+        parent::__construct();
+        
+        $this->addDecorationInterface('Factory');
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">

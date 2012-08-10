@@ -44,7 +44,7 @@ interface Application {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function resolve($tag, $attributes=array(), $interfaces=array());
+    function resolve($tag, $attributes=array(), $interfaces=array(), $caller=null);
     
     function addFactory(\Factory $factory);
     

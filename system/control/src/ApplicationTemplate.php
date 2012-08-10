@@ -77,7 +77,9 @@ class ApplicationTemplate implements Application {
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
     public function __construct(\Factory $factory=null) {
-        $this->setFactory($factory);
+        if ($factory !== null) {
+            $this->setFactory($factory);
+        }
     }
     /**///</editor-fold>
 
@@ -105,8 +107,8 @@ class ApplicationTemplate implements Application {
         $this->getFactory()->removeDecoration($factory);
     }
 
-    public function resolve($tag, $attributes = array(), $interfaces = array()) {
-        return $this->getFactory()->resolve($tag, $attributes, $interfaces);
+    public function resolve($tag, $attributes = array(), $interfaces = array(), $caller=null) {
+        return $this->getFactory()->resolve($tag, $attributes, $interfaces, $caller);
     }
     /**///</editor-fold>
 
