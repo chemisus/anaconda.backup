@@ -186,7 +186,6 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
                         throw new Exception;
                     }
                 }
-                
             }
             else {
                 $current->addChild(new TextTemplate($line));
@@ -198,7 +197,7 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
         list($tag, $attributes) = explode(' ', $line.' ', 2);
         
         $matches = array();
-+
+
         preg_match_all('/(?:\"[^\"]*\")|\w+/', $attributes, $matches);
         
         $attributes = array();
@@ -206,7 +205,7 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
         while (count($matches[0])) {
             $attributes[array_shift($matches[0])] = trim(array_shift($matches[0]), '"');
         }
-        
+
         return array($tag, $attributes);
     }    
     
