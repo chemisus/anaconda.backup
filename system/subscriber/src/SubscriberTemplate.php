@@ -68,8 +68,8 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
+    public function __construct(\Application $application=null) {
+        parent::__construct($application);
         
         $this->addDecorationInterface('Subscriber');
     }

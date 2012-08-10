@@ -80,7 +80,7 @@ class FactoryDecoration extends DecorationTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($tag, $attributes) {
+    protected function doResolve($tag, $attributes, $interfaces, $caller) {
     }
     /**///</editor-fold>
 
@@ -88,14 +88,14 @@ class FactoryDecoration extends DecorationTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function resolve($tag, $attributes=array(), $interfaces=array()) {
-        $value = $this->doResolve($tag, $attributes, $interfaces);
+    public final function resolve($tag, $attributes=array(), $interfaces=array(), $caller=null) {
+        $value = $this->doResolve($tag, $attributes, $interfaces, $caller);
         
         if ($value !== null) {
             return $value;
         }
         
-        return $this->getUnder()->resolve($tag, $attributes, $interfaces);
+        return $this->getUnder()->resolve($tag, $attributes, $interfaces, $caller);
     }
     /**///</editor-fold>
 

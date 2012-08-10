@@ -85,7 +85,7 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($tag, $attributes, $interfaces) {
+    protected function doResolve($tag, $attributes, $interfaces, $caller=null) {
         throw new Exception("Factory for {$tag} has not been specified.");
     }
     /**///</editor-fold>
@@ -94,8 +94,8 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function resolve($tag, $attributes=array(), $interfaces=array()) {
-        return $this->doResolve($tag, $attributes, $interfaces);
+    public final function resolve($tag, $attributes=array(), $interfaces=array(), $caller=null) {
+        return $this->doResolve($tag, $attributes, $interfaces, $caller);
     }
     /**///</editor-fold>
 

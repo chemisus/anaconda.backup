@@ -81,8 +81,8 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
+    public function __construct(\Application $application=null) {
+        parent::__construct($application);
         
         $this->addCompositeInterface('Node');
         

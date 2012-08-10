@@ -88,7 +88,7 @@ $document->addChild($node);
 
 $document->getOutside()->reset();
 
-xmp($document->toXml());
+xmp($document);
 
 
 $application = new ApplicationTemplate(new FactoryTemplate());

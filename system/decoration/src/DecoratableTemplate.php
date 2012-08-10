@@ -33,7 +33,7 @@
  * @version     0.1
  * @since       0.1
  */
-class DecoratableTemplate implements Decoratable {
+class DecoratableTemplate extends InjectableTemplate implements Decoratable {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -86,7 +86,9 @@ class DecoratableTemplate implements Decoratable {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
+    public function __construct(\Application $application=null) {
+        parent::__construct($application);
+        
         $this->outside = $this;
         
         $this->addDecorationInterface('Decoration');
