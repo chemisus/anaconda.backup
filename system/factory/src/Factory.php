@@ -44,7 +44,7 @@ interface Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function resolve($tag, $attributes=array(), $interfaces=array(), $caller=null);
+    function resolve($caller, $tag, $attributes=array(), $interfaces=array());
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

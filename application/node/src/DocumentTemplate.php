@@ -158,7 +158,7 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
                 else if (right($line, '/')) {
                     list($tag, $attributes) = $this->parseLine($line);
                     
-                    $current->addChild($this->getApplication()->resolve($tag, $attributes));
+                    $current->addChild($this->getApplication()->resolve($this, $tag, $attributes));
 
                     if (array_shift($matches[0]) !== '>') {
                         throw new Exception;
@@ -176,7 +176,7 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
 
                     list($tag, $attributes) = $this->parseLine($line);
                     
-                    $node = $this->getApplication()->resolve($tag, $attributes);
+                    $node = $this->getApplication()->resolve($this, $tag, $attributes);
                     
                     $current->addChild($node);
                     

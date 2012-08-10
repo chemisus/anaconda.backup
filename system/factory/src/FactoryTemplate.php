@@ -85,7 +85,7 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($tag, $attributes, $interfaces, $caller=null) {
+    protected function doResolve($caller, $tag, $attributes, $interfaces) {
         return new ElementTemplate($tag, $attributes);
     }
     /**///</editor-fold>
@@ -94,8 +94,8 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function resolve($tag, $attributes=array(), $interfaces=array(), $caller=null) {
-        return $this->doResolve($tag, $attributes, $interfaces, $caller);
+    public final function resolve($caller=null, $tag=null, $attributes=array(), $interfaces=array()) {
+        return $this->doResolve($caller, $tag, $attributes, $interfaces);
     }
     /**///</editor-fold>
 
