@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \DecoratedTemplate}
+ * {@link \DocumentTemplate}
  * 
  * @package     
- * @name        DecoratedTemplate
+ * @name        DocumentTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class DecoratedTemplate implements Decorated {
+class DocumentTemplate extends CompositeTemplate implements Document, Node {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,33 +56,24 @@ class DecoratedTemplate implements Decorated {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getOutside() {
-        return $this->outside;
+    public function getDocument() {
+        return $this;
     }
-    
-    public function setOutside(\Decorator $value) {
-        $this->outside = $value;
+
+    public function getValue() {
+        $value = '';
         
-        return $this;
-    }
-
-    public function getDecorated() {
-        return $this;
-    }
-
-    public function getInside() {
-        return $this;
-    }
-
-    public function setDecorated(\Decorated $value) {
-        return $this;
+        foreach ($this->getChildren() as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
     }
     /**///</editor-fold>
 
@@ -90,6 +81,15 @@ class DecoratedTemplate implements Decorated {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct() {
+        parent::__construct();
+        
+        $this->addCompositeInterface('Node');
+        
+        $this->addDecorationInterface('Node');
+        
+        $this->addDecorationInterface('Document');
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -102,12 +102,44 @@ class DecoratedTemplate implements Decorated {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doReset() {
+        xmp(__METHOD__);
+
+        parent::doReset();
+    }
+
+    protected function doPrepare(\Publisher $publisher) {
+        xmp(__METHOD__);
+
+        parent::doPrepare($publisher);
+    }
+
+    protected function doCheck(\Publisher $publisher) {
+        xmp(__METHOD__);
+
+        parent::doCheck($publisher);
+    }
+
+    protected function doPublish(\Publisher $publisher) {
+        xmp(__METHOD__);
+
+        parent::doPublish($publisher);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function toXml($level=0) {
+        $xml = '<?xml version="1.0"?>';
+        
+        foreach ($this->getChildren() as $child) {
+            $xml .= $child->toXml($level);
+        }
+        
+        return $xml;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

@@ -25,32 +25,29 @@
 
 
 /**
- * {@link \Subscriber}
+ * {@link \Composite}
  * 
  * @package     
- * @name        Subscriber
+ * @name        Composite
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Composite {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function getChildren();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function reset();
+    function addChild($child);
     
-    function prepare(\Publisher $publisher);
-
-    function check(\Publisher $publisher);
-    
-    function publish(\Publisher $publisher);
+    function removeChild($child);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \DecoratedDecorator}
+ * {@link \Decoration}
  * 
  * @package     
- * @name        DecoratedDecorator
+ * @name        Decoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface DecoratedDecorator extends Decorated, Decorator {
+interface Decoration {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -44,7 +44,10 @@ interface DecoratedDecorator extends Decorated, Decorator {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function setDecorated(\Decorated $value);
+    /**
+     * @param \Decoratable $value
+     */
+    function setUnder($value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

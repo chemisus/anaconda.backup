@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \FactoryTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        FactoryTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class FactoryTemplate extends DecoratableTemplate implements Factory {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -68,11 +68,6 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Subscriber');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -85,18 +80,8 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doPublish(\Publisher $publisher) {
+    protected function doResolve($tag, $attributes, $interfaces) {
+        throw new Exception("Factory for {$tag} has not been specified.");
     }
     /**///</editor-fold>
 
@@ -104,20 +89,8 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
-    }
-
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public final function resolve($tag, $attributes=array(), $interfaces=array()) {
+        return $this->doResolve($tag, $attributes, $interfaces);
     }
     /**///</editor-fold>
 

@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \Subscriber}
+ * {@link \Factory}
  * 
  * @package     
- * @name        Subscriber
+ * @name        Factory
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Factory {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -44,13 +44,7 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function reset();
-    
-    function prepare(\Publisher $publisher);
-
-    function check(\Publisher $publisher);
-    
-    function publish(\Publisher $publisher);
+    function resolve($tag, $attributes=array(), $interfaces=array());
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

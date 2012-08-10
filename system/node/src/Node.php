@@ -25,32 +25,29 @@
 
 
 /**
- * {@link \Subscriber}
+ * {@link \Node}
  * 
  * @package     
- * @name        Subscriber
+ * @name        Node
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Node {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    function getDocument();
+
+    function getValue();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function reset();
-    
-    function prepare(\Publisher $publisher);
-
-    function check(\Publisher $publisher);
-    
-    function publish(\Publisher $publisher);
+    function toXml($level=0);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

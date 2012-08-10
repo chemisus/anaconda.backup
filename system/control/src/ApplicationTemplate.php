@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \ApplicationTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        ApplicationTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class ApplicationTemplate implements Application {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,22 +56,28 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $factory;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    protected function getFactory() {
+        return $this->factory;
+    }
+    
+    protected function setFactory(\Factory $value) {
+        $this->factory = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Subscriber');
+    public function __construct(\Factory $factory=null) {
+        $this->setFactory($factory);
     }
     /**///</editor-fold>
 
@@ -85,39 +91,22 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
+    public function addFactory(\Factory $factory) {
+        $this->getFactory()->addDecoration($factory);
     }
 
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
+    public function removeFactory(\Factory $factory) {
+        $this->getFactory()->removeDecoration($factory);
     }
 
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public function resolve($tag, $attributes = array(), $interfaces = array()) {
+        return $this->getFactory()->resolve($tag, $attributes, $interfaces);
     }
     /**///</editor-fold>
 

@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \SubscriberDecoration}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        SubscriberDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class SubscriberDecoration extends DecorationTemplate implements Subscriber {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -68,11 +68,6 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Subscriber');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -106,18 +101,30 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     public final function reset() {
         $this->doReset();
+        
+        $this->getUnder()->reset();
     }
 
     public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
+        if (!$this->doPrepare($publisher)) {
+            return false;
+        }
+        
+        return $this->getUnder()->prepare($publisher);
     }
 
     public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
+        if (!$this->doCheck($publisher)) {
+            return false;
+        }
+        
+        return $this->getUnder()->check($publisher);
     }
 
     public final function publish(\Publisher $publisher) {
         $this->doPublish($publisher);
+        
+        $this->getUnder()->publish($publisher);
     }
     /**///</editor-fold>
 

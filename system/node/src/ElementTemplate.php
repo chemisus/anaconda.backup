@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \ElementTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        ElementTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class ElementTemplate extends CompositeTemplate implements Node, Element {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,22 +56,72 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $document;
+
+    private $tag;
+    
+    private $attributes = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getDocument() {
+        return $this->document;
+    }
+
+    public function getTag() {
+        return $this->tag;
+    }
+    
+    protected function setTag($value) {
+        $this->tag = $value;
+    }
+
+    public function getAttributes() {
+        return $this->attributes;
+    }
+    
+    protected function setAttributes($value) {
+        $this->attributes = $value;
+    }
+    
+    protected function getAttribute($key) {
+        return $this->attributes[$key];
+    }
+    
+    protected function setAttribute($key, $value) {
+        $this->attributes[$key] = $value;
+    }
+
+    public function getValue() {
+        $value = '';
+        
+        foreach ($this->getChildren() as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
+    public function __construct($tag=null, $attributes=array()) {
         parent::__construct();
         
-        $this->addDecorationInterface('Subscriber');
+        $this->setTag($tag);
+        
+        $this->setAttributes($attributes);
+        
+        $this->addCompositeInterface('Node');
+        
+        $this->addDecorationInterface('Node');
+        
+        $this->addDecorationInterface('Element');
     }
     /**///</editor-fold>
 
@@ -86,17 +136,27 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     protected function doReset() {
+        xmp(__METHOD__);
+
+        parent::doReset();
     }
 
     protected function doPrepare(\Publisher $publisher) {
-        return true;
+        xmp(__METHOD__);
+
+        parent::doPrepare($publisher);
     }
 
     protected function doCheck(\Publisher $publisher) {
-        return true;
+        xmp(__METHOD__);
+
+        parent::doCheck($publisher);
     }
 
     protected function doPublish(\Publisher $publisher) {
+        xmp(__METHOD__);
+
+        parent::doPublish($publisher);
     }
     /**///</editor-fold>
 
@@ -104,20 +164,31 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
-    }
-
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public function toXml($level=0) {
+        $pad = str_pad('', $level * 4, ' ');
+        
+        $xml = "\n{$pad}<{$this->getTag()}";
+        
+        foreach ($this->getAttributes() as $key=>$value) {
+            $xml .= " {$key}=\"{$value}\"";
+        }
+        
+        if (!count($this->getChildren())) {
+            $xml .= ' />';
+        }
+        else {
+            $xml .= '>';
+            
+            $value = '';
+            
+            foreach ($this->getChildren() as $child) {
+                $value .= $child->toXml($level + 1);
+            }
+            
+            $xml .= "{$value}</ {$this->getTag()}>";
+        }
+        
+        return $xml;
     }
     /**///</editor-fold>
 

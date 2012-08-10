@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberDecorator}
+ * {@link \CompositeDecoration}
  * 
  * @package     
- * @name        SubscriberDecorator
+ * @name        CompositeDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberDecorator extends SubscriberTemplate implements DecoratedDecorator {
+class CompositeDecoration extends SubscriberDecoration implements Composite {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,33 +56,14 @@ class SubscriberDecorator extends SubscriberTemplate implements DecoratedDecorat
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $decorated;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getOutside() {
-        return $this->getInside()->getOutside();
-    }
-
-    public function setOutside(\Decorator $value) {
-        $this->getInside()->setOutside($value);
-        
-        return $this;
-    }
-
-    public function getDecorated() {
-        return $this->decorated;
-    }
-
-    public function getInside() {
-        return $this->getDecorated()->getInside();
-    }
-
-    public function setDecorated(\Decorated $value) {
-        $this->decorated = $value;
+    public function getChildren() {
+        return $this->getInside()->getChildren();
     }
     /**///</editor-fold>
 
@@ -90,11 +71,6 @@ class SubscriberDecorator extends SubscriberTemplate implements DecoratedDecorat
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\Subscriber $subscriber) {
-        $this->setDecorated($subscriber);
-        
-        $this->setOutside($this);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -113,6 +89,13 @@ class SubscriberDecorator extends SubscriberTemplate implements DecoratedDecorat
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function addChild($child) {
+        return $this->getInside()->addChild($child);
+    }
+
+    public function removeChild($child) {
+        return $this->getInside()->removeChild($child);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

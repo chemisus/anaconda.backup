@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \CompositeTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        CompositeTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class CompositeTemplate extends SubscriberTemplate implements Composite {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,12 +56,18 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $children = array();
+    
+    private $interfaces = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getChildren() {
+        return new ArrayIterator($this->children);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -71,7 +77,7 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     public function __construct() {
         parent::__construct();
         
-        $this->addDecorationInterface('Subscriber');
+        $this->addDecorationInterface('Composite');
     }
     /**///</editor-fold>
 
@@ -85,18 +91,20 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
+    protected function addCompositeInterface($interface) {
+        $this->interfaces[] = $interface;
+        
+        return $interface;
     }
-
-    protected function doPrepare(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doPublish(\Publisher $publisher) {
+    
+    protected function removeCompositeInterface($interface) {
+        $key = array_search($interface, $this->interfaces, true);
+        
+        if ($key !== false) {
+            unset($this->interfaces[$key]);
+        }
+        
+        return $interface;
     }
     /**///</editor-fold>
 
@@ -104,20 +112,26 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
+    public function addChild($child) {
+        foreach ($this->interfaces as $interface) {
+            if (!($child instanceof $interface)) {
+                throw new Exception("Child must be an instance of {$interface}.");
+            }
+        }
+        
+        $this->children[] = $child;
+        
+        return $child;
     }
 
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public function removeChild($child) {
+        $key = array_search($child, $this->children, true);
+        
+        if ($key !== false) {
+            unset($this->children[$key]);
+        }
+        
+        return $child;
     }
     /**///</editor-fold>
 

@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \TextTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        TextTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class TextTemplate extends SubscriberTemplate implements Node {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,22 +56,38 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $document;
+    
+    private $value;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getDocument() {
+        return $this->document;
+    }
+
+    public function getValue() {
+        return $this->value;
+    }
+    
+    protected function setValue($value) {
+        $this->value = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
+    public function __construct($value='') {
         parent::__construct();
         
-        $this->addDecorationInterface('Subscriber');
+        $this->addDecorationInterface('Node');
+        
+        $this->setValue($value);
     }
     /**///</editor-fold>
 
@@ -85,39 +101,14 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
-    }
-
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public function toXml($level = 0) {
+        return $this->getValue();
     }
     /**///</editor-fold>
 

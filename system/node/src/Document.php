@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \Subscriber}
+ * {@link \Document}
  * 
  * @package     
- * @name        Subscriber
+ * @name        Document
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Document {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
@@ -44,13 +44,6 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function reset();
-    
-    function prepare(\Publisher $publisher);
-
-    function check(\Publisher $publisher);
-    
-    function publish(\Publisher $publisher);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

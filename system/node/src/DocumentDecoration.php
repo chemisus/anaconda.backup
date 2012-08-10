@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \DocumentDecoration}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        DocumentDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class DocumentDecoration extends CompositeDecoration implements Node, Document {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -62,17 +62,19 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getDocument() {
+        return $this->getUnder()->getDocument();
+    }
+
+    public function getValue() {
+        return $this->getUnder()->getValue();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Subscriber');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -86,17 +88,27 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     protected function doReset() {
+        xmp(__METHOD__);
+
+        parent::doReset();
     }
 
     protected function doPrepare(\Publisher $publisher) {
-        return true;
+        xmp(__METHOD__);
+
+        parent::doPrepare($publisher);
     }
 
     protected function doCheck(\Publisher $publisher) {
-        return true;
+        xmp(__METHOD__);
+
+        parent::doCheck($publisher);
     }
 
     protected function doPublish(\Publisher $publisher) {
+        xmp(__METHOD__);
+
+        parent::doPublish($publisher);
     }
     /**///</editor-fold>
 
@@ -104,20 +116,8 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
-    }
-
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public function toXml($level=0) {
+        return $this->getUnder()->getLevel($level);
     }
     /**///</editor-fold>
 

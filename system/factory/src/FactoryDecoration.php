@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \DecoratorTemplate}
+ * {@link \FactoryDecoration}
  * 
  * @package     
- * @name        DecoratorTemplate
+ * @name        FactoryDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class DecoratorTemplate implements DecoratedDecorator {
+class FactoryDecoration extends DecorationTemplate implements Factory {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,45 +56,18 @@ class DecoratorTemplate implements DecoratedDecorator {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $decorated;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getOutside() {
-        return $this->getInside()->getOutside();
-    }
-    
-    public function setOutside(\Decorator $value) {
-        return $this->getInside()->setOutside($value);
-    }
-    
-    public function getDecorated() {
-        return $this->decorated;
-    }
-    
-    public function setDecorated(\Decorated $value) {
-        $this->decorated = $value;
-        
-        return $this;
-    }
-    
-    public function getInside() {
-        return $this->getDecorated()->getInside();
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(\Decorated $decorated) {
-        $this->setDecorated($decorated);
-        
-        $this->setOutside($this);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -107,12 +80,23 @@ class DecoratorTemplate implements DecoratedDecorator {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doResolve($tag, $attributes) {
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public final function resolve($tag, $attributes=array(), $interfaces=array()) {
+        $value = $this->doResolve($tag, $attributes, $interfaces);
+        
+        if ($value !== null) {
+            return $value;
+        }
+        
+        return $this->getUnder()->resolve($tag, $attributes, $interfaces);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

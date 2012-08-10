@@ -25,28 +25,26 @@
 
 
 /**
- * {@link \Decorator}
+ * {@link \Injectable}
  * 
  * @package     
- * @name        Decorator
+ * @name        Injectable
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Decorator {
+interface Injectable {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function getInside();
-    
-    function getDecorated();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function getApplication();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

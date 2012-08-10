@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \DecoratableTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        DecoratableTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class DecoratableTemplate implements Decoratable {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,12 +56,30 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $outside;
+    
+    private $interfaces = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getInside() {
+        return $this;
+    }
+
+    public function getOutside() {
+        return $this->outside;
+    }
+
+    public function getUnder() {
+        return $this;
+    }
+
+    public function setOutside(\Decoration $value) {
+        $this->outside = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -69,9 +87,9 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
     public function __construct() {
-        parent::__construct();
+        $this->outside = $this;
         
-        $this->addDecorationInterface('Subscriber');
+        $this->addDecorationInterface('Decoration');
     }
     /**///</editor-fold>
 
@@ -85,18 +103,16 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
+    protected final function addDecorationInterface($interface) {
+        $this->interfaces[] = $interface;
     }
 
-    protected function doPrepare(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doPublish(\Publisher $publisher) {
+    protected final function removeDecorationInterface($interface) {
+        $key = array_search($interface, $this->interfaces, true);
+        
+        if ($key !== false) {
+            unset($this->interfaces[$key]);
+        }
     }
     /**///</editor-fold>
 
@@ -104,20 +120,22 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
+    public function addDecoration(\Decoration $decoration) {
+        foreach ($this->interfaces as $interface) {
+            if (!($decoration instanceof $interface)) {
+                throw new Exception("Decoration must be an instance of {$interface}.");
+            }
+        }
+        
+        $decoration->setUnder($this->getOutside());
+        
+        $this->setOutside($decoration);
     }
-
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    
+    public function removeDecoration(\Decoration $decoration) {
+        if ($this->outside === $decoration) {
+            $this->outside = $this->outside->getUnder();
+        }
     }
     /**///</editor-fold>
 

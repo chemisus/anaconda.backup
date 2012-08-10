@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberDecorated}
+ * {@link \InjectableTemplate}
  * 
  * @package     
- * @name        SubscriberDecorated
+ * @name        InjectableTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberDecorated extends SubscriberTemplate implements Decorated, Decorator {
+class InjectableTemplate implements Injectable {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,29 +56,19 @@ class SubscriberDecorated extends SubscriberTemplate implements Decorated, Decor
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $outside;
+    private $application;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getOutside() {
-        return $this->outside;
+    public function getApplication() {
+        return $this->application;
     }
-
-    public function setOutside(\Decorator $value) {
-        $this->outside = $value;
-        
-        return $this;
-    }
-
-    public function getDecorated() {
-        return $this;
-    }
-
-    public function getInside() {
-        return $this;
+    
+    protected function setApplication(\Application $value) {
+        $this->application = $value;
     }
     /**///</editor-fold>
 
@@ -86,6 +76,9 @@ class SubscriberDecorated extends SubscriberTemplate implements Decorated, Decor
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct() {
+        
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">

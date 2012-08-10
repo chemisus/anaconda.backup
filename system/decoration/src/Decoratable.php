@@ -25,32 +25,46 @@
 
 
 /**
- * {@link \Subscriber}
+ * {@link \Decoratable}
  * 
  * @package     
- * @name        Subscriber
+ * @name        Decoratable
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Subscriber {
+interface Decoratable {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    /**
+     * Gets the last added Decoration.
+     * 
+     * @return \Decoration 
+     */
+    function getOutside();
+
+    /**
+     * Gets the base object that is being decorated.
+     * 
+     * @return \Decoratable 
+     */
+    function getInside();
+    
+    /**
+     * @return \Decoratable 
+     */
+    function getUnder();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function reset();
+    function addDecoration(\Decoration $decoration);
     
-    function prepare(\Publisher $publisher);
-
-    function check(\Publisher $publisher);
-    
-    function publish(\Publisher $publisher);
+    function removeDecoration(\Decoration $decoration);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

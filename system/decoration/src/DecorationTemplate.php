@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \SubscriberTemplate}
+ * {@link \DecorationTemplate}
  * 
  * @package     
- * @name        SubscriberTemplate
+ * @name        DecorationTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
+class DecorationTemplate implements Decoratable, Decoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,22 +56,38 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $under;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getInside() {
+        return $this->under->getInside();
+    }
+
+    public function getOutside() {
+        return $this->getInside()->getOutside();
+    }
+
+    public function getUnder() {
+        return $this->under;
+    }
+
+    public function setUnder($value) {
+        $this->under = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Subscriber');
+    public function __construct(\Decoratable $under=null) {
+        if ($under !== null) {
+            $under->addDecoration($this);
+        }
     }
     /**///</editor-fold>
 
@@ -85,39 +101,24 @@ class SubscriberTemplate extends DecoratableTemplate implements Subscriber {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        return true;
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function reset() {
-        $this->doReset();
+    public function addDecoration(\Decoration $decoration) {
+        $this->getInside()->addDecoration($decoration);
     }
 
-    public final function prepare(\Publisher $publisher) {
-        return $this->doPrepare($publisher);
-    }
-
-    public final function check(\Publisher $publisher) {
-        return $this->doChech($publisher);
-    }
-
-    public final function publish(\Publisher $publisher) {
-        $this->doPublish($publisher);
+    public function removeDecoration(\Decoration $decoration) {
+        if ($this->getUnder() === $decoration) {
+            $this->under = $this->getUnder()->getUnder();
+        }
+        else {
+            $this->getUnder()->removeDecoration($decoration);
+        }
+        
     }
     /**///</editor-fold>
 
