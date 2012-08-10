@@ -25,7 +25,7 @@
 require_once('functions.php');
 
 class Bootstrap {
-    public static function Run() {
+    public static function Main() {
         define('ROOT', dirname(__FILE__).'/');
         
         spl_autoload_register(function ($class) {
@@ -52,7 +52,7 @@ class Bootstrap {
     }
 }
 
-Bootstrap::Run();
+Bootstrap::Main();
 
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
