@@ -44,6 +44,7 @@ interface Document {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function createNode($tag, $attributes=array());
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">

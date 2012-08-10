@@ -61,41 +61,14 @@ Bootstrap::Run();
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 
+$application = new ApplicationTemplate(new FactoryTemplate());
 
-$documentDecoration1 = new DocumentDecoration();
+$document = new DocumentTemplate($application);
 
-$documentDecoration2 = new DocumentDecoration();
-
-$document = new DocumentTemplate();
-
-$document->addDecoration($documentDecoration1);
-
-$document->addDecoration($documentDecoration2);
-
-$nodeDecoration1 = new ElementDecoration();
-
-$nodeDecoration2 = new ElementDecoration();
-
-$node = new ElementTemplate('node', array('a'=>'b', 'c'=>'d'));
-
-$node->addDecoration($nodeDecoration1);
-
-$node->addDecoration($nodeDecoration2);
-
-$node->addChild(new TextTemplate('hi there. so this is a test to push the max length to see if it wraps.'));
-
-$document->addChild($node);
-
-$document->getOutside()->reset();
+$document->createNode('blah');
 
 xmp($document);
 
-
-$application = new ApplicationTemplate(new FactoryTemplate());
-
-$application->addFactory(new FactoryDecoration());
-
-xmp($application);
 
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/

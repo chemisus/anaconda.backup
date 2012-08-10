@@ -87,35 +87,16 @@ class DocumentDecoration extends CompositeDecoration implements Node, Document {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-        xmp(__METHOD__);
-
-        parent::doReset();
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPrepare($publisher);
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doCheck($publisher);
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPublish($publisher);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function createNode($tag, $attributes=array(), $interfaces=array()) {
+        return $this->getUnder()->createNode($tag, $attributes, $interfaces);
+    }
+    
     public function toXml($level=0) {
         return $this->getUnder()->getLevel($level);
     }

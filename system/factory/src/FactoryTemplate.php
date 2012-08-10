@@ -86,7 +86,7 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     protected function doResolve($tag, $attributes, $interfaces, $caller=null) {
-        throw new Exception("Factory for {$tag} has not been specified.");
+        return new ElementTemplate($tag, $attributes);
     }
     /**///</editor-fold>
 

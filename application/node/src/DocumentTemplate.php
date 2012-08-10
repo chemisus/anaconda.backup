@@ -102,35 +102,20 @@ class DocumentTemplate extends CompositeTemplate implements Document, Node {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-        xmp(__METHOD__);
-
-        parent::doReset();
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPrepare($publisher);
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doCheck($publisher);
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPublish($publisher);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function createNode($tag, $attributes=array(), $interfaces=array()) {
+        $value = $this->getApplication()->resolve($tag, $attributes, $interfaces, $this);
+        
+        $this->addChild($value);
+        
+        return $value;
+    }
+    
     public function toXml($level=0) {
         $xml = '<?xml version="1.0"?>';
         
