@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \ElementTemplate}
+ * {@link \Route}
  * 
  * @package     
- * @name        ElementTemplate
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ElementTemplate extends CompositeTemplate implements Node, Element {
+class Route extends ElementTemplate implements Routable {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,53 +56,27 @@ class ElementTemplate extends CompositeTemplate implements Node, Element {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $document;
-
-    private $tag;
+    private $controller;
     
-    private $attributes = array();
+    private $method;
+    
+    private $parameters = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getDocument() {
-        return $this->document;
-    }
-
-    public function getTag() {
-        return $this->tag;
+    public function getController() {
+        return $this->controller;
     }
     
-    protected function setTag($value) {
-        $this->tag = $value;
-    }
-
-    public function getAttributes() {
-        return $this->attributes;
+    public function getMethod() {
+        return $this->method;
     }
     
-    protected function setAttributes($value) {
-        $this->attributes = $value;
-    }
-    
-    protected function getAttribute($key) {
-        return $this->attributes[$key];
-    }
-    
-    protected function setAttribute($key, $value) {
-        $this->attributes[$key] = $value;
-    }
-
-    public function getValue() {
-        $value = '';
-        
-        foreach ($this->getChildren() as $child) {
-            $value .= $child->getValue();
-        }
-        
-        return $value;
+    public function getParameters() {
+        return $this->parameters;
     }
     /**///</editor-fold>
 
@@ -110,19 +84,6 @@ class ElementTemplate extends CompositeTemplate implements Node, Element {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($tag=null, $attributes=array()) {
-        parent::__construct();
-        
-        $this->setTag($tag);
-        
-        $this->setAttributes($attributes);
-        
-        $this->addCompositeInterface('Node');
-        
-        $this->addDecorationInterface('Node');
-        
-        $this->addDecorationInterface('Element');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -136,27 +97,7 @@ class ElementTemplate extends CompositeTemplate implements Node, Element {
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     protected function doReset() {
-        xmp(__METHOD__);
-
         parent::doReset();
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPrepare($publisher);
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doCheck($publisher);
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPublish($publisher);
     }
     /**///</editor-fold>
 
@@ -164,32 +105,6 @@ class ElementTemplate extends CompositeTemplate implements Node, Element {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function toXml($level=0) {
-        $pad = str_pad('', $level * 4, ' ');
-        
-        $xml = "\n{$pad}<{$this->getTag()}";
-        
-        foreach ($this->getAttributes() as $key=>$value) {
-            $xml .= " {$key}=\"{$value}\"";
-        }
-        
-        if (!count($this->getChildren())) {
-            $xml .= ' />';
-        }
-        else {
-            $xml .= '>';
-            
-            $value = '';
-            
-            foreach ($this->getChildren() as $child) {
-                $value .= $child->toXml($level + 1);
-            }
-            
-            $xml .= "{$value}</{$this->getTag()}>";
-        }
-        
-        return $xml;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">
