@@ -108,7 +108,7 @@ class ApplicationTemplate implements Application {
     }
 
     public function resolve($tag, $attributes = array(), $interfaces = array(), $caller=null) {
-        return $this->getFactory()->resolve($tag, $attributes, $interfaces, $caller);
+        return $this->getFactory()->getOutside()->resolve($tag, $attributes, $interfaces, $caller);
     }
     /**///</editor-fold>
 
