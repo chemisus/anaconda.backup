@@ -38,8 +38,16 @@ class Augment implements AugmentContainer {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    /**
+     *
+     * @var array
+     */
     private $augments = array();
     
+    /**
+     *
+     * @var array
+     */
     private $interfaces = array();
     /**///</editor-fold>
 

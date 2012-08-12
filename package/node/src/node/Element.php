@@ -105,9 +105,6 @@ class Element implements Elementable, Blockable {
     protected function setTag($value) {
         $this->tag = $value;
     }
-
-    protected function setChildren($value) {
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
@@ -117,10 +114,13 @@ class Element implements Elementable, Blockable {
     public function __construct(
             $document=null,
             $tag=null,
-            $attributes=array(),
-            $children=array()
+            $attributes=array()
     ) {
+        $this->setAttributes($attributes);
         
+        $this->setTag($tag);
+        
+        $this->setDocument($document);
     }
     /**///</editor-fold>
 
@@ -150,6 +150,13 @@ class Element implements Elementable, Blockable {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function addCompositeInterface($value) {
+        return $this->children->addCompositeInterface($value);
+    }
+
+    protected function removeCompositeInterface($value) {
+        return $this->children->removeCompositeInterface($value);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

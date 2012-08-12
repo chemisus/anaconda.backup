@@ -38,8 +38,16 @@ class Composite implements CompositeContainer {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    /**
+     *
+     * @var array
+     */
     private $children = array();
     
+    /**
+     *
+     * @var array
+     */
     private $interfaces = array();
     /**///</editor-fold>
 
