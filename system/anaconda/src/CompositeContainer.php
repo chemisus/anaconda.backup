@@ -50,9 +50,9 @@ interface CompositeContainer extends Compositable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function addCompositeInterface($interface);
+    function addCompositeInterface($value);
     
-    function removeCompositeInterface($interface);
+    function removeCompositeInterface($value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

@@ -50,9 +50,9 @@ interface AugmentContainer extends Augmentable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function addAugmentInterface($interface);
+    function addAugmentInterface($value);
     
-    function removeAugmentInterface($interface);
+    function removeAugmentInterface($value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

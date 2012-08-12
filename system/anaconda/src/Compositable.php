@@ -51,9 +51,9 @@ interface Compositable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function addChild($child);
+    function addChild($value);
     
-    function removeChild($child);
+    function removeChild($value);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
