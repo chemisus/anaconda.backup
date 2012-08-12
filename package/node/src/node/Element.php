@@ -137,6 +137,13 @@ class Element implements Elementable, Blockable {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function getValue() {
+        $value = '';
+        
+        foreach ($this->getChildren() as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
     }
 
     public function addChild($child) {

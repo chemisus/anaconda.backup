@@ -58,6 +58,13 @@ class Document extends \Factory implements Documentable {
     }
 
     public function getValue() {
+        $value = '';
+        
+        foreach ($this->getChildren() as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
     }
 
     /**///</editor-fold>
