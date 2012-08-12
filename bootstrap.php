@@ -61,14 +61,47 @@ Bootstrap::Main();
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 
+xmp(memory_get_peak_usage());
+
+class A {
+    private $array = array();
+    
+    public function __construct($array=array()) {
+        $this->array = $array;
+    }
+}
+
+xmp(memory_get_peak_usage());
+
+for ($i = 0; $i < 2; $i++)
+$a[$i] = new A(array());
+
+xmp(memory_get_peak_usage());
+
+
+
+
+
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+/*\**************************************************************************\*/
+
 $application = new ApplicationTemplate(new FactoryTemplate());
 
-$document = new DocumentTemplate($application);
+$application->addFactory(new \node\ElementFactory());
+
+$application->addFactory(new \route\RouteFactory());
+
+$document = new \node\DocumentTemplate($application);
 
 $document->fromXml(file_get_contents(ROOT.'application/anaconda/config/routes.xml'));
 
 xmp($document->toXml());
 
+xmp($document);
 
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/

@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \DocumentDecoration}
+ * {@link \node\ElementTemplate}
  * 
- * @package     
- * @name        DocumentDecoration
+ * @package     node
+ * @name        ElementTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class DocumentDecoration extends CompositeDecoration implements Node, Document {
+class ElementTemplate extends \CompositeTemplate implements Node, Element {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,6 +56,11 @@ class DocumentDecoration extends CompositeDecoration implements Node, Document {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $document;
+
+    private $tag;
+    
+    private $attributes = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
@@ -63,11 +68,41 @@ class DocumentDecoration extends CompositeDecoration implements Node, Document {
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
     public function getDocument() {
-        return $this->getUnder()->getDocument();
+        return $this->document;
+    }
+
+    public function getTag() {
+        return $this->tag;
+    }
+    
+    protected function setTag($value) {
+        $this->tag = $value;
+    }
+
+    public function getAttributes() {
+        return $this->attributes;
+    }
+    
+    protected function setAttributes($value) {
+        $this->attributes = $value;
+    }
+    
+    protected function getAttribute($key) {
+        return $this->attributes[$key];
+    }
+    
+    protected function setAttribute($key, $value) {
+        $this->attributes[$key] = $value;
     }
 
     public function getValue() {
-        return $this->getUnder()->getValue();
+        $value = '';
+        
+        foreach ($this->getChildren() as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
     }
     /**///</editor-fold>
 
@@ -75,6 +110,19 @@ class DocumentDecoration extends CompositeDecoration implements Node, Document {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($tag=null, $attributes=array()) {
+        parent::__construct();
+        
+        $this->setTag($tag);
+        
+        $this->setAttributes($attributes);
+        
+        $this->addCompositeInterface('\\node\\Node');
+        
+        $this->addDecorationInterface('\\node\\Node');
+        
+        $this->addDecorationInterface('\\node\\Element');
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -93,12 +141,31 @@ class DocumentDecoration extends CompositeDecoration implements Node, Document {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function createNode($tag, $attributes=array(), $interfaces=array()) {
-        return $this->getUnder()->createNode($tag, $attributes, $interfaces);
-    }
-    
     public function toXml($level=0) {
-        return $this->getUnder()->getLevel($level);
+        $pad = str_pad('', $level * 4, ' ');
+        
+        $xml = "\n{$pad}<{$this->getTag()}";
+        
+        foreach ($this->getAttributes() as $key=>$value) {
+            $xml .= " {$key}=\"{$value}\"";
+        }
+        
+        if (!count($this->getChildren())) {
+            $xml .= ' />';
+        }
+        else {
+            $xml .= '>';
+            
+            $value = '';
+            
+            foreach ($this->getChildren() as $child) {
+                $value .= $child->toXml($level + 1);
+            }
+            
+            $xml .= "{$value}</{$this->getTag()}>";
+        }
+        
+        return $xml;
     }
     /**///</editor-fold>
 

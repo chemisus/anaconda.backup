@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \RouteFactory}
+ * {@link \node\ElementFactory}
  * 
- * @package     
- * @name        RouteFactory
+ * @package     node
+ * @name        ElementFactory
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class RouteFactory extends FactoryDecoration {
+class ElementFactory extends \FactoryDecoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -81,27 +81,7 @@ class RouteFactory extends FactoryDecoration {
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     protected function doResolve($caller, $tag, $attributes, $interfaces) {
-        switch ($tag) {
-            case 'routes':
-            break;
-
-            case 'route':
-                return new Route($tag, $attributes);
-            break;
-        
-            case 'form':
-            break;
-        
-            case 'filter':
-            break;
-        
-            case 'default':
-            break;
-        }
-        
-        xmp($tag);
-        
-        parent::doResolve($caller, $tag, $attributes, $interfaces);
+        return new ElementTemplate($tag, $attributes);
     }
     /**///</editor-fold>
 

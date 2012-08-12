@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace route;
 
 /**
- * {@link \TextTemplate}
+ * {@link \route\RouteFactory}
  * 
- * @package     
- * @name        TextTemplate
+ * @package     route
+ * @name        RouteFactory
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class TextTemplate extends SubscriberTemplate implements Node {
+class RouteFactory extends \FactoryDecoration {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,39 +56,18 @@ class TextTemplate extends SubscriberTemplate implements Node {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $document;
-    
-    private $value;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getDocument() {
-        return $this->document;
-    }
-
-    public function getValue() {
-        return $this->value;
-    }
-    
-    protected function setValue($value) {
-        $this->value = $value;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($value='') {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Node');
-        
-        $this->setValue($value);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -101,15 +80,36 @@ class TextTemplate extends SubscriberTemplate implements Node {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doResolve($caller, $tag, $attributes, $interfaces) {
+        switch ($tag) {
+            case 'routes':
+            break;
+
+            case 'route':
+                return new Route($tag, $attributes);
+            break;
+        
+            case 'form':
+                $caller->addDecoration(new RouteForm());
+            break;
+        
+            case 'filter':
+            break;
+        
+            case 'default':
+            break;
+        }
+        
+        xmp($tag);
+        
+        parent::doResolve($caller, $tag, $attributes, $interfaces);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function toXml($level = 0) {
-        return $this->getValue();
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

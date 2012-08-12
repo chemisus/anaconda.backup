@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \ElementDecoration}
+ * {@link \node\ElementDecoration}
  * 
- * @package     
+ * @package     node
  * @name        ElementDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class ElementDecoration extends CompositeDecoration implements Node, Element {
+class ElementDecoration extends \CompositeDecoration implements Node, Element {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -95,29 +95,6 @@ class ElementDecoration extends CompositeDecoration implements Node, Element {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-        xmp(__METHOD__);
-
-        parent::doReset();
-    }
-
-    protected function doPrepare(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPrepare($publisher);
-    }
-
-    protected function doCheck(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doCheck($publisher);
-    }
-
-    protected function doPublish(\Publisher $publisher) {
-        xmp(__METHOD__);
-
-        parent::doPublish($publisher);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

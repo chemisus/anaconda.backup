@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \Route}
+ * {@link \node\TextTemplate}
  * 
- * @package     
- * @name        Route
+ * @package     node
+ * @name        TextTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Route extends ElementTemplate implements Routable {
+class TextTemplate extends \SubscriberTemplate implements Node {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -56,27 +56,25 @@ class Route extends ElementTemplate implements Routable {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $controller;
+    private $document;
     
-    private $method;
-    
-    private $parameters = array();
+    private $value;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    public function getController() {
-        return $this->controller;
+    public function getDocument() {
+        return $this->document;
+    }
+
+    public function getValue() {
+        return $this->value;
     }
     
-    public function getMethod() {
-        return $this->method;
-    }
-    
-    public function getParameters() {
-        return $this->parameters;
+    protected function setValue($value) {
+        $this->value = $value;
     }
     /**///</editor-fold>
 
@@ -84,6 +82,13 @@ class Route extends ElementTemplate implements Routable {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($value='') {
+        parent::__construct();
+        
+        $this->addDecorationInterface('\\node\\Node');
+        
+        $this->setValue($value);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -96,15 +101,15 @@ class Route extends ElementTemplate implements Routable {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doReset() {
-        parent::doReset();
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function toXml($level = 0) {
+        return $this->getValue();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

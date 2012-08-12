@@ -22,12 +22,12 @@
  *              GNU General Public License
  */
 
-
+namespace route;
 
 /**
- * {@link \Routable}
+ * {@link \route\Routable}
  * 
- * @package     
+ * @package     route
  * @name        Routable
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1

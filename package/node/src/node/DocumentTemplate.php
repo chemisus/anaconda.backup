@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \FactoryTemplate}
+ * {@link \node\DocumentTemplate}
  * 
- * @package     
- * @name        FactoryTemplate
+ * @package     node
+ * @name        DocumentTemplate
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class FactoryTemplate extends DecoratableTemplate implements Factory {
+class DocumentTemplate extends \CompositeTemplate implements Document, Node {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -62,16 +62,33 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
+    public function getDocument() {
+        return $this;
+    }
+
+    public function getValue() {
+        $value = '';
+        
+        foreach ($this->getChildren() as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
+    public function __construct(\Application $application=null) {
+        parent::__construct($application);
         
-        $this->addDecorationInterface('Factory');
+        $this->addCompositeInterface('\\node\\Node');
+        
+        $this->addDecorationInterface('\\node\\Node');
+        
+        $this->addDecorationInterface('\\node\\Document');
     }
     /**///</editor-fold>
 
@@ -85,18 +102,113 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($caller, $tag, $attributes, $interfaces) {
-        throw new Exception("Could not resolve {$tag}.");
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function resolve($caller=null, $tag=null, $attributes=array(), $interfaces=array()) {
-        return $this->doResolve($caller, $tag, $attributes, $interfaces);
+    public function createNode($tag, $attributes=array(), $interfaces=array()) {
+        $value = $this->getApplication()->resolve($tag, $attributes, $interfaces, $this);
+        
+        $this->addChild($value);
+        
+        return $value;
     }
+    
+    public function toXml($level=0) {
+        $xml = '';
+        
+        foreach ($this->getChildren() as $child) {
+            $xml .= $child->getOutside()->toXml($level);
+        }
+        
+        return $xml;
+    }
+    
+    public function fromXml($xml) {
+        $matches = array();
+
+        preg_match_all('/\<|\>|[^\<\>]*/', $xml, $matches);
+        
+        $stack = array();
+        
+        $current = $this;
+        
+        while (count($matches[0])) {
+            $line = array_shift($matches[0]);
+            
+            if ($line === '<') {
+                $line = array_shift($matches[0]);
+
+                if (left($line, '?') || right($line, '?')) {
+                    $current->addChild(new TextTemplate('<'.$line.'>'));
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else if (left($line, '--')) {
+                    while (!right($line, '-->')) {
+                        $line .= array_shift($matches[0]);
+                    }
+                    
+                    $current->addChild(new XmlText('<'.$line));
+                }
+                else if (right($line, '/')) {
+                    list($tag, $attributes) = $this->parseLine($line);
+                    
+                    $current->addChild($this->getApplication()->resolve($current, $tag, $attributes));
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else if (left($line, '/')) {
+                    $current = array_pop($stack);
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+                else {
+                    $stack[] = $current;
+
+                    list($tag, $attributes) = $this->parseLine($line);
+                    
+                    $node = $this->getApplication()->resolve($current, $tag, $attributes);
+                    
+                    $current->addChild($node);
+                    
+                    $current = $node;
+
+                    if (array_shift($matches[0]) !== '>') {
+                        throw new Exception;
+                    }
+                }
+            }
+            else {
+                $current->addChild(new TextTemplate($line));
+            }
+        }
+    }
+    
+    public function parseLine($line) {
+        list($tag, $attributes) = explode(' ', $line.' ', 2);
+        
+        $matches = array();
+
+        preg_match_all('/(?:\"[^\"]*\")|\w+/', $attributes, $matches);
+        
+        $attributes = array();
+        
+        while (count($matches[0])) {
+            $attributes[array_shift($matches[0])] = trim(array_shift($matches[0]), '"');
+        }
+
+        return array($tag, $attributes);
+    }    
+    
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

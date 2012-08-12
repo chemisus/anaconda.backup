@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-
+namespace route;
 
 /**
- * {@link \FactoryTemplate}
+ * {@link \route\RouteDecoration}
  * 
- * @package     
- * @name        FactoryTemplate
+ * @package     route
+ * @name        RouteDecoration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class FactoryTemplate extends DecoratableTemplate implements Factory {
+class RouteDecoration extends \node\ElementDecoration implements Routable {
     /**///<editor-fold desc="Constants">
     /*\**********************************************************************\*/
     /*\                             Constants                                \*/
@@ -68,11 +68,6 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        parent::__construct();
-        
-        $this->addDecorationInterface('Factory');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
@@ -85,8 +80,16 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($caller, $tag, $attributes, $interfaces) {
-        throw new Exception("Could not resolve {$tag}.");
+    public function getController() {
+        return $this->getUnder()->getController();
+    }
+
+    public function getMethod() {
+        return $this->getUnder()->getMethod();
+    }
+
+    public function getParameters() {
+        return $this->getUnder()->getParameters();
     }
     /**///</editor-fold>
 
@@ -94,9 +97,6 @@ class FactoryTemplate extends DecoratableTemplate implements Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public final function resolve($caller=null, $tag=null, $attributes=array(), $interfaces=array()) {
-        return $this->doResolve($caller, $tag, $attributes, $interfaces);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">

@@ -22,31 +22,32 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \Element}
+ * {@link \node\Node}
  * 
- * @package     
- * @name        Element
+ * @package     node
+ * @name        Node
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Element {
+interface Node {
     /**///<editor-fold desc="Properties">
     /*\**********************************************************************\*/
     /*\                             Properties                               \*/
     /*\**********************************************************************\*/
-    function getTag();
-    
-    function getAttributes();
+    function getDocument();
+
+    function getValue();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function toXml($level=0);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Handlers">
