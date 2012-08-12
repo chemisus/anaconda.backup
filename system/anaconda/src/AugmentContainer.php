@@ -33,7 +33,7 @@
  * @version     0.1
  * @since       0.1
  */
-class AugmentContainer extends Augmentable {
+interface AugmentContainer extends Augmentable {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
