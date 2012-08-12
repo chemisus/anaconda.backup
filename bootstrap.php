@@ -63,6 +63,8 @@ Bootstrap::Main();
 
 $document = new node\Document();
 
+$document->addAugment(new \route\Factory());
+
 $document->addAugment(new \node\Factory());
 
 $document->fromXml(file_get_contents(ROOT.'application/anaconda/config/routes.xml'));

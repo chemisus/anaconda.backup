@@ -22,66 +22,28 @@
  *              GNU General Public License
  */
 
-namespace node;
+namespace route;
 
 /**
- * {@link \node\Element}
+ * {@link \route\Factory}
  * 
- * @package     node
- * @name        Element
+ * @package     route
+ * @name        Factory
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Element extends \Augment implements Elementable, Blockable {
+class Factory implements \Resolvable {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    /**
-     *
-     * @var string
-     */
-    private $tag;
-    
-    /**
-     *
-     * @var Documentable
-     */
-    private $document;
-    
-    /**
-     *
-     * @var array
-     */
-    private $attributes = array();
-
-    /**
-     *
-     * @var \CompositeContainer
-     */
-    private $children;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getAttributes() {
-        return $this->attributes;
-    }
-    
-    public function getDocument() {
-        return $this->document;
-    }
-
-    public function getTag() {
-        return $this->tag;
-    }
-    
-    public function getChildren() {
-        return $this->children->getChildren();
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -94,109 +56,24 @@ class Element extends \Augment implements Elementable, Blockable {
     /*\**********************************************************************\*/
     /*\                             Protected Mutators                       \*/
     /*\**********************************************************************\*/
-    protected function setAttributes($value) {
-        $this->attributes = $value;
-    }
-
-    protected function setDocument($value) {
-        $this->document = $value;
-    }
-    
-    protected function setTag($value) {
-        $this->tag = $value;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Constructors">
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct(
-            $document=null,
-            $tag=null,
-            $attributes=array()
-    ) {
-        $this->setAttributes($attributes);
-        
-        $this->setTag($tag);
-        
-        $this->setDocument($document);
-
-        $this->children = new \Composite();
-        
-        $this->children->addCompositeInterface('\\node\\Nodable');
-
-        $this->augments = new \Augment();
-        
-        $this->augments->addAugmentInterface('\\node\\Nodable');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function getValue() {
-        $value = '';
-        
-        foreach ($this->getChildren() as $child) {
-            $value .= $child->getValue();
-        }
-        
-        return $value;
-    }
-
-    public function addChild($child) {
-        return $this->children->addChild($child);
-    }
-
-    public function removeChild($child) {
-        return $this->children->removeChild($child);
-    }
-
-    public function toXml($level=0) {
-        $pad = str_pad('', $level * 4, ' ');
-        
-        $xml = '';
-        
-        $xml .= "\n{$pad}";
-        
-        $xml .= "<{$this->getTag()}";
-        
-        foreach ($this->getAttributes() as $key=>$value) {
-            $xml .= " {$key}=\"{$value}\"";
-        }
-        
-        if (!count($this->getChildren()) && !count($this->getAugments())) {
-            $xml .= ' />';
-        }
-        else {
-            if (count($this->getAugments())) {
-                $xml .= '>';
-
-                $value = '';
-
-                foreach ($this->getAugments() as $augment) {
-                    $value .= $augment->toXml($level + 1);
-                }
-
-                $xml .= "{$value}\n{$pad}</{$this->getTag()}>";
-            }
+    public function resolve($caller, $tag, $attributes = array(), $interfaces = array()) {
+        if ($tag === 'routes') {
+            $value = new RouteContainer($caller->getDocument(), $tag, $attributes);
             
-            if (count($this->getChildren())) {
-                $xml .= '>';
-
-                $value = '';
-
-                foreach ($this->getChildren() as $child) {
-                    $value .= $child->toXml($level + 1);
-                }
-
-                $xml .= "{$value}\n{$pad}</{$this->getTag()}>";
-            }
+            return $value;
         }
-        
-        return $xml;
     }
     /**///</editor-fold>
 
@@ -210,13 +87,6 @@ class Element extends \Augment implements Elementable, Blockable {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function addCompositeInterface($value) {
-        return $this->children->addCompositeInterface($value);
-    }
-
-    protected function removeCompositeInterface($value) {
-        return $this->children->removeCompositeInterface($value);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
