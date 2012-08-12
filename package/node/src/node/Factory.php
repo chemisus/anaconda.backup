@@ -25,41 +25,25 @@
 namespace node;
 
 /**
- * {@link \node\Document}
+ * {@link \node\Factory}
  * 
  * @package     node
- * @name        Document
+ * @name        Factory
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Document extends \Factory implements Documentable {
+class Factory implements \Resolvable {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    /**
-     *
-     * @var \CompositeContainer
-     */
-    private $children;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getChildren() {
-        return $this->children->getChildren();
-    }
-
-    public function getDocument() {
-        return $this;
-    }
-
-    public function getValue() {
-    }
-
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -78,120 +62,14 @@ class Document extends \Factory implements Documentable {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        $this->children = new \Composite();
-        
-        $this->children->addCompositeInterface('\\node\\Nodable');
-
-        $this->augments = new \Augment();
-        
-        $this->augments->addAugmentInterface('\\node\\Documentable');
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function addChild($value) {
-        return $this->children->addChild($value);
-    }
-
-    public function removeChild($value) {
-        return $this->children->removeChild($value);
-    }
-
-    public function toXml($level=0) {
-        $xml = '';
-        
-        foreach ($this->getChildren() as $child) {
-            $xml .= $child->toXml($level);
-        }
-        
-        return $xml;
-    }
-    
-    public function fromXml($xml) {
-        $matches = array();
-
-        preg_match_all('/\<|\>|[^\<\>]*/', $xml, $matches);
-        
-        $stack = array();
-        
-        $current = $this;
-        
-        while (count($matches[0])) {
-            $line = array_shift($matches[0]);
-            
-            if ($line === '<') {
-                $line = array_shift($matches[0]);
-
-                if (left($line, '?') || right($line, '?')) {
-                    $current->addChild(new Node($this, '<'.$line.'>'));
-
-                    if (array_shift($matches[0]) !== '>') {
-                        throw new Exception;
-                    }
-                }
-                else if (left($line, '--')) {
-                    while (!right($line, '-->')) {
-                        $line .= array_shift($matches[0]);
-                    }
-                    
-                    $current->addChild(new XmlText('<'.$line));
-                }
-                else if (right($line, '/')) {
-                    list($tag, $attributes) = $this->parseLine($line);
-                    
-                    $current->addChild($this->resolve($current, $tag, $attributes));
-
-                    if (array_shift($matches[0]) !== '>') {
-                        throw new Exception;
-                    }
-                }
-                else if (left($line, '/')) {
-                    $current = array_pop($stack);
-
-                    if (array_shift($matches[0]) !== '>') {
-                        throw new Exception;
-                    }
-                }
-                else {
-                    $stack[] = $current;
-
-                    list($tag, $attributes) = $this->parseLine($line);
-                    
-                    $node = $this->resolve($current, $tag, $attributes);
-                    
-                    $current->addChild($node);
-                    
-                    $current = $node;
-
-                    if (array_shift($matches[0]) !== '>') {
-                        throw new Exception;
-                    }
-                }
-            }
-            else {
-                $current->addChild(new Node($this, $line));
-            }
-        }
-    }
-    
-    public function parseLine($line) {
-        list($tag, $attributes) = explode(' ', $line.' ', 2);
-        
-        $matches = array();
-
-        preg_match_all('/(?:\"[^\"]*\")|\w+/', $attributes, $matches);
-        
-        $attributes = array();
-        
-        while (count($matches[0])) {
-            $attributes[array_shift($matches[0])] = trim(array_shift($matches[0]), '"');
-        }
-
-        return array($tag, $attributes);
+    public function resolve($caller, $tag, $attributes = array(), $interfaces = array()) {
+        return new Element($caller->getDocument(), $tag, $attributes);
     }
     /**///</editor-fold>
 

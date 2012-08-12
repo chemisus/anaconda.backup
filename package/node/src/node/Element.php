@@ -121,6 +121,14 @@ class Element implements Elementable, Blockable {
         $this->setTag($tag);
         
         $this->setDocument($document);
+
+        $this->children = new \Composite();
+        
+        $this->children->addCompositeInterface('\\node\\Nodable');
+
+        $this->augments = new \Augment();
+        
+        $this->augments->addAugmentInterface('\\node\\Nodable');
     }
     /**///</editor-fold>
 
@@ -137,6 +145,37 @@ class Element implements Elementable, Blockable {
 
     public function removeChild($child) {
         return $this->children->removeChild($child);
+    }
+
+    public function toXml($level=0) {
+        $pad = str_pad('', $level * 4, ' ');
+        
+        $xml = '';
+        
+//        $xml .= "\n{$pad}";
+        
+        $xml .= "<{$this->getTag()}";
+        
+        foreach ($this->getAttributes() as $key=>$value) {
+            $xml .= " {$key}=\"{$value}\"";
+        }
+        
+        if (!count($this->getChildren())) {
+            $xml .= ' />';
+        }
+        else {
+            $xml .= '>';
+            
+            $value = '';
+            
+            foreach ($this->getChildren() as $child) {
+                $value .= $child->toXml($level + 1);
+            }
+            
+            $xml .= "{$value}</{$this->getTag()}>";
+        }
+        
+        return $xml;
     }
     /**///</editor-fold>
 

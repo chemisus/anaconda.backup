@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace node;
+
 
 /**
- * {@link \node\Documentable}
+ * {@link \Resolvable}
  * 
- * @package     node
- * @name        Documentable
+ * @package     
+ * @name        Resolvable
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Documentable extends Blockable, \Resolvable {
+interface Resolvable {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
@@ -50,6 +50,7 @@ interface Documentable extends Blockable, \Resolvable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function resolve($caller, $tag, $attributes=array(), $interfaces=array());
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

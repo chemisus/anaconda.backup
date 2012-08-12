@@ -68,6 +68,11 @@ class Node implements Nodable {
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
+    public function __construct($document, $value=null) {
+        $this->document = $document;
+        
+        $this->value = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Mutators">
@@ -86,6 +91,9 @@ class Node implements Nodable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function toXml($level=0) {
+        return $this->getValue();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
