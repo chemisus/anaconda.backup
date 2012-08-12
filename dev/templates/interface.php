@@ -33,7 +33,7 @@
  * @version     0.1
  * @since       0.1
  */
-class ${name} {
+interface ${name} {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/

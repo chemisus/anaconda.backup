@@ -25,7 +25,7 @@
 namespace node;
 
 /**
- * {@link node\Element}
+ * {@link \node\Element}
  * 
  * @package     node
  * @name        Element
@@ -34,32 +34,26 @@ namespace node;
  * @since       0.1
  */
 class Element implements Elementable, Blockable {
-    /**///<editor-fold desc="Constants">
-    /*\**********************************************************************\*/
-    /*\                             Constants                                \*/
-    /*\**********************************************************************\*/
-    /**///</editor-fold>
-
-    /**///<editor-fold desc="Static Fields">
-    /*\**********************************************************************\*/
-    /*\                             Static Fields                            \*/
-    /*\**********************************************************************\*/
-    /**///</editor-fold>
-
-    /**///<editor-fold desc="Static Methods">
-    /*\**********************************************************************\*/
-    /*\                             Static Methods                           \*/
-    /*\**********************************************************************\*/
-    /**///</editor-fold>
-
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    /**
+     *
+     * @var string
+     */
     private $tag;
     
+    /**
+     *
+     * @var Documentable
+     */
     private $document;
     
+    /**
+     *
+     * @var array
+     */
     private $attributes = array();
 
     /**
@@ -69,37 +63,49 @@ class Element implements Elementable, Blockable {
     private $children;
     /**///</editor-fold>
 
-    /**///<editor-fold desc="Properties">
+    /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
-    /*\                             Properties                               \*/
+    /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
     public function getAttributes() {
         return $this->attributes;
     }
     
-    protected function setAttributes($value) {
-        $this->attributes = $value;
-    }
-
     public function getDocument() {
         return $this->document;
+    }
+
+    public function getTag() {
+        return $this->tag;
+    }
+    
+    public function getChildren() {
+        return $this->children->getChildren();
+    }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Public Mutators                          \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Protected Mutators                       \*/
+    /*\**********************************************************************\*/
+    protected function setAttributes($value) {
+        $this->attributes = $value;
     }
 
     protected function setDocument($value) {
         $this->document = $value;
     }
     
-    public function getTag() {
-        return $this->tag;
-    }
-    
     protected function setTag($value) {
         $this->tag = $value;
     }
 
-    public function getChildren() {
-    }
-    
     protected function setChildren($value) {
     }
     /**///</editor-fold>
@@ -118,18 +124,6 @@ class Element implements Elementable, Blockable {
     }
     /**///</editor-fold>
 
-    /**///<editor-fold desc="Private Methods">
-    /*\**********************************************************************\*/
-    /*\                             Private Methods                          \*/
-    /*\**********************************************************************\*/
-    /**///</editor-fold>
-
-    /**///<editor-fold desc="Protected Methods">
-    /*\**********************************************************************\*/
-    /*\                             Protected Methods                        \*/
-    /*\**********************************************************************\*/
-    /**///</editor-fold>
-
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
@@ -144,6 +138,73 @@ class Element implements Elementable, Blockable {
     public function removeChild($child) {
         return $this->children->removeChild($child);
     }
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Methods">
+    /*\**********************************************************************\*/
+    /*\                             Private Methods                          \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Methods">
+    /*\**********************************************************************\*/
+    /*\                             Protected Methods                        \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
+    /**///<editor-fold desc="Constants">
+    /*\**********************************************************************\*/
+    /*\                             Constants                                \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Static Fields">
+    /*\**********************************************************************\*/
+    /*\                             Static Fields                            \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Static Methods">
+    /*\**********************************************************************\*/
+    /*\                             Static Methods                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Properties">
+    /*\**********************************************************************\*/
+    /*\                             Public Properties                        \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Properties">
+    /*\**********************************************************************\*/
+    /*\                             Private Properties                       \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Properties">
+    /*\**********************************************************************\*/
+    /*\                             Protected Properties                     \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Accessors">
+    /*\**********************************************************************\*/
+    /*\                             Private Accessors                        \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Protected Accessors">
+    /*\**********************************************************************\*/
+    /*\                             Protected Accessors                      \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Private Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Private Mutators                         \*/
+    /*\**********************************************************************\*/
     /**///</editor-fold>
 
     /**///<editor-fold desc="Event Triggers">
@@ -162,5 +223,12 @@ class Element implements Elementable, Blockable {
     /*\**********************************************************************\*/
     /*\                             Classes                                  \*/
     /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Classes">
+    /*\**********************************************************************\*/
+    /*\                             Interfaces                               \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
     /**///</editor-fold>
 }

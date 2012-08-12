@@ -25,7 +25,7 @@
 namespace node;
 
 /**
- * {@link node\Nodable}
+ * {@link \node\Nodable}
  * 
  * @package     node
  * @name        Nodable
@@ -34,13 +34,19 @@ namespace node;
  * @since       0.1
  */
 interface Nodable {
-    /**///<editor-fold desc="Properties">
+    /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
-    /*\                             Properties                               \*/
+    /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
     function getDocument();
     
     function getValue();
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Public Mutators                          \*/
+    /*\**********************************************************************\*/
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
@@ -49,9 +55,17 @@ interface Nodable {
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
+    /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
     /**///<editor-fold desc="Event Handlers">
     /*\**********************************************************************\*/
     /*\                             Event Handlers                           \*/
     /*\**********************************************************************\*/
+    /**///</editor-fold>
     /**///</editor-fold>
 }

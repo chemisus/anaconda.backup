@@ -25,43 +25,25 @@
 namespace node;
 
 /**
- * {@link \node\Node}
+ * {@link \node\Document}
  * 
  * @package     node
- * @name        Node
+ * @name        Document
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Node implements Nodable {
+class Document {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    /**
-     *
-     * @var Documentable
-     */
-    private $document;
-    
-    /**
-     *
-     * @var mixed
-     */
-    private $value;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getDocument() {
-        return $this->document;
-    }
-
-    public function getValue() {
-        return $this->value;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">

@@ -33,10 +33,16 @@
  * @version     0.1
  * @since       0.1
  */
-interface AugmentContainer extends Augmentable {
-    /**///<editor-fold desc="Properties">
+class AugmentContainer extends Augmentable {
+    /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
-    /*\                             Properties                               \*/
+    /*\                             Public Accessors                         \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
@@ -49,9 +55,17 @@ interface AugmentContainer extends Augmentable {
     function removeAugmentInterface($interface);
     /**///</editor-fold>
 
+    /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
     /**///<editor-fold desc="Event Handlers">
     /*\**********************************************************************\*/
     /*\                             Event Handlers                           \*/
     /*\**********************************************************************\*/
+    /**///</editor-fold>
     /**///</editor-fold>
 }

@@ -25,7 +25,7 @@
 namespace node;
 
 /**
- * {@link node\Documentable}
+ * {@link \node\Documentable}
  * 
  * @package     node
  * @name        Documentable
@@ -34,9 +34,15 @@ namespace node;
  * @since       0.1
  */
 interface Documentable extends Blockable {
-    /**///<editor-fold desc="Properties">
+    /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
-    /*\                             Properties                               \*/
+    /*\                             Public Accessors                         \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
@@ -46,9 +52,17 @@ interface Documentable extends Blockable {
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
+    /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
     /**///<editor-fold desc="Event Handlers">
     /*\**********************************************************************\*/
     /*\                             Event Handlers                           \*/
     /*\**********************************************************************\*/
+    /**///</editor-fold>
     /**///</editor-fold>
 }

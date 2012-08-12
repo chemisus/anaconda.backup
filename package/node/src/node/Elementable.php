@@ -25,7 +25,7 @@
 namespace node;
 
 /**
- * {@link node\Elementable}
+ * {@link \node\Elementable}
  * 
  * @package     node
  * @name        Elementable
@@ -33,14 +33,20 @@ namespace node;
  * @version     0.1
  * @since       0.1
  */
-interface Elementable extends Nodable {
-    /**///<editor-fold desc="Properties">
+interface Elementable {
+    /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
-    /*\                             Properties                               \*/
+    /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
     function getTag();
     
     function getAttributes();
+    /**///</editor-fold>
+
+    /**///<editor-fold desc="Public Mutators">
+    /*\**********************************************************************\*/
+    /*\                             Public Mutators                          \*/
+    /*\**********************************************************************\*/
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
@@ -49,9 +55,17 @@ interface Elementable extends Nodable {
     /*\**********************************************************************\*/
     /**///</editor-fold>
 
+    /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">
+    /**///<editor-fold desc="Event Triggers">
+    /*\**********************************************************************\*/
+    /*\                             Event Triggers                           \*/
+    /*\**********************************************************************\*/
+    /**///</editor-fold>
+
     /**///<editor-fold desc="Event Handlers">
     /*\**********************************************************************\*/
     /*\                             Event Handlers                           \*/
     /*\**********************************************************************\*/
+    /**///</editor-fold>
     /**///</editor-fold>
 }
