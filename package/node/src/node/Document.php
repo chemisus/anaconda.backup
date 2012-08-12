@@ -43,6 +43,8 @@ class Document extends \Factory implements Documentable {
      * @var \CompositeContainer
      */
     private $children;
+    
+    private $whitespace = false;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
@@ -66,7 +68,14 @@ class Document extends \Factory implements Documentable {
         
         return $value;
     }
-
+    
+    public function getWhitespace() {
+        return $this->whitespace;
+    }
+    
+    public function setWhitespace($value) {
+        $this->whitespace = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -180,7 +189,9 @@ class Document extends \Factory implements Documentable {
                 }
             }
             else {
-                $current->addChild(new Node($this, $line));
+                if ($this->getWhitespace() || strlen(trim($line))) {
+                    $current->addChild(new Node($this, $line));
+                }
             }
         }
     }

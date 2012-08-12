@@ -159,7 +159,7 @@ class Element implements Elementable, Blockable {
         
         $xml = '';
         
-//        $xml .= "\n{$pad}";
+        $xml .= "\n{$pad}";
         
         $xml .= "<{$this->getTag()}";
         
@@ -179,7 +179,7 @@ class Element implements Elementable, Blockable {
                 $value .= $child->toXml($level + 1);
             }
             
-            $xml .= "{$value}</{$this->getTag()}>";
+            $xml .= "{$value}\n{$pad}</{$this->getTag()}>";
         }
         
         return $xml;
