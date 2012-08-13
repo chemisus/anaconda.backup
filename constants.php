@@ -24,6 +24,10 @@
 
 define('ROOT', dirname(__FILE__).'/');
 
-define('SRC', ROOT.'{application,package,system,interfaces}/*/src/');
+define('MOD', ROOT.'{application,package,system,interfaces}/*/');
 
-define('RSRC', ROOT.'{interfaces,system,package,application}/*/src/');
+define('RMOD', ROOT.'{interfaces,system,package,application}/*/');
+
+define('SRC', MOD.'src/');
+
+define('RSRC', RMOD.'src/');

@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace configuration;
 
 /**
- * {@link \anaconda\Router}
+ * {@link \configuration\Configuration}
  * 
- * @package     anaconda
- * @name        Router
+ * @package     
+ * @name        Configuration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Router implements \Router {
+class Configuration implements \Configuration {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -45,7 +45,7 @@ class Router implements \Router {
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getApplication() {
+    public function getApplicatoin() {
         return $this->application;
     }
     /**///</editor-fold>
@@ -75,19 +75,8 @@ class Router implements \Router {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function route() {
-        $publisher = $this->getApplication()->publish(new Publisher(array(
-            'event' => 'system.route.path',
-            'path' => $this->getApplication()->getRequest()->getPath(),
-        )));
-        
-        foreach ($this->getApplication()->getRequest()->getFields() as $key=>$value) {
-            $this->getApplication()->publish(new Publisher(array(
-                'event' => 'system.route.form',
-                'key' => $key,
-                'value' => $value,
-            )));
-        }
+    public function load($filename) {
+        xmp($filename);
     }
     /**///</editor-fold>
 

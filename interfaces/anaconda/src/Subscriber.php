@@ -50,6 +50,10 @@ interface Subscriber {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function reset();
+    
+    function prepare($publisher);
+    
     function check($publisher);
     /**///</editor-fold>
 

@@ -55,8 +55,6 @@ interface Router {
      * @return \Page
      */
     function route();
-    
-    function execute();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<routes>
-
+<config>
     <route path="module/[method]" controller="page/ModuleController" method="[method]">
         <form name="module" value="field:module:[method]" />
         <filter name="method" value="create" />
@@ -17,4 +16,4 @@
         <default name="method" value="index" />
         <filter name="controller" value="" />
     </route>
-</routes>
+</config>

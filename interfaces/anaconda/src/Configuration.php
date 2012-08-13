@@ -44,6 +44,7 @@ interface Configuration {
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
+    function load($file);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

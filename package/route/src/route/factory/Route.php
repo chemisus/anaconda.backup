@@ -22,32 +22,28 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace route\factory;
 
 /**
- * {@link \anaconda\Router}
+ * {@link \route\factory\Route}
  * 
- * @package     anaconda
- * @name        Router
+ * @package     
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Router implements \Router {
+class Route extends \anaconda\Factory {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $application;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getApplication() {
-        return $this->application;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -66,28 +62,14 @@ class Router implements \Router {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($application) {
-        $this->application = $application;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function route() {
-        $publisher = $this->getApplication()->publish(new Publisher(array(
-            'event' => 'system.route.path',
-            'path' => $this->getApplication()->getRequest()->getPath(),
-        )));
-        
-        foreach ($this->getApplication()->getRequest()->getFields() as $key=>$value) {
-            $this->getApplication()->publish(new Publisher(array(
-                'event' => 'system.route.form',
-                'key' => $key,
-                'value' => $value,
-            )));
-        }
+    public function instance() {
+        return new Route();
     }
     /**///</editor-fold>
 

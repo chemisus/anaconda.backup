@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace configuration\factory;
 
 /**
- * {@link \anaconda\Configuration}
+ * {@link \config\factory\Configuration}
  * 
- * @package     
+ * @package     configuration
  * @name        Configuration
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Configuration {
+class Configuration extends \anaconda\Factory {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -68,6 +68,13 @@ class Configuration {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    /**
+     *
+     * @todo implement this.
+     */
+    public function instance($application=null) {
+        return new \configuration\Configuration($application);
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">

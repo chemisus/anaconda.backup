@@ -53,6 +53,8 @@ class Application implements \Application, \Resolvable {
     private $session;
     
     private $controllers = array();
+    
+    private $configuration;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
@@ -82,6 +84,10 @@ class Application implements \Application, \Resolvable {
     public function getSession() {
         return $this->session;
     }
+    
+    public function getConfiguration() {
+        return $this->configuration;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -110,6 +116,10 @@ class Application implements \Application, \Resolvable {
 
     public function setSession($value) {
         $this->session = $value;
+    }
+    
+    public function setConfiguration($value) {
+        $this->configuration = $value;
     }
     /**///</editor-fold>
 
@@ -145,6 +155,8 @@ class Application implements \Application, \Resolvable {
     final public function run() {
         $this->setup();
         
+        $this->configurations();
+        
         $this->execute();
         
         $this->flush();
@@ -160,6 +172,8 @@ class Application implements \Application, \Resolvable {
     
     public function publish($publisher) {
         $publisher->publish($this->subscribers->getSubscribers());
+        
+        return $publisher;
     }
     /**///</editor-fold>
 
@@ -170,6 +184,10 @@ class Application implements \Application, \Resolvable {
     private function setup() {
         if ($this->getSession() == null) {
             $this->setSession($this->resolve('Session')->instance($this));
+        }
+        
+        if ($this->getConfiguration() == null) {
+            $this->setConfiguration($this->resolve('Configuration')->instance($this));
         }
         
         if ($this->getResponse() == null) {
@@ -189,8 +207,13 @@ class Application implements \Application, \Resolvable {
         }
     }
     
+    private function configurations() {
+        foreach (glob(MOD."config.xml", GLOB_BRACE) as $filename) {
+            $this->getConfiguration()->load($filename);
+        }
+    }
+    
     private function execute() {
-        $this->getRouter()->execute();
     }
     
     private function flush() {

@@ -38,12 +38,16 @@ class Publisher implements \Publisher {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $values;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
+    public function getValues() {
+        return $this->values;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -62,6 +66,9 @@ class Publisher implements \Publisher {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($values=array()) {
+        $this->values = $values;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
@@ -70,7 +77,31 @@ class Publisher implements \Publisher {
     /*\**********************************************************************\*/
     public function publish ($subscribers) {
         foreach (new SubscriberIterator($this, $subscribers) as $subscriber) {
-            xmp($subscriber);
+            if ($this->doPublish($subscriber) === false) {
+                break;
+            }
+        }
+    }
+
+    public function offsetExists($offset) {
+        return isset($this->values[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        if (!$this->offsetExists($offset)) {
+            return null;
+        }
+        
+        return $this->values[$offset];
+    }
+
+    public function offsetSet($offset, $value) {
+        $this->values[$offset] = $value;
+    }
+
+    public function offsetUnset($offset) {
+        if ($this->offsetExists($offset)) {
+            unset($this->values[$offset]);
         }
     }
     /**///</editor-fold>
@@ -85,6 +116,8 @@ class Publisher implements \Publisher {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doPublish($subscriber) {
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

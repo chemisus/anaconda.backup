@@ -114,6 +114,14 @@ class SubscriberContainer implements \SubscriberComposite {
         return $value;
     }
     
+    public final function reset() {
+        $this->doReset();
+    }
+    
+    public final function prepare($publisher) {
+        return $this->doPrepare($publisher);
+    }
+    
     public final function check($publisher) {
         return $this->doCheck($publisher);
     }
@@ -129,6 +137,13 @@ class SubscriberContainer implements \SubscriberComposite {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doReset() {
+    }
+
+    protected function doPrepare($publisher) {
+        return true;
+    }
+
     protected function doCheck($publisher) {
         return true;
     }

@@ -68,6 +68,13 @@ class Subscriber implements \SubscriberPublish {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function reset() {
+    }
+    
+    public function prepare($publisher) {
+        return true;
+    }
+    
     public function check($publisher) {
         return true;
     }

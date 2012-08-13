@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \Publisher}
+ * {@link \Route}
  * 
  * @package     
- * @name        Publisher
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Publisher extends ArrayAccess {
+interface Route {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
