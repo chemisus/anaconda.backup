@@ -22,16 +22,19 @@
  *              GNU General Public License
  */
 
-require_once('functions.php');
-
 class Bootstrap {
     public static function Main() {
-        define('ROOT', dirname(__FILE__).'/');
-        
+        // 1. load constants
+        require_once('constants.php');
+
+        // 2. load functions
+        require_once('functions.php');
+
+        // 3. load autoloaders
         spl_autoload_register(function ($class) {
             $class = strtr($class, array('\\'=>'/'));
             
-            $filename = array_shift(glob(ROOT."*/*/src/{$class}.php"));
+            $filename = array_shift(glob(SRC."{$class}.php", GLOB_BRACE));
             
             if ($filename === null) {
                 $stack = debug_backtrace();
@@ -49,6 +52,27 @@ class Bootstrap {
             
             require_once($filename);
         });
+
+        // 4. initialize application
+        $application = new \anaconda\Application();
+
+        // 5. initialize factories
+        foreach (glob(RSRC."*/factory/*.php", GLOB_BRACE) as $path) {
+            $file = array_pop(explode('/', substr($path, strlen(ROOT)), 4));
+            
+            $class = substr($file, 0, strrpos($file, '.'));
+            
+            $tag = basename($class);
+            
+            $class = strtr($class, array('/'=>'\\'));
+            
+            $factory = new $class($tag);
+            
+            $application->addFactory($factory);
+        }
+
+        // 6. run application
+        $application->run();
     }
 }
 
@@ -61,14 +85,18 @@ Bootstrap::Main();
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 
-$document = new node\Document();
 
-$document->addAugment(new \route\Factory());
 
-$document->addAugment(new \node\Factory());
 
-$document->fromXml(file_get_contents(ROOT.'application/anaconda/config/routes.xml'));
 
-xmp($document->toXml());
 
-xmp($document);
+
+
+
+
+
+
+
+
+
+
