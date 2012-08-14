@@ -105,7 +105,7 @@ abstract class Factory implements \Factory {
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
     protected function doResolve($tag) {
-        return $this->tag === $tag;
+        return strtolower($this->tag) === strtolower($tag);
     }
     /**///</editor-fold>
 
