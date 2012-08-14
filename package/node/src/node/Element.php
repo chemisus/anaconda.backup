@@ -22,30 +22,31 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \Configuration}
+ * {@link \node\Element}
  * 
- * @package     
- * @name        Configuration
+ * @package     node
+ * @name        Element
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Configuration {
+interface Element extends \Element, Node {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    function getApplication();
+    function getTag();
+    
+    function getAttributes();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
-    function load($file);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

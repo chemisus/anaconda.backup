@@ -25,27 +25,26 @@
 
 
 /**
- * {@link \Configuration}
+ * {@link \Node}
  * 
  * @package     
- * @name        Configuration
+ * @name        Node
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Configuration {
+interface Node {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    function getApplication();
+    function getDocument();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
-    function load($file);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">

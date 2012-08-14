@@ -22,75 +22,53 @@
  *              GNU General Public License
  */
 
-namespace anaconda;
+namespace xml;
 
 /**
- * {@link \anaconda\Application}
+ * {@link \xml\XmlElement}
  * 
- * @package     anaconda
- * @name        Application
+ * @package     xml
+ * @name        XmlElement
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Application implements \Application, \Resolvable {
+class XmlElement extends XmlNode implements \node\Element {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $factory;
+    private $tag;
+
+    private $attributes = array();
     
-    private $page;
-    
-    private $request;
-    
-    private $response;
-    
-    private $router;
-    
-    private $subscribers;
-    
-    private $session;
-    
-    private $controllers = array();
-    
-    private $configuration;
+    private $children = array();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getControllers() {
-        return $this->controllers;
-    }
-    
-    public function getPage() {
-        return $this->page;
+    public function getAttributes() {
+        return $this->attributes;
     }
 
-    public function getRequest() {
-        return $this->request;
+    public function getChildren() {
+        return $this->children;
     }
 
-    public function getResponse() {
-        return $this->response;
+    public function getTag() {
+        return $this->tag;
     }
 
-    public function getRouter() {
-        return $this->router;
-    }
-    
-    public function getSession() {
-        return $this->session;
-    }
-    
-    public function getConfiguration() {
-        return $this->configuration;
-    }
-    
-    public function getFactory() {
-        return $this->factory;
+    public function getValue() {
+        $value = '';
+        
+        foreach ($this->children as $child) {
+            $value .= $child->getValue();
+        }
+        
+        return $value;
     }
     /**///</editor-fold>
 
@@ -98,32 +76,12 @@ class Application implements \Application, \Resolvable {
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
-    public function setControllers($value) {
-        $this->controllers = $value;
-    }
-
-    public function setPage($value) {
-        $this->page = $value;
-    }
-
-    public function setRequest($value) {
-        $this->request = $value;
-    }
-
-    public function setResponse($value) {
-        $this->response = $value;
-    }
-
-    public function setRouter($value) {
-        $this->router = $value;
-    }
-
-    public function setSession($value) {
-        $this->session = $value;
+    public function setAttributes($value) {
+        $this->attributes = $value;
     }
     
-    public function setConfiguration($value) {
-        $this->configuration = $value;
+    public function setTag($value) {
+        $this->tag = $value;
     }
     /**///</editor-fold>
 
@@ -137,92 +95,18 @@ class Application implements \Application, \Resolvable {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct() {
-        $this->subscribers = new SubscriberContainer();
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function addFactory($value) {
-        $value->setNextFactory($this->factory);
-
-        $this->factory = $value;
-    }
-    
-    public function removeFactory($value) {
-        throw new Exception("Not yet implemented.");
-    }
-    
-    final public function run() {
-        $this->setup();
-        
-        $this->configurations();
-        
-        $this->execute();
-        
-        $this->flush();
-    }
-
-    public function subscribe($value) {
-        return $this->subscribers->addSubscriber($value);
-    }
-
-    public function unsubscribe($value) {
-        return $this->subscribers->removeSubscriber($value);
-    }
-    
-    public function publish($publisher) {
-        $publisher->publish($this->subscribers->getSubscribers());
-        
-        return $publisher;
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">
     /*\**********************************************************************\*/
     /*\                             Private Methods                          \*/
     /*\**********************************************************************\*/
-    private function setup() {
-        if ($this->getSession() == null) {
-            $this->setSession($this->resolve('Session')->instance($this));
-        }
-        
-        if ($this->getConfiguration() == null) {
-            $this->setConfiguration($this->resolve('Configuration')->instance($this));
-        }
-        
-        if ($this->getResponse() == null) {
-            $this->setResponse($this->resolve('Response')->instance($this));
-        }
-        
-        if ($this->getRequest() == null) {
-            $this->setRequest($this->resolve('Request')->instance($this));
-        }
-        
-        if ($this->getRouter() == null) {
-            $this->setRouter($this->resolve('Router')->instance($this));
-        }
-    }
-    
-    private function configurations() {
-        foreach (glob(MOD."config.xml", GLOB_BRACE) as $filename) {
-            $this->getConfiguration()->load($filename);
-        }
-    }
-    
-    private function execute() {
-    }
-    
-    private function flush() {
-//        echo $this->getPage()->render();
-    }
-
-    public function resolve($tag) {
-        return $this->factory->resolve($tag);
-    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Protected Methods">

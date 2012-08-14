@@ -22,36 +22,38 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \Configuration}
+ * {@link \node\Node}
  * 
- * @package     
- * @name        Configuration
+ * @package     node
+ * @name        Node
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Configuration {
+interface Node extends \Node {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    function getApplication();
+    function getValue();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
-    function load($file);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function write($level=0);
+    
+    function read($xml);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

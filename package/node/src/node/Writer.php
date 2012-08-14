@@ -22,36 +22,35 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \Configuration}
+ * {@link \node\Writer}
  * 
- * @package     
- * @name        Configuration
+ * @package     node
+ * @name        Writer
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Configuration {
+interface Writer {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    function getApplication();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
-    function load($file);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function write($node, $level=0);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

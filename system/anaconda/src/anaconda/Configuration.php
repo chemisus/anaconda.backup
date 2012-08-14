@@ -22,10 +22,10 @@
  *              GNU General Public License
  */
 
-namespace configuration;
+namespace anaconda;
 
 /**
- * {@link \configuration\Configuration}
+ * {@link \anaconda\Configuration}
  * 
  * @package     
  * @name        Configuration
@@ -39,14 +39,20 @@ class Configuration implements \Configuration {
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
     private $application;
+    
+    private $document;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getApplicatoin() {
+    public function getApplication() {
         return $this->application;
+    }
+    
+    public function getDocument() {
+        return $this->document;
     }
     /**///</editor-fold>
 
@@ -76,7 +82,9 @@ class Configuration implements \Configuration {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function load($filename) {
-        xmp($filename);
+        $this->document = $this->getApplication()->resolve('Document')->instance($this->getApplication());
+        
+        $this->document->read(file_get_contents($filename));
     }
     /**///</editor-fold>
 

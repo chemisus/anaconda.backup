@@ -22,36 +22,35 @@
  *              GNU General Public License
  */
 
-
+namespace node;
 
 /**
- * {@link \Configuration}
+ * {@link \node\Reader}
  * 
- * @package     
- * @name        Configuration
+ * @package     node
+ * @name        Reader
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Configuration {
+interface Reader {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    function getApplication();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
     /*\**********************************************************************\*/
     /*\                             Public Mutators                          \*/
     /*\**********************************************************************\*/
-    function load($file);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    function read($node, $xml);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

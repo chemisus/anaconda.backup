@@ -22,28 +22,40 @@
  *              GNU General Public License
  */
 
-namespace configuration\factory;
+namespace xml;
 
 /**
- * {@link \config\factory\Configuration}
+ * {@link \xml\XmlNode}
  * 
- * @package     configuration
- * @name        Configuration
+ * @package     xml
+ * @name        XmlNode
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Configuration extends \anaconda\Factory {
+abstract class XmlNode implements \node\Node, \Resolvable {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $document;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
+    public function getDocument() {
+        return $this->document;
+    }
+
+    public function getReader() {
+        return $this->getDocument()->getReader();
+    }
+
+    public function getWriter() {
+        return $this->getDocument()->getWriter();
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
@@ -68,12 +80,16 @@ class Configuration extends \anaconda\Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    /**
-     *
-     * @todo implement this.
-     */
-    public function instance($application=null) {
-        return new \configuration\Configuration($application);
+    public function read($xml) {
+        $this->getReader()->read($this, $xml);
+    }
+
+    public function write($level = 0) {
+        return $this->getReader()->write($this, $level);
+    }
+
+    public function resolve($tag) {
+        return $this->getDocument()->resolve($tag);
     }
     /**///</editor-fold>
 
