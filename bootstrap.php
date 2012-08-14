@@ -72,31 +72,9 @@ class Bootstrap {
     private function application() {
         $this->application = new \anaconda\Application();
     }
-
+    
     private function factories() {
-        $classes = array();
-        
-        foreach (glob(RSRC."*/factory/*.php", GLOB_BRACE) as $path) {
-            $relative = array_pop(explode('/', substr($path, strlen(ROOT)), 4));
-            
-            $file = array_shift(glob(SRC.$relative, GLOB_BRACE));
-            
-            $file = array_pop(explode('/', substr($path, strlen(ROOT)), 4));
-            
-            $class = substr($file, 0, strrpos($file, '.'));
-            
-            $tag = basename($class);
-            
-            $class = strtr($class, array('/'=>'\\'));
-            
-            if (isset($classes[$class])) {
-                continue;
-            }
-            
-            $classes[$class] = $class;
-            
-            $factory = new $class($tag);
-            
+        foreach (factories(RSRC."*/factory/*.php") as $factory) {
             $this->application->addFactory($factory);
         }
     }

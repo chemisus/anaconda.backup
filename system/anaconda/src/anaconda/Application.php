@@ -157,9 +157,9 @@ class Application implements \Application, \Resolvable {
     }
     
     final public function run() {
-        $this->setup();
-        
         $this->configurations();
+        
+        $this->setup();
         
         $this->execute();
         
@@ -190,10 +190,6 @@ class Application implements \Application, \Resolvable {
             $this->setSession($this->resolve('Session')->instance($this));
         }
         
-        if ($this->getConfiguration() == null) {
-            $this->setConfiguration($this->resolve('Configuration')->instance($this));
-        }
-        
         if ($this->getResponse() == null) {
             $this->setResponse($this->resolve('Response')->instance($this));
         }
@@ -208,12 +204,17 @@ class Application implements \Application, \Resolvable {
     }
     
     private function configurations() {
+        if ($this->getConfiguration() == null) {
+            $this->setConfiguration($this->resolve('Configuration')->instance($this));
+        }
+        
         foreach (glob(MOD."config.xml", GLOB_BRACE) as $filename) {
             $this->getConfiguration()->load($filename);
         }
     }
     
     private function execute() {
+        $this->getRouter()->route();
     }
     
     private function flush() {

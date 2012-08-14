@@ -33,7 +33,7 @@ namespace xml;
  * @version     0.1
  * @since       0.1
  */
-class XmlDocument extends XmlNode implements \node\Document {
+class XmlDocument extends XmlNode implements \node\Document, \SubscriberComposite {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -53,6 +53,10 @@ class XmlDocument extends XmlNode implements \node\Document {
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
+    public function getSubscribers() {
+        return $this->children;
+    }
+    
     public function getDocument() {
         return $this;
     }

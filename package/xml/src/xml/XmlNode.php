@@ -33,7 +33,7 @@ namespace xml;
  * @version     0.1
  * @since       0.1
  */
-abstract class XmlNode implements \node\Node, \Resolvable {
+abstract class XmlNode implements \node\Node, \Resolvable, \Subscriber {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -93,6 +93,17 @@ abstract class XmlNode implements \node\Node, \Resolvable {
 
     public function resolve($tag) {
         return $this->getDocument()->resolve($tag);
+    }
+
+    public function check($publisher) {
+        return true;
+    }
+
+    public function prepare($publisher) {
+        return true;
+    }
+
+    public function reset() {
     }
     /**///</editor-fold>
 

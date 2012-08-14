@@ -33,7 +33,7 @@ namespace route;
  * @version     0.1
  * @since       0.1
  */
-class Route implements \SubscriberComposite, \SubscriberPublish {
+class Route extends \xml\XmlElement implements \SubscriberComposite, \SubscriberPublish {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -73,15 +73,25 @@ class Route implements \SubscriberComposite, \SubscriberPublish {
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
     public function check($publisher) {
+        xmp(__METHOD__);
+        
+        if (!preg_match('/^system.route/', $publisher['event'])) {
+            return false;
+        }
+        
+        return true;
     }
 
     public function prepare($publisher) {
+        xmp(__METHOD__);
     }
 
     public function publish($publisher) {
+        xmp(__METHOD__);
     }
 
     public function reset() {
+        xmp(__METHOD__);
     }
     /**///</editor-fold>
 

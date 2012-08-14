@@ -22,18 +22,18 @@
  *              GNU General Public License
  */
 
-namespace route\factory;
+namespace route\factory\config;
 
 /**
- * {@link \route\factory\Route}
+ * {@link \route\factory\config\RouteConfig}
  * 
- * @package     
- * @name        Route
+ * @package     route
+ * @name        RouteConfig
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class Route extends \anaconda\Factory {
+class RouteConfig extends \anaconda\Factory {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -68,8 +68,8 @@ class Route extends \anaconda\Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function instance() {
-        return new Route();
+    public function instance($document=null, $tag=null, $attributes=array()) {
+        return new \route\Route($document, $tag, $attributes);
     }
     /**///</editor-fold>
 

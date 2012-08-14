@@ -87,6 +87,38 @@ function right($string, $pattern) {
     return substr($string, strlen($string) - strlen($pattern)) === $pattern;
 }
 
+
+function factories($pattern) {
+    $classes = array();
+
+    $factories = array();
+
+    foreach (glob($pattern, GLOB_BRACE) as $path) {
+        $relative = array_pop(explode('/', substr($path, strlen(ROOT)), 4));
+
+        $file = array_shift(glob(SRC.$relative, GLOB_BRACE));
+
+        $file = array_pop(explode('/', substr($path, strlen(ROOT)), 4));
+
+        $class = substr($file, 0, strrpos($file, '.'));
+
+        $tag = basename($class);
+
+        $class = strtr($class, array('/'=>'\\'));
+
+        if (isset($classes[$class])) {
+            continue;
+        }
+
+        $classes[$class] = $class;
+
+        $factories[] = new $class($tag);
+    }
+
+    return $factories;
+}
+
+
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/
 /*\**************************************************************************\*/

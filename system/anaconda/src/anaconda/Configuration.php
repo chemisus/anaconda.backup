@@ -84,9 +84,13 @@ class Configuration implements \Configuration {
     public function load($filename) {
         $this->document = $this->getApplication()->resolve('Document')->instance($this->getApplication());
         
-        $this->document->read(file_get_contents($filename));
+        foreach (factories(RSRC."*/factory/config/*.php") as $factory) {
+            $this->document->addFactory($factory);
+        }
         
-        xmp($this->document);
+        $this->document->read(file_get_contents($filename));
+
+        $this->getApplication()->subscribe($this->getDocument());
     }
     /**///</editor-fold>
 
