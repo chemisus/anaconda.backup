@@ -85,6 +85,8 @@ class Configuration implements \Configuration {
         $this->document = $this->getApplication()->resolve('Document')->instance($this->getApplication());
         
         $this->document->read(file_get_contents($filename));
+        
+        xmp($this->document);
     }
     /**///</editor-fold>
 

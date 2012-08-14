@@ -22,10 +22,10 @@
  *              GNU General Public License
  */
 
-namespace xml\factory;
+namespace xml;
 
 /**
- * {@link \xml\factory\Element}
+ * {@link \xml\XmlFactory}
  * 
  * @package     xml
  * @name        Element
@@ -33,7 +33,7 @@ namespace xml\factory;
  * @version     0.1
  * @since       0.1
  */
-class Element extends \anaconda\Factory {
+class XmlFactory extends \anaconda\Factory {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -68,8 +68,8 @@ class Element extends \anaconda\Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function instance($application=null) {
-        return new \xml\XmlElement($application);
+    public function instance($document=null, $tag=null, $attributes=array()) {
+        return new \xml\XmlElement($document, $tag, $attributes);
     }
     /**///</editor-fold>
 

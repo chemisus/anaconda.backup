@@ -74,14 +74,17 @@ abstract class XmlNode implements \node\Node, \Resolvable {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($document) {
+        $this->document = $document;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function read($xml) {
-        $this->getReader()->read($this, $xml);
+    public function read($xml, $offset=0) {
+        return $this->getReader()->read($this, $xml, $offset);
     }
 
     public function write($level = 0) {

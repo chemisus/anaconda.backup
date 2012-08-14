@@ -50,7 +50,7 @@ interface Reader {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function read($node, $xml);
+    function read($node, $xml, $offset=0);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

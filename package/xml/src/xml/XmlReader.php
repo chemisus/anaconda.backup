@@ -68,38 +68,56 @@ class XmlReader implements \node\Reader {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    public function read($node, $xml) {
-        $offset = 0;
-        
-        while ($offset < strlen($xml)) {
-            $matches = array();
+    public function read($node, $xml, $offset=0) {
+        $matches = array();
 
-            preg_match('/[\<\>]|(?:[^\<\>]+)/', $xml, $matches, PREG_OFFSET_CAPTURE, $offset);
+        while (preg_match('/\</', $xml, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+            list($start, $offset) = $matches[0];
             
-            if (!count($matches[0])) {
+            $offset += strlen($matches[0][0]);
+            
+            if (!preg_match('/[^\>]*/', $xml, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+                throw new Exception;
+            }
+            
+            list($middle, $offset) = $matches[0];
+            
+            $offset += strlen($matches[0][0]);
+            
+            if (!preg_match('/\>/', $xml, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+                throw new Exception;
+            }
+            
+            list($end, $offset) = $matches[0];
+            
+            $offset += strlen($matches[0][0]);
+
+            $values = explode(" ", trim($middle), 2);
+            
+            $tag = trim(array_shift($values));
+            
+            $attributes = trim(array_shift($values));
+            
+            if (preg_match('/^\s*\//', $middle, $matches)) {
                 break;
             }
             
-            list($value, $offset) = $matches[0];
+            $child = $node->resolve($tag)->instance($node->getDocument(), $tag, $attributes);
             
-            $offset += strlen($value);
-
-            if ($value === '<') {
-                preg_match('/[\<\>\?]|[^\<\>\s]+/', $xml, $matches, PREG_OFFSET_CAPTURE, $offset);
-                
-                xmp($matches);
-                
-                if (!count($matches[0])) {
-                    break;
-                }
-
-                list($value, $offset) = $matches[0];
-                
-                $node->resolve($value)->instance($node->getApplication());
-
-                $offset += strlen($value);
+            $node->addChild($child);
+            
+            if (preg_match('/\/\s*$/', $middle, $matches)) {
+                continue;
             }
+            
+            if (preg_match('/^\s*\?/', $middle, $matches)) {
+                continue;
+            }
+            
+            $offset = $child->read($xml, $offset);
         }
+                
+        return $offset;
     }
     /**///</editor-fold>
 

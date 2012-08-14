@@ -95,12 +95,22 @@ class XmlElement extends XmlNode implements \node\Element {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
+    public function __construct($document, $tag, $attributes) {
+        parent::__construct($document);
+        
+        $this->tag = $tag;
+        
+        $this->attributes = $attributes;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Methods">
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
+    public function addChild($value) {
+        $this->children[] = $value;
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Private Methods">

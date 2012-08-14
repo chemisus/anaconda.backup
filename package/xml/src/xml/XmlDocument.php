@@ -42,23 +42,23 @@ class XmlDocument extends XmlNode implements \node\Document {
     
     private $writer;
     
-    private $root;
-    
     private $application;
     
     private $factory;
+    
+    private $children;
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
-    public function getApplication() {
-        return $this->application;
+    public function getDocument() {
+        return $this;
     }
     
-    public function getRoot() {
-        return $this->root;
+    public function getApplication() {
+        return $this->application;
     }
     
     public function getValue() {
@@ -100,7 +100,7 @@ class XmlDocument extends XmlNode implements \node\Document {
     public function __construct($application=null, $reader=null, $writer=null) {
         $this->application = $application;
         
-        $this->factory = $this->application->resolve('Element');
+        $this->factory = new XmlFactory('');
         
         $this->addFactory($application->getFactory());
         
@@ -122,6 +122,10 @@ class XmlDocument extends XmlNode implements \node\Document {
     
     public function removeFactory($value) {
         throw new Exception("Not yet implemented.");
+    }
+    
+    public function addChild($value) {
+        $this->children[] = $value;
     }
     
     public function resolve($tag) {

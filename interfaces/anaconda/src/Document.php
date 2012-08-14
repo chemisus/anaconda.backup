@@ -39,8 +39,6 @@ interface Document extends Node {
     /*\                             Public Accessors                         \*/
     /*\**********************************************************************\*/
     function getApplication();
-
-    function getRoot();
     /**///</editor-fold>
 
     /**///<editor-fold desc="Public Mutators">
