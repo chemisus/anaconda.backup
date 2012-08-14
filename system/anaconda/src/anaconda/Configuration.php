@@ -91,6 +91,8 @@ class Configuration implements \Configuration {
         $this->document->read(file_get_contents($filename));
 
         $this->getApplication()->subscribe($this->getDocument());
+        
+        xmp($this->document);
     }
     /**///</editor-fold>
 

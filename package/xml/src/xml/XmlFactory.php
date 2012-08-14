@@ -83,7 +83,20 @@ class XmlFactory extends \anaconda\Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($tag) {
+    protected function doResolve($context) {
+        if (!isset($context['interface'])) {
+            return false;
+        }
+
+        $common = array_intersect(
+            array('Node'),
+            class_implements($context['interface'])
+        );
+        
+        if (count($common) < count((array)$context['interface'])) {
+            return false;
+        }
+        
         return true;
     }
     /**///</editor-fold>

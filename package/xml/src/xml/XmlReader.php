@@ -102,7 +102,11 @@ class XmlReader implements \node\Reader {
                 break;
             }
             
-            $child = $node->resolve($tag)->instance($node->getDocument(), $tag, $attributes);
+            $child = $node->resolve(array(
+                'interface' => 'node\Element',
+                'tag' => $tag,
+                'attributes' => $attributes,
+            ))->instance($node->getDocument(), $tag, $attributes);
             
             $node->addChild($child);
             

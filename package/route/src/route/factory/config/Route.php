@@ -25,15 +25,15 @@
 namespace route\factory\config;
 
 /**
- * {@link \route\factory\config\RouteConfig}
+ * {@link \route\factory\config\Route}
  * 
- * @package     route
- * @name        RouteConfig
+ * @package     
+ * @name        Route
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-class RouteConfig extends \anaconda\Factory {
+class Route extends \anaconda\Factory {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -83,6 +83,22 @@ class RouteConfig extends \anaconda\Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
+    protected function doResolve($context) {
+        if (!isset($context['interface'])) {
+            return false;
+        }
+
+        $common = array_intersect(
+            array('Node'),
+            class_implements($context['interface'])
+        );
+        
+        if (count($common) < count((array)$context['interface'])) {
+            return false;
+        }
+        
+        return $context['tag'] === 'route';
+    }
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

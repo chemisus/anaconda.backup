@@ -25,15 +25,15 @@
 
 
 /**
- * {@link \Resolvable}
+ * {@link \Resolver}
  * 
  * @package     
- * @name        Resolvable
+ * @name        Resolver
  * @author      Terrence Howard <chemisus@gmail.com>
  * @version     0.1
  * @since       0.1
  */
-interface Resolvable {
+interface Resolver {
     /**///<editor-fold desc="Public Accessors">
     /*\**********************************************************************\*/
     /*\                             Public Accessors                         \*/
@@ -50,7 +50,7 @@ interface Resolvable {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    function resolve($tag);
+    function resolve($context);
     /**///</editor-fold>
 
     /**///<editor-fold desc="Unused Sections" defaultstate="collapsed">

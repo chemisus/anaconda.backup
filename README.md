@@ -16,7 +16,7 @@
 ### Application
 * Application     
 * Session
-* Resolvable
+* Resolver
 * Factory
 
 ### Configuration

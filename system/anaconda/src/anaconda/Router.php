@@ -67,8 +67,6 @@ class Router implements \Router {
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
     public function __construct($application) {
-        xmp('hey');
-        
         $this->application = $application;
     }
     /**///</editor-fold>

@@ -33,7 +33,7 @@ namespace anaconda;
  * @version     0.1
  * @since       0.1
  */
-class Application implements \Application, \Resolvable {
+class Application implements \Application, \Resolver {
     /**///<editor-fold desc="Fields">
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
@@ -221,8 +221,8 @@ class Application implements \Application, \Resolvable {
 //        echo $this->getPage()->render();
     }
 
-    public function resolve($tag) {
-        return $this->factory->resolve($tag);
+    public function resolve($context) {
+        return $this->factory->resolve($context);
     }
     /**///</editor-fold>
 

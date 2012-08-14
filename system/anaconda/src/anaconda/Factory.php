@@ -39,7 +39,7 @@ abstract class Factory implements \Factory {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
-    private $tag;
+    private $interface;
     
     private $next;
     /**///</editor-fold>
@@ -72,8 +72,8 @@ abstract class Factory implements \Factory {
     /*\**********************************************************************\*/
     /*\                             Constructors                             \*/
     /*\**********************************************************************\*/
-    public function __construct($tag) {
-        $this->tag = $tag;
+    public function __construct($interface) {
+        $this->interface = $interface;
     }
     /**///</editor-fold>
 
@@ -81,16 +81,22 @@ abstract class Factory implements \Factory {
     /*\**********************************************************************\*/
     /*\                             Public Methods                           \*/
     /*\**********************************************************************\*/
-    final public function resolve($tag) {
-        if ($this->doResolve($tag)) {
+    final public function resolve($context) {
+        if (is_string($context)) {
+            $context = array('interface' => $context);
+        }
+        
+        if ($this->doResolve($context)) {
             return $this;
         }
         
         if ($this->getNextFactory() !== null) {
-            return $this->getNextFactory()->resolve($tag);
+            return $this->getNextFactory()->resolve($context);
         }
         
-        throw new \Exception("Could not resolve {$tag}.");
+        $context = print_r($context, true);
+        
+        throw new \Exception("Could not resolve {$context}.");
     }
     /**///</editor-fold>
 
@@ -104,8 +110,8 @@ abstract class Factory implements \Factory {
     /*\**********************************************************************\*/
     /*\                             Protected Methods                        \*/
     /*\**********************************************************************\*/
-    protected function doResolve($tag) {
-        return strtolower($this->tag) === strtolower($tag);
+    protected function doResolve($context) {
+        return strtolower($this->interface) === strtolower($context['interface']);
     }
     /**///</editor-fold>
 

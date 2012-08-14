@@ -106,8 +106,6 @@ class XmlDocument extends XmlNode implements \node\Document, \SubscriberComposit
         
         $this->factory = new XmlFactory('');
         
-        $this->addFactory($application->getFactory());
-        
         $this->setReader($reader);
         
         $this->setWriter($writer);
@@ -132,8 +130,8 @@ class XmlDocument extends XmlNode implements \node\Document, \SubscriberComposit
         $this->children[] = $value;
     }
     
-    public function resolve($tag) {
-        return $this->factory->resolve($tag);
+    public function resolve($context) {
+        return $this->factory->resolve($context);
     }
     /**///</editor-fold>
 
