@@ -14,7 +14,7 @@
 ## Components:
 
 ### Application
-* Application     
+* Application
 * Session
 * Resolver
 * Factory

@@ -38,6 +38,8 @@ class XmlElement extends XmlNode implements \node\Element {
     /*\**********************************************************************\*/
     /*\                             Fields                                   \*/
     /*\**********************************************************************\*/
+    private $namespace;
+
     private $tag;
 
     private $attributes = array();
